@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:cb="http://java.sun.com/jsf/composite/component"
+	template="/WEB-INF/design/_decorate-register.xhtml">
+
+<ui:define name="stepProductor">
+	<td class="stepNavON">
+		3.#{i18n.label_productor_trainner}
+	</td>
+</ui:define>
+
+
+<ui:define name="stepContent">
+	<h:form>
+	
+		<p:toolbar>
+			<p:toolbarGroup align="left">
+				<p:commandButton ajax="false" icon="ui-icon-circle-triangle-w" value="#{i18n.label_previous}"
+					action="#{registerStepBean.onPrevFromStepProductor }" />
+			</p:toolbarGroup>
+
+			<p:toolbarGroup align="right">
+				<p:commandButton ajax="false" icon="ui-icon-circle-triangle-e" value="#{i18n.label_next}" iconPos="right"
+					action="#{registerStepBean.onNextFromStepProductor }" />
+			</p:toolbarGroup>
+		</p:toolbar>
+		
+		
+		
+		<h:panelGrid columns="2" cellpadding="5" width="100%">
+		
+			<p:panel header="#{i18n.label_productor}" style="height:500">
+			
+				<h:panelGrid columns="1" cellpadding="10">
+
+					<cb:helpPanel text="#{i18n.text_help_productor }" />
+		
+					<h:panelGrid cellpadding="0">
+						<h:outputText value="#{i18n.label_search_contact_by_new_name_or_civil_name}" styleClass="less2" />
+											
+						<p:autoComplete value="#{registerStepBean.register.contact.productorContact}"
+							completeMethod="#{autoCompleteContactBean.queryProductorContact }"  
+							var="contactRow" itemValue="#{contactRow}" itemLabel="#{contactRow.fullDesc }"
+							converter="#{contactConverter}"
+							queryDelay="500" size="40" forceSelection="false" minQueryLength="2" scrollHeight="200"
+							styleClass="destak2" >
+						
+							<p:column headerText="#{i18n.label_civil_name}">
+								#{contactRow.civilName}
+							</p:column>
+			
+							<p:column headerText="#{i18n.label_new_name}">
+								#{contactRow.name}
+							</p:column>
+						
+							<p:column headerText="#{i18n.label_city}">
+								#{contactRow.city}
+							</p:column>
+							
+							<p:ajax process="@this" event="itemSelect" update="displayProductor" />
+						</p:autoComplete>
+					</h:panelGrid>
+					
+					
+					<p:outputPanel id="displayProductor">
+						<h:outputText value="#{i18n.msg_no_productor_selected}" styleClass="less2 req"
+							rendered="#{empty registerStepBean.register.contact.productorContact}" />
+					
+						<p:panelGrid columns="2" 
+							rendered="#{not empty registerStepBean.register.contact.productorContact}" >
+					
+							<f:facet name="header">
+								<h:outputText value="#{i18n.label_productor}" styleClass="destak3" />
+							</f:facet>
+					
+							<h:outputText value="#{i18n.label_new_name}:" styleClass="less2" />
+							<h:outputText value="#{registerStepBean.register.contact.productorContact.name }" styleClass="destak2" />
+							
+							<h:outputText value="#{i18n.label_civil_name}:" styleClass="less2" />
+							<h:outputText value="#{registerStepBean.register.contact.productorContact.civilName }" styleClass="destak2" />
+					
+							<h:outputText value="#{i18n.label_city}:" styleClass="less2" />
+							<h:outputText value="#{registerStepBean.register.contact.productorContact.city }" styleClass="destak2" />
+							
+							<f:facet name="footer">
+								<p:commandLink icon="ui-icon-close" value="#{i18n.label_to_remove_productor }"
+									styleClass="less2"
+									process="@this" update="@form" >
+									<f:setPropertyActionListener target="#{registerStepBean.register.contact.productorContact}" value="#{null}" />
+								</p:commandLink>
+							</f:facet>
+							
+						</p:panelGrid>
+					</p:outputPanel>
+
+
+				</h:panelGrid>
+			</p:panel>
+			
+	
+			<p:panel header="#{i18n.label_trainner}" style="height:500">
+				<h:panelGrid columns="1" cellpadding="10">
+				
+					<cb:helpPanel text="#{i18n.text_help_trainner }" />
+				
+					<h:panelGrid cellpadding="0">
+						<h:outputText value="#{i18n.label_search_contact_by_new_name_or_civil_name}" styleClass="less2" />
+											
+						<p:autoComplete value="#{registerStepBean.register.contact.trainnerContact}"
+							completeMethod="#{autoCompleteContactBean.queryTrainnerContact }"  
+							var="contactRow" itemValue="#{contactRow}" itemLabel="#{contactRow.fullDesc }"
+							converter="#{contactConverter}"
+							queryDelay="500" size="40" forceSelection="false" minQueryLength="2" scrollHeight="200"
+							styleClass="destak2" >
+						
+							<p:column headerText="#{i18n.label_civil_name}">
+								#{contactRow.civilName}
+							</p:column>
+			
+							<p:column headerText="#{i18n.label_new_name}">
+								#{contactRow.name}
+							</p:column>
+						
+							<p:column headerText="#{i18n.label_city}">
+								#{contactRow.city}
+							</p:column>
+							
+							<p:ajax process="@this" event="itemSelect" update="displayTrainner" />
+						</p:autoComplete>
+					</h:panelGrid>
+			
+
+					<p:outputPanel id="displayTrainner">
+						<h:outputText value="#{i18n.msg_no_trainner_selected}" styleClass="less2 req"
+							rendered="#{empty registerStepBean.register.contact.trainnerContact}" />
+					
+						<p:panelGrid columns="2" 
+							rendered="#{not empty registerStepBean.register.contact.trainnerContact}" >
+					
+							<f:facet name="header">
+								<h:outputText value="#{i18n.label_trainner}" styleClass="destak3" />
+							</f:facet>
+					
+							<h:outputText value="#{i18n.label_new_name}:" styleClass="less2" />
+							<h:outputText value="#{registerStepBean.register.contact.trainnerContact.name }" styleClass="destak2" />
+							
+							<h:outputText value="#{i18n.label_civil_name}:" styleClass="less2" />
+							<h:outputText value="#{registerStepBean.register.contact.trainnerContact.civilName }" styleClass="destak2" />
+					
+							<h:outputText value="#{i18n.label_city}:" styleClass="less2" />
+							<h:outputText value="#{registerStepBean.register.contact.trainnerContact.city }" styleClass="destak2" />
+							
+							<f:facet name="footer">
+								<p:commandLink icon="ui-icon-close" value="#{i18n.label_to_remove_trainner }"
+									styleClass="less2"
+									process="@this" update="@form" >
+									<f:setPropertyActionListener target="#{registerStepBean.register.contact.trainnerContact}" value="#{null}" />
+								</p:commandLink>
+							</f:facet>
+							
+						</p:panelGrid>
+					</p:outputPanel>
+				
+			
+				</h:panelGrid>
+			</p:panel>
+	
+		</h:panelGrid>
+
+	</h:form>
+
+	<p:spacer height="25px" />
+</ui:define>
+</ui:composition>

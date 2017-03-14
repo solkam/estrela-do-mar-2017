@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:fragment xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:cb="http://java.sun.com/jsf/composite/component">
+
+<!-- Dialog Hosting -->
+<!-- ************** -->
+<!-- [24 ABR 2014] Criada funcionalida propria. Não usa mais -->
+
+<p:dialog widgetVar="DialogEditHostingInfo" header="#{i18n.label_edit_localization_info }"
+	modal="true" dynamic="true" closeOnEscape="true" maximizable="true"
+	position="top" >
+
+	<h:form id="formEditHostingInfo">
+
+		<cb:globalMessages />
+		
+		<fieldset>
+			<legend>#{i18n.label_localization}</legend>
+			
+			<h:panelGrid columns="2" cellpadding="10">
+				<h:outputText value="#{i18n.label_hosting_area}:"  styleClass="less2" />
+				<p:inputText value="#{paymentBean.selectedRegister.hosting.hostingArea }"   />
+	
+				<h:outputText value="#{i18n.label_hosting_number}:"  styleClass="less2" />
+				<p:inputText value="#{paymentBean.selectedRegister.hosting.hostingNumber }"  />
+			</h:panelGrid>
+		</fieldset>
+		
+		<p:commandButton icon="ui-icon-check" value="#{i18n.label_save_localization_info}"
+			action="#{paymentBean.saveHostingInfo }"
+			update="@form :formRegister:tabDetail:displayHosting" 
+			oncomplete="if (args.sucessOnly) DialogEditHostingInfo.hide()"
+			/>
+	
+	</h:form>
+</p:dialog>
+
+</ui:fragment>

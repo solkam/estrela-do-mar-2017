@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:decorate xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	template="/WEB-INF/design/_template-main.xhtml">
+	
+	
+<ui:define name="content">
+
+	<style type="text/css">
+		#megaEventSpace {
+			margin-top: 15px;
+			margin-bottom: 15px;
+		}		
+		#stepsSpace {
+			margin-top: 15px;
+			margin-bottom: 15px;
+		}
+		#stepContectSpace {
+			margin-top: 15px;
+			margin-bottom: 15px;
+		}
+
+
+		.stepNav {
+			border: 3px solid #002;
+			background-color: white;
+			color: #002;
+			height: 50px;
+			width: 14%;
+			text-align: center;
+			font-size: 1.1em;
+			border-radius: 15px;
+		}
+		.stepNavON {
+			border: 2px solid #002;
+			background-color: #002;
+			color: white;
+			height: 50px;
+			width: 15%;
+			text-align: center;
+			font-weight: bold;
+			font-size: 1.1em;
+			border-radius: 15px;
+		}
+	</style>	
+
+	<div id="megaEventSpace">
+		<p:toolbar>
+			<p:toolbarGroup>
+				<h:panelGrid columns="3" cellpadding="5" rules="cols">
+					<h:panelGrid columns="2" cellpadding="5">
+						<h:graphicImage library="img" name="option_myregister_75.png" />
+						<h:outputText value="#{i18n.label_registers}" styleClass="destak2" />
+					</h:panelGrid>
+					
+					<h:panelGrid columns="2" cellpadding="5">
+						<h:graphicImage library="img" name="#{registerStepBean.register.megaEvent.type.image}" />
+							<h:panelGrid>
+								<h:outputText value="#{registerStepBean.register.megaEvent.name }" styleClass="destak3"  />
+								<h:outputText value="#{registerStepBean.register.megaEvent.descDates}" styleClass="less3"  />
+							</h:panelGrid>
+					</h:panelGrid>
+				</h:panelGrid>
+			</p:toolbarGroup>
+		</p:toolbar>
+	
+	</div>	
+
+	<div id="stepsSpace">
+		<table width="100%" >
+			<tr>
+				<ui:insert name="stepEvent">
+					<td class="stepNav">
+						1.#{i18n.label_events}
+					</td>
+				</ui:insert>
+				<ui:insert name="stepPersonal">
+					<td class="stepNav">
+						2.#{i18n.label_personal_data}
+					</td>
+				</ui:insert>
+				<ui:insert name="stepProductor">
+					<td class="stepNav">
+						3.#{i18n.label_productor_trainner}
+					</td>
+				</ui:insert>
+				<ui:insert name="stepMedicalForm">
+					<td class="stepNav">
+						4.#{i18n.label_medical_form}
+					</td>
+				</ui:insert>
+				<ui:insert name="stepTrip">
+					<td class="stepNav">
+						5.#{i18n.label_trip_and_hosting}
+					</td>
+				</ui:insert>
+				<ui:insert name="stepCondition">
+					<td class="stepNav">
+						6.#{i18n.label_sale_conditions}
+					</td>
+				</ui:insert>
+				<ui:insert name="stepConfirm">
+					<td class="stepNav">
+						7.#{i18n.label_confirmation}
+					</td>
+				</ui:insert>
+			</tr>
+		</table>
+	</div>
+	
+	<div id="stepContectSpace">
+		<ui:insert name="stepContent" >
+			<h1>extra content...</h1>
+		</ui:insert>
+	</div>
+	
+</ui:define>
+
+</ui:decorate>

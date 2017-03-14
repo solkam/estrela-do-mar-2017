@@ -1,0 +1,29 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:composite="http://java.sun.com/jsf/composite"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html">
+
+<composite:interface>
+	<composite:attribute name="value" required="true" />
+</composite:interface>
+
+<composite:implementation>
+
+	<div id="megaEventSpace">
+		<fieldset>
+			<legend>Mega Evento:</legend>
+			<h:panelGrid columns="3" cellpadding="5">
+				<h:graphicImage library="img" name="#{value.type.image}" />
+				
+				<h:outputText value="#{value.name }" styleClass="destak1"  />
+				
+				<h:outputText value="#{value.descDates}" styleClass="destak3" />
+			</h:panelGrid>
+		</fieldset>
+	</div>	
+
+</composite:implementation>
+
+</html>

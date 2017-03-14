@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:cb="http://java.sun.com/jsf/composite/component"
+	template="/WEB-INF/design/_decorate-register.xhtml">
+
+<ui:define name="stepEvent">
+	<td class="stepNavON">
+		1.#{i18n.label_events}
+	</td>
+</ui:define>
+
+
+<ui:define name="stepContent">
+
+	<h:form>
+		<p:outputPanel autoUpdate="true">
+			<p:toolbar>
+				<p:toolbarGroup align="right">
+					<p:commandButton ajax="false" icon="ui-icon-circle-triangle-e" iconPos="right" value="#{i18n.label_next}"
+						action="#{registerStepBean.onNextFromStepEvent }" 
+						disabled="#{empty registerStepBean.register.details }"
+						/>
+				</p:toolbarGroup>
+			</p:toolbar>
+		</p:outputPanel>
+	</h:form>
+
+
+	<fieldset style="border: 5px solid #008">
+		<legend style="font-size: 14pt">#{i18n.label_events_selected}</legend>
+	
+		<h:form id="formSelectedOnes">
+		
+			<p:toolbar>
+				<p:toolbarGroup align="right">
+					<p:commandButton icon="ui-icon-person"
+						value="#{i18n.label_add_familiar_or_baby_sitter}"
+						action="#{registerStepBean.popularFamiliarRegister()}"
+						oncomplete="DialogFamily.show()" />
+					
+				</p:toolbarGroup>
+			</p:toolbar>
+				
+			<h:outputText value="#{i18n.msg_no_event_selected}"  
+				rendered="#{empty registerStepBean.register.details}" />
+		
+		
+			<!-- eventos dos meus dependentes -->
+			<h:dataTable var="dependRegisterRow" value="#{registerStepBean.register.dependentRegisters}" 
+				width="100%" cellpadding="0" cellspacing="0">
+				
+				<h:column>
+					<p:dataTable var="detailRow" value="#{dependRegisterRow.details}" 
+						rendered="#{not empty dependRegisterRow.details}">
+						
+						<p:column headerText="#{i18n.label_week_or_phase}" styleClass="col25p">
+							<h:outputText value="#{detailRow.eventWeek.name }"
+								styleClass="destak3" />
+							<br />
+							<h:outputText value="#{detailRow.eventWeek.descDates }"
+								styleClass="less3" />
+						</p:column>
+		
+						<p:column headerText="#{i18n.label_event_for_dependents}" styleClass="col25p">
+							<h:outputText value="#{detailRow.event.displayNameOrSchool}" styleClass="destak3" />
+							<br />
+							<h:outputText value="#{detailRow.event.description}" styleClass="less3" />
+						</p:column>
+	
+						<p:column headerText="#{i18n.label_dependents}" styleClass="col25p colCenter">
+							<h:outputText value="#{detailRow.register.contact.civilName}" styleClass="destak4" />
+						</p:column>
+		
+						<p:column headerText="#{i18n.label_value}" styleClass="col20p colCenter">
+							<cb:outputCurrency value="#{detailRow.value }" />
+						</p:column>
+		
+						<p:column styleClass="col5p colCenter">
+							<p:commandButton icon="ui-icon-trash" 
+								action="#{registerStepBean.removeRegisterDetail(detailRow) }"
+								process="@this"
+								update="@form :formAvailableEvents" />
+						</p:column>
+					</p:dataTable>
+				</h:column>
+			</h:dataTable>
+		
+		
+			<!-- meus eventos -->
+			<p:dataTable value="#{registerStepBean.register.details}" var="detailRow"
+				rendered="#{not empty registerStepBean.register.details}" >
+			
+				<p:column headerText="#{i18n.label_week_or_phase}" styleClass="col25p">
+					<h:outputText value="#{detailRow.eventWeek.name}" styleClass="destak3" />
+					<br />
+					<h:outputText value="#{detailRow.eventWeek.descDates}" styleClass="less3" />
+				</p:column>
+			
+				<p:column headerText="#{i18n.label_event}" styleClass="col25p">
+					<h:outputText value="#{detailRow.event.displayNameOrSchool}" styleClass="destak3" />
+					<br />
+					<h:outputText value="#{detailRow.event.description}" styleClass="less3" />
+				</p:column>
+				
+				<p:column headerText="#{i18n.label_confirmed_as}" styleClass="col25p colCenter">
+					<h:outputText value="#{i18n[detailRow.presence.key]}" />
+				</p:column>
+				
+				<p:column headerText="#{i18n.label_value}" styleClass="col20p colCenter">
+					<cb:outputCurrency value="#{detailRow.value }" />
+					<f:facet name="footer">
+						<cb:outputCurrency value="#{registerStepBean.register.calculatedTotalValue }" styleClass="destak2" />
+					</f:facet>
+				</p:column>
+
+				<p:column styleClass="col5p colCenter">
+					<p:commandButton icon="ui-icon-trash" 
+						action="#{registerStepBean.removeRegisterDetail(detailRow) }"
+						process="@this"
+						update="@form :formAvailableEvents" />
+				</p:column>
+			</p:dataTable>
+
+		</h:form>
+	</fieldset>
+				
+	<p:spacer height="20" />
+
+	<fieldset style="border: 5px solid #ee0">
+		<legend style="font-size: 14pt">#{i18n.label_events_available}</legend>
+	
+		<h:form id="formAvailableEvents">
+			<h:dataTable var="week" value="#{registerStepBean.availableEventWeeks }" rowKey="#{week.id }" width="100%"
+				rowStyleClass="invisible" tableStyleClass="invisible" styleClass="invisible"  >
+				
+				<h:column styleClass="invisible">
+				
+					<p:dataTable var="event" value="#{week.events }" rowKey="#{event.id }"
+						emptyMessage="#{i18n.msg_no_events}"  >
+						
+						<f:facet name="header">
+							<f:facet name="header">
+								<span style="text-align:left;">
+									<h:outputText value="#{week.name}" styleClass="destak2" />
+									<p:spacer width="10px" />
+									<h:outputText value="#{week.descDates}" styleClass="less1" />
+								</span>
+							</f:facet>
+						</f:facet>
+
+						<p:column styleClass="col10p">
+							<h:outputText value="#{event.id }" styleClass="less3" />
+						</p:column>
+	
+						<p:column headerText="#{i18n.label_event}" styleClass="col30p">
+							<h:outputText value="#{event.displayNameOrSchool}" styleClass="destak2" />
+							<br />
+							<h:outputText value="#{event.description}" styleClass="less2" />
+						</p:column>
+	
+						<p:column headerText="#{i18n.label_participant}" styleClass="col30p colCenter">
+							<p:outputPanel rendered="#{event.enableForParticipant }">
+								<cb:outputCurrency value="#{event.valueParticipant}" styleClass="destak2" />
+								<p:spacer width="10" />
+								<p:commandButton icon="ui-icon-check" value="#{i18n.label_to_participate}" 
+									title="#{i18n.label_to_confirm_as_participant}" 
+									action="#{registerStepBean.confirmAsParticipant(week, event) }"
+									process="@this"
+									update="@form :formSelectedOnes" 
+									/>
+							</p:outputPanel>
+						</p:column>
+
+						<p:column headerText="#{i18n.label_staff}" styleClass="col30p colCenter">
+							<p:outputPanel rendered="#{event.enableForStaff }" >
+								<cb:outputCurrency value="#{event.valueStaff}" styleClass="destak2" />
+								<p:spacer width="10" />
+								<p:commandButton icon="ui-icon-check" value="#{i18n.label_to_staff}" 
+									title="#{i18n.label_to_confirm_as_staff}"
+									action="#{registerStepBean.confirmAsStaff(week, event) }"
+									process="@this"
+									update="@form :formSelectedOnes" 
+									/> 
+							</p:outputPanel>
+						</p:column>
+						
+					</p:dataTable>
+					
+					<p:spacer height="15" />
+					
+				</h:column>
+			 </h:dataTable>
+		</h:form>
+	</fieldset>
+	
+	<p:spacer height="25px" />
+	
+	<ui:include src="/pages/myregister/register-frag-dialog-family.xhtml" />
+	
+</ui:define>
+</ui:composition>

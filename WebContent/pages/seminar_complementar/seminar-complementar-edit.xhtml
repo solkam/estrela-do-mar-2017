@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:cb="http://java.sun.com/jsf/composite/component"
+	template="/WEB-INF/design/_template-main.xhtml">
+
+<ui:define name="content" >
+
+<cb:barPanel imageName="icon_option_seminar_complementar_v2.png" 
+	moduleName="#{i18n.title_seminar_complementary }" 
+	megaEvent="#{sessionHolder.currentMegaEvent }" 
+	/>
+
+<p:toolbar>
+	<p:toolbarGroup>
+		<p:button outcome="/pages/seminar_complementar/seminar-complementar-search.xhtml" value="#{i18n.label_go_back}" />
+	</p:toolbarGroup>
+</p:toolbar>
+
+<p:panel>
+
+	<h:form>
+	
+		<p:panelGrid columns="6">
+			<h:outputText value="#{i18n.label_event_name}"              styleClass="less2" />
+			<h:outputText value="#{i18n.label_event_participant_value}" styleClass="less2" />
+			<h:outputText value="#{i18n.label_event_staff_value}"       styleClass="less2" />
+			<h:outputText value="#{i18n.label_capacity}"                styleClass="less2" />
+			<h:outputText value="#{i18n.label_placed_ones}"             styleClass="less2" />
+			<h:outputText value="#{i18n.label_placed_remaining}"        styleClass="less2" />
+			
+			<h:outputText value="#{seminarCompBean.selectedSeminarComplementarEvent.name}" styleClass="destak2"  />
+			<cb:outputCurrency value="#{seminarCompBean.selectedSeminarComplementarEvent.valueParticipant}"   />
+			<cb:outputCurrency value="#{seminarCompBean.selectedSeminarComplementarEvent.valueStaff}"         />
+			<h:outputText value="#{seminarCompBean.selectedSeminarComplementarEvent.capacity}"                   />
+			<h:outputText value="#{seminarCompBean.selectedSeminarComplementarEvent.calculatedCapacityActual}"   />
+			<h:outputText value="#{seminarCompBean.selectedSeminarComplementarEvent.calculatedCapacityRemained}" />
+		</p:panelGrid>
+		
+		<p:spacer height="10" />
+	
+		<p:fieldset legend="#{i18n.label_new_register}" toggleable="true" collapsed="false">
+			
+			<h:panelGrid columns="3" cellpadding="5">
+
+				<h:panelGrid>
+					<p:outputLabel for="acRegister" value="#{i18n.label_search_by_name_new_or_civil}" styleClass="less2 req" />
+					<p:autoComplete id="acRegister" completeMethod="#{seminarCompBean.queryRegister}" var="registerRow"
+						 value="#{seminarCompBean.newRegisterDetail.register}" converter="#{registerConverter}"
+						 itemValue="#{registerRow}" itemLabel="#{registerRow.contact.fullDesc}"
+						 queryDelay="500" minQueryLength="2" forceSelection="true" size="70" maxResults="10"
+						 required="true" requiredMessage="#{i18n.msg_contact_required}" >
+						 
+						 <p:column headerText="#{i18n.label_civil_name}">
+						 	#{registerRow.contact.civilName}
+						 </p:column>
+
+						 <p:column headerText="#{i18n.label_name}">
+						 	#{registerRow.contact.name}
+						 </p:column>
+
+						 <p:column headerText="#{i18n.label_sex}">
+						 	#{registerRow.contact.gender}
+						 </p:column>
+
+						 <p:column headerText="#{i18n.label_city}">
+						 	#{registerRow.contact.city}
+						 </p:column>
+						 
+						 <p:column headerText="#{i18n.label_country}">
+						 	#{registerRow.contact.country}
+						 </p:column>
+					</p:autoComplete>
+					<p:message for="acRegister" />
+				</h:panelGrid>
+				
+				<p:commandButton icon="ui-icon-plus" value="#{i18n.label_participant}" 
+					action="#{seminarCompBean.prepareToAddRegisterDetailToSeminarComplementar(true)}"
+					update="@form :formPayment"
+					oncomplete="if (args.sucessOnly) DialogPayment.show()"
+					/>
+					
+				<p:commandButton icon="ui-icon-plus" value="#{i18n.label_staff}" 
+					rendered="#{seminarCompBean.selectedSeminarComplementarEvent.enableForStaff}"
+					action="#{seminarCompBean.prepareToAddRegisterDetailToSeminarComplementar(false)}"
+					update="@form"
+					/>
+			</h:panelGrid>
+		</p:fieldset>
+		
+		<p:spacer height="5" />
+		<cb:globalMessages />
+		<p:spacer height="5" />
+
+		<h:outputText value="#{i18n.msg_no_registers}" styleClass="req"
+			rendered="#{empty seminarCompBean.selectedSeminarComplementarEvent.details}" />
+			
+		<p:dataTable value="#{seminarCompBean.selectedSeminarComplementarEvent.details}" var="detailRow"
+			rendered="#{not empty seminarCompBean.selectedSeminarComplementarEvent.details}">
+			
+			<p:column headerText="#{i18n.label_civil_name}" styleClass="col30p" sortBy="#{detailRow.register.contact.civilName}">
+				<h:outputText value="#{detailRow.register.contact.civilName}" />
+			</p:column>
+
+			<p:column headerText="#{i18n.label_new_name}" styleClass="col25p" sortBy="#{detailRow.register.contact.name}">
+				<h:outputText value="#{detailRow.register.contact.name}" />
+			</p:column>
+			
+			<p:column headerText="#{i18n.label_sex}" styleClass="col5p" sortBy="#{detailRow.register.contact.gender}">
+				<h:outputText value="#{detailRow.register.contact.gender}" />
+			</p:column>
+			
+			<p:column headerText="#{i18n.label_city}" styleClass="col25p" sortBy="#{detailRow.register.contact.city}">
+				<h:outputText value="#{detailRow.register.contact.city}" />
+			</p:column>
+			
+			<p:column headerText="#{i18n.label_country}" styleClass="col10p" sortBy="#{detailRow.register.contact.country}">
+				<h:outputText value="#{detailRow.register.contact.country}" />
+			</p:column>
+
+			<p:column styleClass="col5p colCenter">
+				<p:commandButton icon="ui-icon-trash"
+					action="#{seminarCompBean.removeRegisterDetailFromSerminarComplementar(detailRow)}"
+					process="@this"
+					update="@form" />
+			</p:column>
+		
+		</p:dataTable>
+	
+	</h:form>
+</p:panel>	
+
+<p:dialog widgetVar="DialogPayment" header="#{i18n.label_seminar_complementar}"
+	modal="true" dynamic="true" closeOnEscape="true" maximizable="true" 
+	position="top" width="90%" height="90%" >
+
+	<h:form id="formPayment">
+	
+		<cb:globalMessages />
+	
+		<p:outputPanel>
+			<p:panelGrid columns="9">
+				<h:outputText value="#{i18n.label_civil_name}" styleClass="less2" />
+				<h:outputText value="#{i18n.label_name}"       styleClass="less2" />
+				<h:outputText value="#{i18n.label_sex}"        styleClass="less2" />
+				<h:outputText value="#{i18n.label_city}"       styleClass="less2" />
+				<h:outputText value="#{i18n.label_country}"    styleClass="less2" />
+				<h:outputText value="#{i18n.label_seminar_complementar}" styleClass="less2" />
+				<h:outputText value="#{i18n.label_value}"                styleClass="less2" />
+				<h:outputText value="#{i18n.label_paid_value}"           styleClass="less2 paid" />
+				<h:outputText value="#{i18n.label_pendent_value}"        styleClass="less2 pendent" />
+				
+				<h:outputText value="#{seminarCompBean.newRegisterDetail.register.contact.civilName}" styleClass="destak2"     />
+				<h:outputText value="#{seminarCompBean.newRegisterDetail.register.contact.name}"                               />
+				<h:outputText value="#{seminarCompBean.newRegisterDetail.register.contact.gender}"                             />
+				<h:outputText value="#{seminarCompBean.newRegisterDetail.register.contact.city}"                               />
+				<h:outputText value="#{seminarCompBean.newRegisterDetail.register.contact.country}"                            />
+				<h:outputText value="#{seminarCompBean.newRegisterDetail.event.name}"             styleClass="destak2"         />
+				<h:outputText value="#{seminarCompBean.newRegisterDetail.value}"                  styleClass="destak3"         />
+				<h:outputText value="#{seminarCompBean.newRegisterDetail.calculatedPaidValue}"    styleClass="paid destak3"    />
+				<h:outputText value="#{seminarCompBean.newRegisterDetail.calculatedPendentValue}" styleClass="pendent destak3" />
+			</p:panelGrid>
+			
+			<p:spacer height="10" />
+	
+			<p:panel header="#{i18n.label_payments}">
+			
+			</p:panel>
+		
+			<p:spacer height="10" />
+
+			<p:panel header="#{i18n.label_credits}">
+			
+			</p:panel>
+		
+		</p:outputPanel>
+	</h:form>
+</p:dialog>
+
+
+
+</ui:define>
+</ui:composition>

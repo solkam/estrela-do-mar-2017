@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:cb="http://java.sun.com/jsf/composite/component"
+	template="/WEB-INF/design/_decorate-report.xhtml">
+
+<ui:define name="reportContent" >
+
+<h:form id="formResult">
+	<p:panel id="panelPhyLimReport" header="#{i18n.report_people_with_physical_limitation }">
+
+		<h:panelGrid columns="4" cellpadding="10">
+			<h:panelGrid>
+				<h:outputText value="MegaEvento: " styleClass="less2" />
+				<h:outputText value="#{reportBean.currentMegaEvent.name }" styleClass="destak2" />
+			</h:panelGrid>
+			
+			<h:panelGrid>
+				<h:outputText value="#{i18n.label_initial_date }:" styleClass="less2" />
+				<p:calendar id="calInitDate" value="#{reportPhyLimBean.initDate }" 
+					size="10" pattern="dd/MM/yyyy"     showOn="button" 
+					required="true" 
+					/>
+				<p:message for="calInitDate" />
+			</h:panelGrid>
+			
+			<h:panelGrid>
+				<h:outputText value="#{i18n.label_end_date }:" styleClass="less2" />
+				<p:calendar id="calEndDate" value="#{reportPhyLimBean.endDate }" 
+					size="10" pattern="dd/MM/yyyy"     showOn="button" 
+					required="true"  
+					/>
+				<p:message for="calEndDate" />
+			</h:panelGrid>
+			
+			<p:commandButton icon="ui-icon-search" value="#{i18n.label_to_search }"
+				action="#{reportPhyLimBean.search}"
+				update="@form" />
+			
+		</h:panelGrid>
+	
+		<p:spacer height="10" />
+		<p:separator />
+		<p:spacer height="10" />
+	
+		<h:panelGrid rendered="#{not empty reportPhyLimBean.answers}" columns="2" cellpadding="5">
+			<p:commandButton icon="ui-icon-print" value="#{i18n.label_to_print }" type="button">
+				<p:printer target="panelPhyLimReport" />
+			</p:commandButton>
+			
+			<p:commandButton icon="ui-icon-calendar" value="#{i18n.label_to_export_to_excel }" ajax="false" >
+				<p:dataExporter target="dtPhyLim" type="xls" fileName="#{reportPhyLimBean.filenameExportedExcel}" />
+			</p:commandButton>
+		</h:panelGrid>
+	
+		<p:dataTable id="dtPhyLim" value="#{reportPhyLimBean.answers }" var="answer"
+			emptyMessage="#{i18n.msg_no_result_found }">
+		
+			<p:column>
+				<f:facet name="header">
+					<h:outputText value="#{i18n.label_civil_name}" />
+				</f:facet>
+				<h:outputText value="#{answer.register.contact.civilName }" />
+			</p:column>
+			
+			<p:column>
+				<f:facet name="header">
+					<h:outputText value="#{i18n.label_new_name}" />
+				</f:facet>
+				<h:outputText value="#{answer.register.contact.name }" />
+			</p:column>
+			
+			<p:column>
+				<f:facet name="header">
+					<h:outputText value="#{i18n.label_question}" />
+				</f:facet>
+				<h:outputText value="#{answer.question.text }" />
+			</p:column>
+			
+			<p:column>
+				<f:facet name="header">
+					<h:outputText value="#{i18n.label_treatment}" />
+				</f:facet>
+				<h:outputText value="#{answer.textAnswer }" />
+			</p:column>
+			
+			<p:column>
+				<f:facet name="header">
+					<h:outputText value="#{i18n.label_checkin_date}" />
+				</f:facet>
+				<h:outputText value="#{answer.register.previewCheckinDate }" >
+					<f:convertDateTime pattern="dd/MM/yyyy"     />
+				</h:outputText>
+			</p:column>
+			
+		</p:dataTable>		
+
+	</p:panel>
+</h:form>
+
+</ui:define>
+</ui:composition>

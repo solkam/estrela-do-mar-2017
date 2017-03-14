@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:fragment xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:cb="http://java.sun.com/jsf/composite/component">
+
+<p:dialog widgetVar="DialogPaymentPrint" header="#{i18n.label_view }" 
+    modal="true" dynamic="true" maximizable="true" closeOnEscape="true" 
+    position="top" >
+
+	<h:form id="formPaymentPrint">
+
+		<h:panelGrid style="width:100%; text-align:center">
+			<p:commandButton icon="ui-icon-print"
+				value="#{i18n.label_print_payment_docket}" type="button">
+				
+				<p:printer target="panelCheckinConfirmation" />
+			</p:commandButton>
+		</h:panelGrid>
+	
+		<p:panel id="panelCheckinConfirmation" >
+	
+			<p:panel>
+				<h:panelGrid columns="2" rules="cols" cellpadding="5">
+					<h:panelGrid columns="2" cellpadding="5">
+						<h:graphicImage library="img"
+							name="#{sessionHolder.currentMegaEvent.type.image }" />
+						<h:panelGroup>
+							<h:outputText value="#{sessionHolder.currentMegaEvent.name }"
+								styleClass="destak2" />
+							<br />
+							<h:outputText
+								value="#{sessionHolder.currentMegaEvent.descDates}"
+								styleClass="less2" />
+						</h:panelGroup>
+					</h:panelGrid>
+
+					<h:panelGrid>
+						<h:outputText value="#{i18n.label_payment_docket}" styleClass="destak2" />
+						<p:separator />
+						<h:panelGrid columns="2" cellpadding="5">
+							<h:outputText value="#{i18n.label_docket_number }:" styleClass="less2" />
+							<h:outputText value="#{paymentBean.registerDocket.id }" styleClass="destak3" />
+						
+		 					<h:outputText value="#{i18n.label_docket_date }:" styleClass="less2" />
+							<cb:outputDate value="#{paymentBean.registerDocket.date }" styleClass="destak3" />
+						</h:panelGrid>
+					</h:panelGrid>
+				</h:panelGrid>
+			</p:panel>
+	
+			<h:panelGrid columns="2" cellpadding="5" rules="cols">
+			
+				<h:panelGrid columns="2" cellpadding="2">
+					<h:outputText value="#{i18n.label_register_number}:" styleClass="less2" />
+					<h:outputText value="#{paymentBean.selectedRegister.id }" styleClass="destak3" />
+		
+					<h:outputText value="#{i18n.label_register_name}:" styleClass="less2" />
+					<h:outputText value="#{paymentBean.selectedContact.fullDesc }"	styleClass="destak1" />
+		
+					<h:outputText value="#{i18n.label_productor}:"	styleClass="less2" />
+					<h:panelGroup>
+						<h:outputText
+							value="#{paymentBean.selectedContact.productorContact.fullDesc}" styleClass="destak3"
+							rendered="#{not empty paymentBean.selectedContact.productorContact}" />
+							
+						<h:outputText value="#{i18n.msg_no_productor_selected}" styleClass="less3"
+							rendered="#{empty paymentBean.selectedContact.productorContact}" />
+					</h:panelGroup>
+		
+					<h:outputText value="#{i18n.label_trainner}:" styleClass="less2" />
+					<h:panelGroup>
+						<h:outputText
+							value="#{paymentBean.selectedContact.trainnerContact.fullDesc}" styleClass="destak3"
+							rendered="#{not empty paymentBean.selectedContact.trainnerContact}" />
+							
+						<h:outputText value="#{i18n.msg_no_trainner_selected}" styleClass="less3"
+							rendered="#{empty paymentBean.selectedContact.trainnerContact}" />
+					</h:panelGroup>
+				</h:panelGrid>
+	
+				<h:panelGrid columns="2" cellpadding="2">
+					<h:outputText value="#{i18n.label_trip}:" styleClass="less2" />
+					<h:panelGrid columns="2" cellpadding="5">
+						<h:outputText value="#{i18n.label_arrival_date}:" />
+						<cb:outputDate
+							value="#{paymentBean.selectedRegister.tripInfo.tripArrivalDate }"
+							styleClass="destak3" />
+		
+						<h:outputText value="#{i18n.label_departure_date}:" />
+						<cb:outputDate
+							value="#{paymentBean.selectedRegister.tripInfo.tripDepartureDate }"
+							styleClass="destak3" />
+					</h:panelGrid>
+		
+					<h:outputText value="#{i18n.label_preview_checkout_date}:"
+						styleClass="less2" />
+					<cb:outputDate
+						value="#{paymentBean.selectedRegister.previewCheckoutDate }"
+						styleClass="destak3" />
+				</h:panelGrid>
+			</h:panelGrid>
+	
+			<h:panelGrid>
+				<h:outputText value="#{i18n.label_events}:" styleClass="less2" />
+				
+				<p:dataTable value="#{paymentBean.selectedRegister.details }"
+					var="detail" emptyMessage="#{i18n.msg_no_event_selected }">
+					<p:column headerText="#{i18n.label_week_or_phase}">
+					#{detail.eventWeek.name }
+					</p:column>
+		
+					<p:column headerText="#{i18n.label_event}">
+						#{detail.event.displayNameOrSchool }
+					</p:column>
+		
+					<p:column headerText="#{i18n.label_presence}">
+						#{i18n[detail.presence.key]}
+					</p:column>
+		
+					<p:column headerText="#{i18n.label_value}">
+						<cb:outputCurrency value="#{detail.value}" />
+						<f:facet name="footer">
+							<cb:outputCurrency
+								value="#{paymentBean.selectedRegister.calculatedTotalValue}"
+								styleClass="destak4" />
+						</f:facet>
+					</p:column>
+	
+					<p:column headerText="#{i18n.label_paid_value}">
+						<cb:outputCurrency value="#{detail.calculatedPaidValue}"
+							styleClass="paid" />
+						<f:facet name="footer">
+							<cb:outputCurrency
+								value="#{paymentBean.selectedRegister.calculatedPaidValue}"
+								styleClass="destak4 paid" />
+						</f:facet>
+					</p:column>
+	
+					<p:column headerText="#{i18n.label_pendent_value}">
+						<cb:outputCurrency value="#{detail.calculatedPendentValue}"
+							styleClass="pendent" />
+						<f:facet name="footer">
+							<cb:outputCurrency
+								value="#{paymentBean.selectedRegister.calculatedPendentValue}"
+								styleClass="destak4 pendent" />
+						</f:facet>
+					</p:column>
+	
+					<p:column headerText="#{i18n.label_payments }">
+						<h:outputText value="#{i18n.label_no_payments }"
+							rendered="#{empty detail.payments}" />
+	
+						<p:dataTable value="#{detail.payments}" var="payment"
+							rendered="#{not empty detail.payments}">
+							<p:column>
+								<f:facet name="header">
+									<h:outputText value="#{i18n.label_payment_method }"
+										styleClass="less2" />
+								</f:facet>
+								<h:outputText value="#{i18n[payment.method.key]}"
+									styleClass="less2" />
+							</p:column>
+							<p:column>
+								<f:facet name="header">
+									<h:outputText value="#{i18n.label_sale_order }"
+										styleClass="less2" />
+								</f:facet>
+								<h:outputText value="#{payment.saleOrder}"
+									styleClass="less2" />
+							</p:column>
+							<p:column>
+								<f:facet name="header">
+									<h:outputText value="#{i18n.label_date}" styleClass="less2" />
+								</f:facet>
+								<cb:outputDate value="#{payment.date}" styleClass="less2" />
+							</p:column>
+							<p:column>
+								<f:facet name="header">
+									<h:outputText value="#{i18n.label_value }"
+										styleClass="less2" />
+								</f:facet>
+								<cb:outputCurrency value="#{payment.value}"
+									styleClass="less2" />
+							</p:column>
+						</p:dataTable>
+					</p:column>
+				</p:dataTable>
+			</h:panelGrid>
+		</p:panel>
+	</h:form>
+</p:dialog>
+
+</ui:fragment>

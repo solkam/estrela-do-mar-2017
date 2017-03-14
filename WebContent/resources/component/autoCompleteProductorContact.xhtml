@@ -1,0 +1,29 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:cc="http://java.sun.com/jsf/composite"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+<cc:interface>
+	<cc:attribute name="value" required="true" />
+	<cc:attribute name="update" required="true" />
+</cc:interface>
+
+<cc:implementation>
+
+	<h:form>
+		<p:autoComplete value="#{cc.attrs.value}"
+			completeMethod="#{autoCompleteContactBean.queryProductorContact }"  
+			var="contactRow" itemValue="#{contactRow}" itemLabel="#{contactRow.fullDesc }"
+			converter="#{contactConverter}"
+			queryDelay="500" size="60" maxResults="10" forceSelection="false" minQueryLength="2" >
+		
+			<p:ajax event="itemSelect" process="@this" update="#{cc.attrs.update}" />	
+		</p:autoComplete>
+	</h:form>
+
+</cc:implementation>
+
+</html>

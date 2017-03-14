@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:fragment xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:cb="http://java.sun.com/jsf/composite/component">
+
+
+<!-- Dialog Dados Pessoais -->
+<!-- ********************* -->
+<p:dialog widgetVar="DialogPersonalData" header="#{i18n.label_edit_personal_data}"
+	modal="true" dynamic="true" closeOnEscape="true" maximizable="true"
+	position="top" width="80%" height="80%" >
+	
+	<h:form id="formEditPersonalData">
+	
+		<cb:globalMessages />
+	
+		<p:scrollPanel styleClass="scrollable2" mode="native">
+	
+			<h:panelGrid columns="2" cellpadding="10">
+				<p:outputLabel for="inRootSchool" value="#{i18n.label_root_school}" styleClass="destak4 req" />
+				<h:panelGrid>
+					<p:selectOneMenu id="inRootSchool" value="#{paymentBean.selectedContact.rootSchool}" required="true">
+						<f:selectItem itemLabel="--" noSelectionOption="true" />
+						<f:selectItems value="#{enumHelper.schools}" var="schoolRow"
+							itemValue="#{schoolRow}" itemLabel="#{i18n[schoolRow.key]}" />
+					</p:selectOneMenu>
+					<p:message for="inRootSchool" />
+				</h:panelGrid>
+			</h:panelGrid>
+	
+			<h:panelGrid columns="2" width="100%">
+				<h:panelGrid columns="1">
+					<p:outputLabel for="inNewName" value="#{i18n.label_new_name}" styleClass="less2" />
+					<p:inputText id="inNewName" value="#{paymentBean.selectedContact.name }" size="30"
+						required="false"  />
+					<p:message for="inNewName" />
+				</h:panelGrid>
+	
+				<h:panelGrid columns="1">
+					<p:outputLabel for="inCivilName" value="#{i18n.label_civil_name}"  styleClass="less2 req" />
+					<p:inputText id="inCivilName"  value="#{paymentBean.selectedContact.civilName }"  size="60"
+						required="true"  />
+					<p:message for="inCivilName" />
+				</h:panelGrid>
+	
+				<h:panelGrid columns="1">
+					<p:outputLabel for="inEmail" value="#{i18n.label_email}"  styleClass="less2 req" />
+					<p:inputText id="inEmail" value="#{paymentBean.selectedContact.email }" size="60"
+						required="true"  />
+					<p:message for="inEmail" />
+				</h:panelGrid>
+	
+				<h:panelGrid columns="1">
+					<p:outputLabel for="inTel" value="#{i18n.label_telephone}"  styleClass="less2 req" />
+					<p:inputText id="inTel" value="#{paymentBean.selectedContact.telephone1 }"  size="30"
+						required="true"  />
+					<p:message for="inTel" />
+				</h:panelGrid>
+	
+				<h:panelGrid columns="1">
+					<p:outputLabel for="inAddress" value="#{i18n.label_address}" styleClass="less2 req"  />
+					<p:inputText id="inAddress" value="#{paymentBean.selectedContact.address }"  size="60"
+						required="true"  />
+					<p:message for="inAddress" />
+				</h:panelGrid>
+	
+				<h:panelGrid columns="1">
+					<p:outputLabel for="inZip" value="#{i18n.label_zip_code}" styleClass="less2"  />
+					<p:inputText id="inZip" value="#{paymentBean.selectedContact.zipPostal }" size="30"
+						required="false"  />
+					<p:message for="inZip" />
+				</h:panelGrid>
+	
+				<h:panelGrid columns="1">
+					<p:outputLabel for="inCity" value="#{i18n.label_city}" styleClass="less2 req"  />
+					<p:inputText id="inCity" value="#{paymentBean.selectedContact.city }"  size="40"
+						required="true"  />
+					<p:message for="inCity" />
+				</h:panelGrid>
+	
+				<h:panelGrid columns="1">
+					<p:outputLabel for="inCountry" value="#{i18n.label_country}" styleClass="less2 req"  />
+					<p:inputText id="inCountry" value="#{paymentBean.selectedContact.country }"  size="30"
+						required="true"  />
+					<p:message for="inCountry" />
+				</h:panelGrid>
+	
+				<h:panelGrid columns="1">
+					<p:outputLabel for="inDocType" value="#{i18n.label_document_type_with_examples}" styleClass="less2 req"  />
+					<cb:selectDocumentType id="inDocType" value="#{paymentBean.selectedContact.identityDocumentType }" 
+						required="true" />
+					<p:message for="inDocType" />
+				</h:panelGrid>
+	
+				<h:panelGrid columns="1">
+					<p:outputLabel for="inDoc" value="#{i18n.label_document_identity}" styleClass="less2 req"  />
+					<p:inputText id="inDoc" value="#{paymentBean.selectedContact.identityDocument }" size="20" 
+						required="true" />
+					<p:message for="inDoc" />
+				</h:panelGrid>
+	
+				<h:panelGrid columns="1">
+					<p:outputLabel for="calBirthday" value="#{i18n.label_birthdate_with_format}" styleClass="less2 req"  />
+					<p:calendar id="calBirthday" value="#{paymentBean.selectedContact.birthDate }" 
+						required="true"  pattern="dd/MM/yyyy"  navigator="true"   
+						/>
+					<p:message for="calBirthday" />
+				</h:panelGrid>
+	
+				<h:panelGrid columns="1">
+					<p:outputLabel for="inSex" value="#{i18n.label_sex}" styleClass="less2 req"  />
+					<p:selectOneRadio id="inSex" value="#{paymentBean.selectedContact.gender }" 
+						required="true"	>
+						<f:selectItem itemValue="M" itemLabel="#{i18n.GENDER_MALE}" />
+						<f:selectItem itemValue="F" itemLabel="#{i18n.GENDER_FEMALE}" />
+					</p:selectOneRadio>
+						<p:message for="inSex" />
+				</h:panelGrid>
+			</h:panelGrid>
+			
+			<h:panelGrid columns="3" cellpadding="10" width="100%">
+				<h:panelGrid columns="2">
+					<p:outputLabel for="inFlagProd" value="#{i18n.label_is_productor}" styleClass="less2"  />
+					<p:selectBooleanButton id="inFlagProd" value="#{paymentBean.selectedContact.flagProductor }"
+						onLabel="#{i18n.label_yes}" onIcon="ui-icon-check" 
+						offLabel="#{i18n.label_no}" offIcon="ui-icon-close" 
+						/>
+					<p:message for="inFlagProd" />
+				</h:panelGrid>
+
+				<h:panelGrid columns="2">
+					<p:outputLabel for="inFlagCons" value="#{i18n.label_is_consultant}" styleClass="less2"  />
+					<p:selectBooleanButton id="inFlagCons" value="#{paymentBean.selectedContact.flagConsultant }" 
+						onLabel="#{i18n.label_yes}" onIcon="ui-icon-check" 
+						offLabel="#{i18n.label_no}" offIcon="ui-icon-close" 
+						/>
+					<p:message for="inFlagCons" />
+				</h:panelGrid>
+
+				<h:panelGrid columns="2">
+					<p:outputLabel for="inTypeTrainner" value="#{i18n.label_is_trainner}" styleClass="less2"  />
+					<p:selectOneMenu id="inTypeTrainner" value="#{paymentBean.selectedContact.trainnerType }" >
+						<f:selectItem itemLabel="#{i18n.label_no}" noSelectionOption="true" />
+						<f:selectItems value="#{enumHelper.trainnerTypes}" var="typeRow"
+							itemValue="#{typeRow}" itemLabel="#{i18n[typeRow.key]}" />
+					</p:selectOneMenu>
+					<p:message for="inTypeTrainner" />
+				</h:panelGrid>
+			</h:panelGrid>
+			
+		</p:scrollPanel>
+		
+		<p:toolbar>
+			<p:toolbarGroup>
+				<p:commandButton icon="ui-icon-check" value="#{i18n.label_save_personal_data}"
+					action="#{paymentBean.savePersonalData }"
+					update="@form :formRegister:displayDetails :formRegister:tabDetail:displayPersonalData" 
+					oncomplete="if (args.sucessOnly) DialogPersonalData.hide()" 
+					/>
+			</p:toolbarGroup>
+		</p:toolbar>
+			 
+	</h:form>
+</p:dialog>
+
+
+</ui:fragment>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:fragment xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:cb="http://java.sun.com/jsf/composite/component">
+
+<p:dialog widgetVar="DialogChangeStatusToCheckedIN" header="#{i18n.label_alter_status_to_checkedin }"
+	modal="true" dynamic="true" closeOnEscape="true" maximizable="false"
+	position="top" >
+	
+	<h:form id="formAlterStatusToCheckedin">
+		<p:panel>
+			<h:panelGrid columns="3" cellpadding="5">
+				<p:outputLabel value="#{i18n.label_checkin_date }:" />
+				<p:calendar id="calCheckinDate" value="#{paymentBean.selectedRegister.checkin.checkinDate }"
+					size="10" pattern="dd/MM/yyyy"     showOn="button"
+					required="true" />	
+				<p:message for="calCheckinDate"/>	
+			
+				<h:outputText value="#{i18n.label_note }:" />
+				<p:inputTextarea id="inNote" value="#{paymentBean.selectedRegister.checkin.checkinNote }" rows="2" cols="33" />
+				<p:message for="inNote" />
+				
+				<h:outputText value="#{i18n.label_user }" />
+				<h:outputText value="#{paymentBean.selectedRegister.checkin.checkinUser.contact.email }" />
+			</h:panelGrid>
+		</p:panel>
+
+		<p:commandButton icon="ui-icon-arrowreturn-1-s" value="#{i18n.label_alter_status }"
+			action="#{paymentBean.alterStatusToCheckedin }"
+			update="@form :formRegister:displayDetails"
+			 />
+			 
+		<p:messages />	 
+		
+	</h:form>
+</p:dialog>
+
+
+</ui:fragment>

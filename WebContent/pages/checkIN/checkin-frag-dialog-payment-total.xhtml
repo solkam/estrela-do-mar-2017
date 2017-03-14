@@ -1,0 +1,126 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:fragment xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:cb="http://java.sun.com/jsf/composite/component">
+
+<!-- Dialog Pagamentos TOTAL -->
+<!-- *********************** -->
+<p:dialog widgetVar="DialogTotalPayment" header="#{i18n.label_total_payment}" 
+	modal="true" maximizable="true" dynamic="true" closeOnEscape="true"
+	position="top" >
+
+	<h:form id="formTotalPayment">
+		<p:dataTable value="#{checkInEventBean.listForTotalPayment}" var="paymentRow">
+		
+			<p:column headerText="#{i18n.label_week_or_phase}">
+				<h:outputText value="#{paymentRow.registerDetail.eventWeek.name}" styleClass="destak3" />
+				<br />
+				<h:outputText value="#{paymentRow.registerDetail.eventWeek.descDates}" styleClass="less3" />
+			</p:column>
+
+			<p:column headerText="#{i18n.label_event}">
+				<h:outputText value="#{paymentRow.registerDetail.event.displayNameOrSchool}" styleClass="destak4" />
+				<br />
+				<h:outputText value="#{i18n[paymentRow.registerDetail.presence.key]}" styleClass="less3" />
+				<br />
+				<h:outputText value="#{paymentRow.registerDetail.dependentContactName}" styleClass="destak3" />
+			</p:column>
+
+			<p:column headerText="#{i18n.label_pendent_values}" styleClass="pendent">
+				<cb:outputCurrency value="#{paymentRow.value}" styleClass="destak3" />
+			</p:column>
+
+		</p:dataTable>
+
+		<p:spacer height="10px" />
+
+		<fieldset>
+			<legend>#{i18n.label_infos_about_total_payment}:</legend>
+			
+			<h:panelGrid>
+				<h:panelGrid columns="4" cellpadding="5">
+					<h:panelGrid>
+						<p:outputLabel for="selMethodTP" value="#{i18n.label_payment_method}" styleClass="less2 req" />
+						<p:selectOneMenu id="selMethodTP" value="#{checkInEventBean.methodForTotalPayment}"	required="true" >
+							<f:selectItems value="#{enumHelper.megaEventPaymentMethods }" var="pm" 
+								itemLabel="#{i18n[pm.key]}" />
+							<p:ajax process="@this" update="displayCheckInputs" />
+						</p:selectOneMenu>
+						<p:message for="selMethodTP" />
+					</h:panelGrid>
+	
+					<h:panelGrid>
+						<p:outputLabel for="inSalesOrder" value="#{i18n.label_sale_order}" styleClass="less2" />
+						<p:inputText id="inSalesOrder" value="#{checkInEventBean.saleOrderForTotalPayment }" />
+						<p:message for="inSalesOrder" />
+					</h:panelGrid>
+	
+					<h:panelGrid>
+						<p:outputLabel for="inDate" value="#{i18n.label_date}" styleClass="less2" />
+						<p:calendar id="inDate" value="#{checkInEventBean.dateForTotalPayment }" pattern="dd/MM/yyyy" navigator="true" />
+						<p:message for="inDate" />
+					</h:panelGrid>
+					
+					<h:panelGrid>
+						<h:outputText value="#{i18n.label_total_payment_value }" styleClass="less2" />
+						<cb:outputCurrency value="#{checkInEventBean.valueForTotalPayment }" styleClass="destak3 pendent" />
+					</h:panelGrid>
+				</h:panelGrid>
+
+				<p:outputPanel id="displayCheckInputs" >
+					<h:panelGrid columns="4" rendered="#{checkInEventBean.methodForTotalPayment.flagCheck}" >
+						<h:panelGrid>
+							<p:outputLabel for="inChTitular" value="#{i18n.label_check_titular }" styleClass="less2 req" />
+							<p:inputText id="inChTitular" value="#{checkInEventBean.checkTitularForTotalPayment}" size="26" required="true"  />
+							<p:message for="inChTitular" />
+						</h:panelGrid>
+			
+						<h:panelGrid>
+							<p:outputLabel for="inChBank" value="#{i18n.label_check_bank}" styleClass="less2" />
+							<p:inputText id="inChBank" value="#{checkInEventBean.checkBankForTotalPayment}" size="20" />
+							<p:message for="inChBank" />
+						</h:panelGrid>
+
+						<h:panelGrid>
+							<p:outputLabel for="inChAccount" value="#{i18n.label_check_account }" styleClass="less2" />
+							<p:inputText id="inChAccount" value="#{checkInEventBean.checkAccountForTotalPayment}" size="10" />
+							<p:message for="inChAccount" />
+						</h:panelGrid>
+
+						<h:panelGrid>
+							<p:outputLabel for="inChNumber" value="#{i18n.label_check_number }" styleClass="less2 req" />
+							<p:inputText id="inChNumber" value="#{checkInEventBean.checkNumberForTotalPayment}" size="10" required="true" />
+							<p:message for="inChNumber" />
+						</h:panelGrid>
+					</h:panelGrid>
+				</p:outputPanel>
+
+				<h:panelGrid>
+					<p:outputLabel for="inNote" value="#{i18n.label_note}" styleClass="less2" />
+					<p:inputTextarea id="inNote" value="#{checkInEventBean.noteForTotalPayment }" rows="2" cols="80" />
+				</h:panelGrid>
+			</h:panelGrid>
+			
+		</fieldset>
+
+		<p:spacer height="10px" />
+
+		<fieldset style="text-align: center;">
+			<p:commandButton widgetVar="BtnConfirmTotalPay"
+				icon="ui-icon-flag" value="#{i18n.label_confirm_total_payment }"
+				action="#{checkInEventBean.saveTotalPayment }"
+				update="@form :formCheckin"
+				onclick="BtnConfirmTotalPay.disable()"
+				oncomplete="if (args.sucessOnly) DialogTotalPayment.hide()" />
+		</fieldset>
+
+		<cb:globalMessages />
+
+	</h:form>
+</p:dialog>
+
+
+</ui:fragment>

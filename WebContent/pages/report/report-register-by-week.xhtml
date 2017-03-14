@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:cb="http://java.sun.com/jsf/composite/component"
+	template="/WEB-INF/design/_decorate-report.xhtml">
+
+<ui:define name="reportContent" >
+
+<p:panel header="#{i18n.report_register_by_week }">
+	
+	<h:form>	
+		<h:panelGrid columns="4" cellpadding="10">
+			<h:panelGrid>
+				<h:outputText value="MegaEvento: " styleClass="less2" />
+				<h:outputText value="#{reportBean.currentMegaEvent.name }" styleClass="destak2" />
+			</h:panelGrid>
+			
+			<h:panelGrid>
+				<p:outputLabel for="selWeek" value="Semanas:" styleClass="less2 req" />
+				<p:selectCheckboxMenu id="selWeek" label="(selecione)" value="#{reportRegisterByWeekBean.selectedEventWeeks}"
+					converter="#{eventWeekConverter}" required="true"  >
+	
+					<f:selectItems value="#{reportBean.currentEventWeeks }" var="w"
+						itemValue="#{w}" itemLabel="#{w.name}" />
+				</p:selectCheckboxMenu>
+				<p:message for="selWeek" />
+			</h:panelGrid>
+			
+			<h:panelGrid cellpadding="2">
+				<p:outputLabel for="selStatus"   value="#{i18n.label_status }"   styleClass="less2 req" />
+				<p:selectManyCheckbox id="selStatus" value="#{reportRegisterByWeekBean.selectedStatusList }" 
+					layout="pageDirection" required="true" converter="#{registerStatusConverter}" >
+					<f:selectItems value="#{enumHelper.registerStatusList }" var="statusRow" 
+						itemValue="#{statusRow }" itemLabel="#{i18n[statusRow.key] }" />
+				</p:selectManyCheckbox>
+				<p:message for="selStatus" />
+			</h:panelGrid>
+			
+			
+			<p:commandButton icon="ui-icon-search" value="Pesquisar"
+				action="#{reportRegisterByWeekBean.search }"
+				update="@form" />
+			
+		</h:panelGrid>
+		
+		
+		<p:spacer height="5" />
+		<p:separator />
+		<p:spacer height="5" />
+
+		<cb:globalMessages />
+	
+		<h:outputText value="#{i18n.msg_no_result_found}" styleClass="req"
+			rendered="#{empty reportRegisterByWeekBean.summaries}" />
+	
+		<p:outputPanel rendered="#{not empty reportRegisterByWeekBean.summaries}">
+		
+			<p:fieldset legend="#{i18n.label_export_options}" toggleable="true" collapsed="true">
+				<h:panelGrid columns="2" cellpadding="5">
+					<p:commandButton icon="ui-icon-calendar" value="#{i18n.label_export_to_excel}" 
+						action="#{reportRegisterByWeekBean.exportToExcel() }" 
+						ajax="false"
+						/>
+					<p:commandButton icon="ui-icon-document" value="#{i18n.label_export_pdf}" 	
+						action="#{reportRegisterByWeekBean.exportToPdf() }" 
+						ajax="false"
+						/>
+				</h:panelGrid>
+			</p:fieldset>
+			
+			<p:spacer height="5" />
+	
+			<h:dataTable var="summary" value="#{reportRegisterByWeekBean.summaries }" 
+				width="100%" cellpadding="10" cellspacing="0" style="border:1px solid black" border="1" >
+				
+				<h:column>
+				
+					<h:panelGrid columns="2" cellpadding="5" rendered="#{empty summary.registers}">
+						<h:outputText value="#{summary.eventWeek.name}:" styleClass="destak2"  />
+						<h:outputText value="#{i18n.msg_no_result_found }" />
+					</h:panelGrid>
+				
+					<h:panelGrid width="100%" cellpadding="5" rendered="#{not empty summary.registers}">
+						<h:outputText value="#{summary.eventWeek.name}" styleClass="destak1" />
+						
+						<p:panelGrid columns="6" >
+							<h:outputText value="#{i18n.label_age_child_number}:"   styleClass="less1" />
+							<h:outputText value="#{i18n.label_age_young_number}:"   styleClass="less1" />
+							<h:outputText value="#{i18n.label_age_adult_number}:"   styleClass="less1" />
+							<h:outputText value="#{i18n.label_age_ancient_number}:" styleClass="less1" />
+							<h:outputText value="#{i18n.label_age_unknow_number}:"  styleClass="less1" />
+							<h:outputText value="#{i18n.label_age_total_number}"    styleClass="less1" />
+						
+							<h:outputText value="#{summary.numberOfChild }"   styleClass="less1"   />
+							<h:outputText value="#{summary.numberOfYoung }"   styleClass="less1"   />
+							<h:outputText value="#{summary.numberOfAdult }"   styleClass="less1"   />
+							<h:outputText value="#{summary.numberOfAncient }" styleClass="less1"   />
+							<h:outputText value="#{summary.numberOfUnknown }" styleClass="less1"   />
+							<h:outputText value="#{summary.numberOfTotal }"   styleClass="destak3" />
+						</p:panelGrid>
+					</h:panelGrid>
+					
+					<p:dataTable var="register" value="#{summary.registers}" 
+						rendered="#{not empty summary.registers}" >
+					
+						<p:column headerText="#">
+							#{register.id }
+						</p:column>
+	
+						<p:column headerText="#{i18n.label_civil_name}" sortBy="#{register.contact.civilName }">
+							#{register.contact.civilName }
+						</p:column>
+
+						<p:column headerText="#{i18n.label_new_name}" sortBy="#{register.contact.name }">
+							#{register.contact.name }
+						</p:column>
+			
+						<p:column headerText="#{i18n.label_sex}" sortBy="#{register.contact.gender}">
+							#{register.contact.gender}
+						</p:column>
+						
+						<p:column headerText="#{i18n.label_age}" styleClass="colCenter" sortBy="#{register.contact.maturity.key}">
+							<h:outputText value="#{i18n[register.contact.maturity.key]}" />
+						</p:column>
+
+						<p:column headerText="#{i18n.label_country}" sortBy="#{register.contact.country}">
+							#{register.contact.country}
+						</p:column>
+						
+						<p:column headerText="#{i18n.label_city}" sortBy="#{register.contact.city}">
+							#{register.contact.city}
+						</p:column>
+	
+						<p:column headerText="#{i18n.label_productor}" sortBy="#{register.contact.productorContact.shortDesc}">
+							#{register.contact.productorContact.shortDesc}
+						</p:column>
+						
+						<p:column exportable="false" styleClass="colCenter">
+							<cb:displayRegisterStatus register="#{register}" />
+						</p:column>
+
+						<p:column headerText="#{i18n.label_status}" styleClass="colCenter" sortBy="#{register.status}">
+							<h:outputText value="#{i18n[register.status.key]}" styleClass="less2" />
+						</p:column>
+
+						<p:column headerText="#{i18n.label_preview_checkin_date}" styleClass="colCenter" sortBy="#{register.previewCheckinDate}">
+							<cb:outputDate value="#{register.previewCheckinDate}" />
+						</p:column>
+
+						<p:column headerText="#{i18n.label_checkin_date}" styleClass="colCenter" sortBy="#{register.checkin.checkinDate}">
+							<cb:outputDate value="#{register.checkin.checkinDate}" />
+						</p:column>
+	
+						<p:column headerText="#{i18n.label_preview_checkout_date}" styleClass="colCenter" sortBy="#{register.previewCheckoutDate}">
+							<cb:outputDate value="#{register.previewCheckoutDate}" />
+						</p:column>
+	
+						<p:column headerText="#{i18n.label_checkout_date}" styleClass="colCenter" sortBy="#{register.checkout.checkoutDate}">
+							<cb:outputDate value="#{register.checkout.checkoutDate}" />
+						</p:column>
+	
+					</p:dataTable>
+					
+					<p:spacer height="15" />
+					
+				</h:column>
+			</h:dataTable>
+		</p:outputPanel>
+	</h:form>
+
+</p:panel>
+</ui:define>
+	
+
+</ui:composition>

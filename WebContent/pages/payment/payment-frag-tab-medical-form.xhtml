@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:fragment xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:cb="http://java.sun.com/jsf/composite/component">
+
+<p:dataTable value="#{paymentBean.medicalAnswers }" var="aswerRow">
+	<p:column headerText="#{i18n.label_question}">
+		<h:outputText value="#{aswerRow.question.displayTextByLocale(facesContext.viewRoot.locale) }" />
+	</p:column>
+
+	<p:column headerText="#{i18n.label_answer}" style="width:15%" >
+		<h:outputText value="#{i18n.label_no }" rendered="#{not aswerRow.booleanAnswer }" />
+		<h:outputText value="#{i18n.label_yes}" rendered="#{aswerRow.booleanAnswer }" styleClass="pendent" />
+	</p:column>
+
+	<p:column headerText="#{i18n.label_treatment}"  style="width:20%" >
+		<h:outputText value="#{aswerRow.textAnswer }" />
+	</p:column>
+
+</p:dataTable>
+
+
+</ui:fragment>

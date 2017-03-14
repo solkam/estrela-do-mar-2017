@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:cb="http://java.sun.com/jsf/composite/component"
+	template="/WEB-INF/design/_decorate-report.xhtml">
+
+<ui:define name="reportContent" >
+
+<h:form id="formResult">
+	<p:panel header="#{i18n.report_balance_by_register }">
+
+		<h:panelGrid columns="3" cellpadding="5">
+			<h:panelGrid>
+				<h:outputText value="MegaEvento: " styleClass="less2" />
+				<h:outputText value="#{reportBean.currentMegaEvent.name }" styleClass="destak2" />
+			</h:panelGrid>
+			
+			<h:panelGroup>
+				<cb:selectContact value="#{reportBalanceByRegisterBean.selectedContact}" />
+				<p:messages globalOnly="true" />
+			</h:panelGroup>
+			
+			<p:commandButton icon="ui-icon-search" value="#{i18n.label_to_search}"
+				action="#{reportBalanceByRegisterBean.search }"
+				update="@form" 
+				/>
+		</h:panelGrid>
+	
+		<p:spacer height="10" />
+
+		<p:dataTable var="registerSummary" value="#{reportBalanceByRegisterBean.summaries }" 
+			emptyMessage="#{i18n.msg_no_result_found }">
+		
+			<p:column>
+				<p:dataTable value="#{registerSummary.eventWeekSummaries }" var="eventWeekSummary">
+					<f:facet name="header">
+						<h:outputText value="#{registerSummary.register.contact.fullDesc }" styleClass="destak2" />
+					</f:facet>
+
+					<p:column headerText="Semana">
+						#{eventWeekSummary.eventWeek.name }
+					</p:column>
+					
+					<p:column headerText="Total" style="text-align:center">
+						<cb:outputCurrency value="#{eventWeekSummary.totalValue }" />
+						<f:facet name="footer">
+							<cb:outputCurrency value="#{registerSummary.totalValue }" styleClass="destak3" />
+						</f:facet>
+					</p:column>
+					
+					<p:column headerText="Ja Pago" style="text-align:center">
+						<cb:outputCurrency value="#{eventWeekSummary.paidValue }" styleClass="paid" />
+						<f:facet name="footer">
+							<cb:outputCurrency value="#{registerSummary.paidValue }" styleClass="destak3 paid" />
+						</f:facet>
+					</p:column>
+					
+					<p:column headerText="Valor Pendente" style="text-align:center">
+						<cb:outputCurrency value="#{eventWeekSummary.pendentValue }" styleClass="pendent" />
+						<f:facet name="footer">
+							<cb:outputCurrency value="#{registerSummary.pendentValue }" styleClass="destak3 pendent" />
+						</f:facet>
+					</p:column>
+				
+				</p:dataTable>
+				
+				<p:spacer height="15" />
+			
+			</p:column>
+			
+		</p:dataTable>		
+
+	</p:panel>
+</h:form>
+</ui:define>
+	
+
+</ui:composition>

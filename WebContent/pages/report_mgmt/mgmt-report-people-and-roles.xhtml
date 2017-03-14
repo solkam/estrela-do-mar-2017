@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html >
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:cb="http://java.sun.com/jsf/composite/component"
+	template="/WEB-INF/design/_decorate-report-mgmt.xhtml">
+	
+<ui:define name="decorate-content" >
+
+	<h:form>
+		<h:panelGrid columns="2" cellpadding="10">
+
+			<h:panelGrid columns="2" cellpadding="5">
+				<h:outputText value="#{i18n.label_day}:" styleClass="destak4" />
+				
+				<p:calendar value="#{mrepPeopleAndRoleBean.filterDate}" 
+					pattern="dd/MM/yyyy" size="12" 
+					navigator="true" style="font-size:1.5em" />
+			</h:panelGrid>
+			
+			<p:commandButton icon="ui-icon-search" value="Pesquisar" style="font-size:1.25em"
+				action="#{mrepPeopleAndRoleBean.search()}"
+				update="@form :formResult"
+				/>
+		</h:panelGrid>
+	</h:form>
+		
+		
+	<p:separator />
+
+
+	<h:form id="formResult">
+		<cb:globalMessages />
+	
+		<p:outputPanel rendered="#{not empty mrepPeopleAndRoleBean.dtos}">
+		
+			<p:fieldset legend="Resumo" toggleable="true">
+				<h:panelGrid columns="3" cellpadding="10" >
+				
+					<p:panel style="height:600px">
+						<p:dataTable value="#{mrepPeopleAndRoleBean.activeMegaEvents }" var="megaEventVar">
+							<f:facet name="header">
+								<h:outputText value="Mega Eventos neste dia" styleClass="destak3" />
+							</f:facet>
+						
+							<p:column headerText="#{i18n.label_megaevent_name }">
+								<h:outputText value="#{megaEventVar.name }" styleClass="destak3" />
+							</p:column>
+							<p:column headerText="#{i18n.label_megaevent_begin_date }">
+								<cb:outputDate value="#{megaEventVar.beginDate }" />
+							</p:column>
+							<p:column headerText="#{i18n.label_megaevent_end_date }">
+								<cb:outputDate value="#{megaEventVar.endDate }" />
+							</p:column>
+						</p:dataTable>
+					</p:panel>
+					
+
+					<cb:panelPieChart title="Gráficos por Papel" chartModel="#{mrepPeopleAndRoleBean.chartModel}" panelStyle="height:600px" />
+					
+					
+					<p:panel style="height:600px">
+						<h:panelGrid cellpadding="5">
+							<p:dataTable value="#{mrepPeopleAndRoleBean.summaryMap.entrySet().toArray() }" var="entryVar">
+								<p:column headerText="Papel">
+									<h:outputText value="#{entryVar.key.description }" styleClass="destak3" />
+								</p:column>
+							
+								<p:column headerText="Total de pessoas" styleClass="colCenter">
+									<h:outputText value="#{entryVar.value}" styleClass="destak3" />
+									<f:facet name="footer">
+										<h:outputText value="#{mrepPeopleAndRoleBean.totalPeople}" styleClass="destak2" />
+									</f:facet>
+								</p:column>
+	
+								<p:column headerText="%" styleClass="colCenter">
+									<h:outputText value="#{mrepPeopleAndRoleBean.percentMap.get(entryVar.key) }%" styleClass="destak3" />
+								</p:column>
+							</p:dataTable>
+						</h:panelGrid>
+					</p:panel>
+
+				</h:panelGrid>
+			</p:fieldset>
+		
+		
+			<p:spacer height="10" />
+		
+		
+			<p:fieldset legend="#{i18n.label_detailed}" toggleable="true" collapsed="true">
+			
+				<p:dataTable value="#{mrepPeopleAndRoleBean.dtos}" var="dtoVar">
+					<p:column headerText="Papel" sortBy="#{dtoVar.role.description}" >
+						<h:outputText value="#{dtoVar.role.description }" styleClass="destak2" />
+					</p:column>
+
+					<p:column headerText="#{i18n.label_civil_name}" sortBy="#{dtoVar.register.contact.civilName}">
+						<h:outputText value="#{dtoVar.register.contact.civilName }" styleClass="destak3" />
+					</p:column>
+			
+					<p:column headerText="#{i18n.label_contact_new}" sortBy="#{dtoVar.register.contact.name}">
+						<h:outputText value="#{dtoVar.register.contact.name }" styleClass="destak2" />
+					</p:column>
+
+					<p:column headerText="#{i18n.label_city}" >
+						<h:outputText value="#{dtoVar.register.contact.city }" />
+					</p:column>
+
+					<p:column headerText="#{i18n.label_country}" >
+						<h:outputText value="#{dtoVar.register.contact.country }" />
+					</p:column>
+
+					<p:column headerText="#{i18n.label_age}" styleClass="colCenter" >
+						<h:outputText value="#{dtoVar.register.contact.age }" />
+					</p:column>
+
+					<p:column headerText="Status" styleClass="colCenter">
+						<cb:displayRegisterStatus register="#{dtoVar.register}" />
+					</p:column>
+				</p:dataTable>
+
+			</p:fieldset>
+		
+		</p:outputPanel>
+	</h:form>
+	
+	
+</ui:define>
+</ui:composition>

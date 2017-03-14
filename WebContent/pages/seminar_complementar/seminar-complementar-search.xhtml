@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:cb="http://java.sun.com/jsf/composite/component"
+	template="/WEB-INF/design/_template-main.xhtml">
+
+<ui:define name="content" >
+
+<cb:barPanel imageName="option_seminar_complementar_75.png" 
+	moduleName="#{i18n.title_seminar_complementary }" 
+	megaEvent="#{sessionHolder.currentMegaEvent }" 
+	/>
+
+<p:panel>
+	<h:form id="formSeminars">
+	
+		<p:fieldset legend="#{i18n.label_search}" toggleable="true" collapsed="false">
+			<h:panelGrid columns="3" cellpadding="10">
+				<h:panelGrid>
+					<h:outputText value="#{i18n.label_megaevent}" styleClass="less2" />
+					<h:outputText value="#{seminarCompBean.currentMegaEvent.name}" styleClass="destak2" />
+				</h:panelGrid>
+
+				<h:panelGrid>
+					<h:outputText value="#{i18n.label_week}" styleClass="less2" />
+					<p:selectOneMenu value="#{seminarCompBean.selectedWeek.id}" >
+						<f:selectItems value="#{seminarCompBean.weeks}" var="weekRow"
+							itemValue="#{weekRow.id}" itemLabel="#{weekRow.name}" />
+					</p:selectOneMenu>
+				</h:panelGrid>
+				
+				<p:commandButton icon="ui-icon-search" value="#{i18n.label_to_search}"
+					action="#{seminarCompBean.search()}"
+					update="@form" />
+			</h:panelGrid>
+		</p:fieldset>
+	
+		<p:spacer height="10" />
+		
+		<h:outputText value="#{i18n.msg_no_result_found}" styleClass="less2 req"
+			rendered="#{empty seminarCompBean.seminarComplementarEvents}" />
+	
+		<p:dataTable value="#{seminarCompBean.seminarComplementarEvents}" var="eventRow"
+			rendered="#{not empty seminarCompBean.seminarComplementarEvents}">
+			
+			<f:facet name="header">
+				<h:outputText value="#{seminarCompBean.selectedWeek.name}" styleClass="destak1" />
+			</f:facet>
+
+			<p:column headerText="#{i18n.label_event_name}" styleClass="col25p">
+				<h:outputText value="#{eventRow.name}" styleClass="destak3" />
+			</p:column>
+
+			<p:column headerText="#{i18n.label_event_participant_value}" styleClass="col20p colCenter">
+				<cb:outputCurrency value="#{eventRow.valueParticipant}" />
+			</p:column>
+			
+			<p:column headerText="#{i18n.label_event_staff_value}" styleClass="col20p colCenter">
+				<cb:outputCurrency value="#{eventRow.valueStaff}" />
+			</p:column>
+
+			<p:column headerText="#{i18n.label_capacity}" styleClass="col10p colCenter">
+				#{eventRow.capacity} 
+			</p:column>
+			
+			<p:column headerText="#{i18n.label_placed_ones}" styleClass="col10p colCenter">
+				#{eventRow.calculatedCapacityActual}
+			</p:column>
+		
+			<p:column headerText="#{i18n.label_placed_remaining}" styleClass="col10p colCenter">
+				#{eventRow.calculatedCapacityRemained}
+			</p:column>
+			
+			<p:column styleClass="col5p colCenter">
+				<p:commandButton icon="ui-icon-pencil"
+					action="#{seminarCompBean.manageSeminarComplementar(eventRow)}"
+					ajax="false"
+					/>
+			</p:column>
+
+		</p:dataTable>
+	
+	</h:form>
+</p:panel>	
+
+
+</ui:define>
+</ui:composition>

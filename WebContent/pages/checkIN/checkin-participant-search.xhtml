@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:fragment xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:cb="http://java.sun.com/jsf/composite/component">
+
+<h:form>
+	<h:panelGrid columns="4" cellpadding="5" >
+
+		<h:panelGroup>
+			<h:outputText value="#{i18n.label_search_for_checkin}:" />
+		</h:panelGroup>
+
+		<h:panelGroup>
+			<p:inputText value="#{checkInBean.keyword }" size="30" style="font-size:1.5em"  />
+			<br />
+			<h:outputText value="#{i18n.label_search_for_checkin_by}" styleClass="less2" />
+		</h:panelGroup>
+		
+		<p:commandButton icon="ui-icon-search" value="#{i18n.label_to_search}" style="font-size:1.25em" 
+			action="#{checkInBean.searchByKeywork }" 
+			update="@form" 
+			/>
+
+		<p:commandButton icon="ui-icon-plus" value="#{i18n.label_new_register}" rendered="false"
+			onclick="DialogEnterEmail.show()" 
+			/>
+
+	</h:panelGrid>
+	
+	<p:separator />
+	
+	<cb:globalMessages />
+
+	<h:outputText value="#{i18n.msg_no_result_found}" styleClass="less2 warning"
+		rendered="#{empty checkInBean.registers }" 
+		/>
+
+	<p:dataTable var="registerRow" value="#{checkInBean.registers }" 
+		rendered="#{not empty checkInBean.registers }">
+	
+		<p:column headerText="ID">
+			#{registerRow.id }
+		</p:column>
+	
+		<p:column headerText="#{i18n.label_name}" sortBy="#{registerRow.contact.civilName }">
+			#{registerRow.contact.fullDesc }
+		</p:column>
+
+		<p:column headerText="#{i18n.label_email}" sortBy="#{registerRow.contact.email }">
+			#{registerRow.contact.email }
+		</p:column>
+		
+		<p:column headerText="#{i18n.label_register_date}" style="text-align:center" sortBy="#{registerRow.createDate }">
+			<cb:outputDate value="#{registerRow.createDate }" />
+		</p:column>
+
+		<p:column headerText="#{i18n.label_status}" style="text-align:center;" >
+			<cb:displayRegisterStatus register="#{registerRow}" />
+		</p:column>
+		
+		<p:column styleClass="colCenter">
+			<cb:displayNote note="#{registerRow.note}" />
+		</p:column>
+		
+		<p:column style="width:5%">
+			<p:commandButton icon="ui-icon-arrowreturnthick-1-s" value="#{i18n.label_checkin}"
+				action="#{checkInBean.selectRegister(registerRow) }"
+				rendered="#{registerRow.statusRegistered or registerRow.statusIncomplete}"
+				ajax="false"
+				/>
+		</p:column>
+	</p:dataTable>
+
+	<p:spacer height="30" style="display:block;" />
+	
+	<cb:legendRegisterStatus />	
+	
+</h:form>
+
+<p:dialog widgetVar="DialogEnterEmail" modal="true" header="#{i18n.label_search_email_for_new_register}">
+	<h:form>
+		<cb:helpPanel text="#{i18n.text_enter_email_for_new_register }" />
+		
+		<h:panelGrid columns="3">
+			<h:outputText value="#{i18n.label_participant_staff_email}:" />
+			<h:panelGrid>
+				<p:inputText id="inEmailParticipant" value="#{checkInBean.emailForNewRegister }" 
+					size="40" style="font-size:1.5em"
+					required="true" label="#{i18n.label_participant_staff_email}" 
+					/>
+				<p:message for="inEmailParticipant" />
+			</h:panelGrid>
+			<p:commandButton icon="ui-icon-check" value="OK"
+				action="#{checkInBean.searchByEmailForNewRegister }"
+				ajax="false" />
+		</h:panelGrid>
+		
+	</h:form>
+</p:dialog>
+
+</ui:fragment>

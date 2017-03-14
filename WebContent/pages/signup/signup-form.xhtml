@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:cb="http://java.sun.com/jsf/composite/component"
+	template="/WEB-INF/design/_template-main.xhtml">
+
+<ui:define name="controls" />
+
+<ui:define name="options" />
+	 	 
+<ui:define name="content">
+
+	
+	<p:panel header="#{i18n.label_user_creation }">
+	
+		<cb:helpPanel text="#{i18n.text_help_user_form }" />
+		<cb:helpPanel text="Se seus dados pessoais já estão cadastrados, você deve pesquisar usando o nome civil ou nome novo"/>		
+		<cb:helpPanel text="Se seus dados ainda não foram cadastrados, você pode cadastrá-los a partir do campo 'email'"/>		
+
+		<p:spacer height="15" style="display:block" />
+		<h:outputText value="#{i18n.label_personal_data }" styleClass="destak2" />
+		<p:separator />
+		
+		<p:spacer height="10" />
+
+		<h:form id="formSearch">
+		
+			<h:panelGrid>
+				<p:outputLabel for="acContact" value="#{i18n.label_search_contact_by_new_name_or_civil_name}" styleClass="destak3" />
+				
+				<p:autoComplete id="acContact" value="#{signupBean.contact}" converter="#{contactConverter}"
+					completeMethod="#{signupBean.queryContact}" var="contactRow"
+					itemValue="#{contactRow}" itemLabel="#{contactRow.fullDesc}"
+					minQueryLength="2" queryDelay="750"
+					size="70" style="font-size:1.5em" scrollHeight="300">
+					
+					<p:column headerText="#{i18n.label_civil_name}">
+						#{contactRow.civilName}
+					</p:column>
+				
+					<p:column headerText="#{i18n.label_new_name}">
+						#{contactRow.name}
+					</p:column>
+	
+					<p:column headerText="#{i18n.label_email}">
+						#{contactRow.email}
+					</p:column>
+	
+					<p:column headerText="#{i18n.label_city}">
+						#{contactRow.city}
+					</p:column>
+	
+					<p:column headerText="#{i18n.label_country}">
+						#{contactRow.country}
+					</p:column>
+					
+					<p:column headerText="#{i18n.label_root_school}">
+						#{contactRow.rootSchool.description}
+					</p:column>
+
+					<p:ajax event="itemSelect" process="@this" 
+						listener="#{signupBean.onSelectContact}" 
+						update="@form :formNewUser" 
+						/>
+				</p:autoComplete>
+				
+			</h:panelGrid>
+
+			<cb:globalMessages />
+
+		</h:form>
+		
+		<p:spacer height="10" />
+
+		<h:form id="formNewUser">
+			<h:panelGrid columns="2" cellpadding="5">	
+				<p:outputLabel for="inEmail" value="#{i18n.label_email}" styleClass="less2 req" />
+				<h:panelGrid>
+					<p:inputText id="inEmail" value="#{signupBean.contact.email }" 
+						size="60" maxlength="60" required="true" />
+					<p:message for="inEmail" />
+				</h:panelGrid>
+	
+				<p:outputLabel for="inTel" value="#{i18n.label_telephone}" styleClass="less2 req"  />
+				<h:panelGrid>
+					<p:inputText id="inTel"  value="#{signupBean.contact.telephone1 }" 
+						size="20" maxlength="20" required="true"  />
+					<p:message for="inTel" />
+				</h:panelGrid>
+
+				<p:outputLabel for="inNewName" value="#{i18n.label_new_name_if_have}" styleClass="less2" />
+				<h:panelGrid>
+					<p:inputText id="inNewName" value="#{signupBean.contact.name }" size="30" maxlength="30" />
+					<p:message for="inNewName" />
+				</h:panelGrid>
+				
+				<p:outputLabel for="inCivilName" value="#{i18n.label_civil_name_complete}" styleClass="less2 req"  />
+				<h:panelGrid>
+					<p:inputText id="inCivilName" value="#{signupBean.contact.civilName }" 
+						size="60" maxlength="60" required="true" />
+					<p:message for="inCivilName" />
+				</h:panelGrid>
+				
+				<p:outputLabel for="inCity" value="#{i18n.label_city}" styleClass="less2 req"  />
+				<h:panelGrid>
+					<p:inputText id="inCity" value="#{signupBean.contact.city}" 
+						size="60" required="true" />
+					<p:message for="inCity" />
+				</h:panelGrid>
+
+				<p:outputLabel for="inCountry" value="#{i18n.label_country }" styleClass="less2 req"  />
+				<h:panelGrid>
+					<p:inputText id="inCountry" value="#{signupBean.contact.country }" 
+						size="60" required="true" />
+					<p:message for="inCountry" />
+				</h:panelGrid>
+
+				<p:outputLabel for="inDoc" value="#{i18n.label_document_identity}" styleClass="less2 req" />
+				<h:panelGrid>
+					<h:panelGrid columns="2">
+						<p:selectOneMenu value="#{signupBean.contact.identityDocumentType}">
+							<f:selectItems value="#{enumHelper.documentTypes}" var="typeRow"
+								itemLabel="#{i18n[typeRow.key]}" />
+						</p:selectOneMenu>
+						<p:inputText id="inDoc" value="#{signupBean.contact.identityDocument}" required="true" />
+					</h:panelGrid>
+					<p:message for="inDoc" />
+				</h:panelGrid>
+
+				<p:outputLabel for="inSchool" value="#{i18n.label_school}" styleClass="less2 req"  />
+				<h:panelGrid>
+					<p:selectOneMenu id="inSchool" value="#{signupBean.contact.rootSchool}" 
+						required="true" label="#{i18n.label_school}" style="width:200px" >
+					
+						<f:selectItems value="#{enumHelper.schools }" var="s"
+							itemValue="#{s}" itemLabel="#{i18n[s.key]}" />
+					</p:selectOneMenu>
+					<p:message for="inSchool" />
+				</h:panelGrid>
+
+				<p:outputLabel value="#{i18n.title_idiom}" styleClass="less2 req"  />
+				<h:panelGrid>
+					<p:selectOneMenu id="inIdiom" value="#{signupBean.idiom}" 
+						required="true" label="#{i18n.title_idiom}" style="width:100px" >
+					
+						<f:selectItems value="#{enumHelper.idioms }" var="idiomVar"
+							itemValue="#{idiomVar}" itemLabel="#{idiomVar.description}" />
+					</p:selectOneMenu>
+					<p:message for="inIdiom" />
+				</h:panelGrid>
+
+			</h:panelGrid>
+
+			<p:spacer height="15" style="display:block" />
+			<h:outputText value="#{i18n.label_acess_data}" styleClass="destak2" />
+			<p:separator />
+
+			<h:panelGrid columns="2">
+				<p:outputLabel for="inPass1" value="#{i18n.label_create_pass}" styleClass="less2 req"  />
+				<h:panelGrid>
+					<p:password id="inPass1" value="#{signupBean.pass1}"
+						required="true" label="#{i18n.label_pass}" 
+						size="20" maxlength="20"
+						inline="false" feedback="true"
+						weakLabel="#{i18n.label_pass_weak}" 
+						strongLabel="#{i18n.label_pass_strong}" 
+						goodLabel="#{i18n.label_pass_good}" 
+						promptLabel="#{i18n.label_enter_your_pass}" 
+						/>
+					<p:message for="inPass1" />
+				</h:panelGrid>
+	
+				<p:outputLabel for="inPass2" value="#{i18n.label_confirm_your_pass}" styleClass="less2 req"  />
+				<h:panelGrid>
+					<p:password id="inPass2" value="#{signupBean.pass2}" 
+						required="true" label="#{i18n.label_pass_confirmation}" 
+						size="20" maxlength="20"
+						inline="false" feedback="true"
+						weakLabel="#{i18n.label_pass_weak}" 
+						strongLabel="#{i18n.label_pass_strong}" 
+						goodLabel="#{i18n.label_pass_good}" 
+						promptLabel="#{i18n.label_confirm_your_pass}" 
+						/>
+					<p:message for="inPass2" />
+				</h:panelGrid>
+				
+				<h:outputText />
+				<p:commandButton icon="ui-icon-check" value="#{i18n.label_save_user}"
+					action="#{loginBean.saveClientUserAndDoLogin }"
+					ajax="false" />
+					
+			</h:panelGrid>
+			
+		</h:form>
+		
+	</p:panel>
+	
+	<h:link outcome="/login.xhtml">#{i18n.label_go_back_login_page}</h:link>
+
+	<p:spacer height="50" />
+	
+
+</ui:define>
+</ui:composition>

@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html >
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:cb="http://java.sun.com/jsf/composite/component"
+	template="/WEB-INF/design/_decorate-report-mgmt.xhtml">
+	
+<ui:define name="decorate-content" >
+
+	<h:form>
+		<h:panelGrid columns="2" cellpadding="10">
+			<h:panelGrid>
+				<p:outputLabel for="inFilterME" value="#{i18n.label_megaevent}" styleClass="destak3" />
+				<p:selectOneMenu id="inFilterME" value="#{mrNewParticipantMEBean.filterMegaEvent}" converter="#{megaEventConverter}">
+					<f:selectItems value="#{mrNewParticipantMEBean.comboMegaEvents}" var="megaEventVar" 
+						itemValue="#{megaEventVar}" itemLabel="#{megaEventVar.name}" />
+				</p:selectOneMenu>
+				<p:message for="inFilterME" />
+			</h:panelGrid>
+			
+			<p:commandButton icon="ui-icon-search" value="Pesquisar" style="font-size:1.25em"
+				action="#{mrNewParticipantMEBean.search()}"
+				update="@form :formResult"
+				/>
+		</h:panelGrid>
+	</h:form>
+
+	<p:separator />
+
+	<h:form id="formResult">
+	
+		<cb:globalMessages />
+		
+		
+		<p:outputPanel rendered="#{not empty mrNewParticipantMEBean.registers}">
+
+			<p:fieldset legend="Resumo" toggleable="true">
+				<h:panelGrid columns="4" cellpadding="5">
+					<f:facet name="header">
+						<h:outputFormat value="Novos Participantes" styleClass="destak1" >
+							<f:param value="#{mrNewParticipantMEBean.registers.size()}" />
+						</h:outputFormat>
+						<p:separator />
+					</f:facet>
+				
+					<cb:panelPieChart title="Por Escola Raiz" chartModel="#{mrNewParticipantMEBean.chartModelBySchool}" />
+
+					<cb:panelPieChart title="Por País" chartModel="#{mrNewParticipantMEBean.chartModelByCountry}" />
+					
+					<cb:panelPieChart title="Por Sexo" chartModel="#{mrNewParticipantMEBean.chartModelByGender}" />
+
+					<cb:panelPieChart title="Por Maturidade" chartModel="#{mrNewParticipantMEBean.chartModelByMaturity}" />
+
+				</h:panelGrid>
+			</p:fieldset>
+		
+			<p:spacer height="20" />
+		
+			<p:fieldset legend="#{i18n.label_detailed}" toggleable="true" collapsed="true">
+			
+				<p:dataTable id="tableResult" value="#{mrNewParticipantMEBean.registers}" var="registerVar">
+				
+					<p:column sortBy="#{registerVar.contact.civilName}">
+						<f:facet name="header">
+							<h:outputText value="#{i18n.label_civil_name}" />
+						</f:facet>
+						<h:outputText value="#{registerVar.contact.civilName}" styleClass="destak3" />
+					</p:column>
+				
+					<p:column sortBy="#{registerVar.contact.name}">
+						<f:facet name="header">
+							<h:outputText value="#{i18n.label_new_name}" />
+						</f:facet>
+						<h:outputText value="#{registerVar.contact.name}" styleClass="destak2" />
+					</p:column>
+	
+					<p:column sortBy="#{registerVar.contact.rootSchool.key}">
+						<f:facet name="header">
+							<h:outputText value="#{i18n.label_root_school }" />
+						</f:facet>
+						<h:outputText value="#{i18n[registerVar.contact.rootSchool.key] }" />
+					</p:column>
+	
+					<p:column sortBy="#{registerVar.contact.country }">
+						<f:facet name="header">
+							<h:outputText value="#{i18n.label_country }" />
+						</f:facet>
+						<h:outputText value="#{registerVar.contact.country }"  />
+					</p:column>
+
+					<p:column sortBy="#{registerVar.contact.city }">
+						<f:facet name="header">
+							<h:outputText value="#{i18n.label_city }" />
+						</f:facet>
+						<h:outputText value="#{registerVar.contact.city }"  />
+					</p:column>
+					
+					<p:column sortBy="#{registerVar.contact.gender }">
+						<f:facet name="header">
+							<h:outputText value="Sexo" />
+						</f:facet>
+						<h:outputText value="#{registerVar.contact.gender }"  />
+					</p:column>
+
+					<p:column sortBy="#{registerVar.contact.age }">
+						<f:facet name="header">
+							<h:outputText value="#{i18n.label_age }" />
+						</f:facet>
+						<h:outputText value="#{registerVar.contact.age }"  />
+					</p:column>
+
+					<p:column sortBy="#{registerVar.contact.maturity}">
+						<f:facet name="header">
+							<h:outputText value="Maturidade" />
+						</f:facet>
+						<h:outputText value="#{i18n[registerVar.contact.maturity.key] }"  />
+					</p:column>
+	
+					<p:column exportable="false" styleClass="colCenter col5p">
+						<cb:displayRegisterStatus register="#{registerVar}" />
+					</p:column>
+
+					<p:column sortBy="#{registerVar.status}">
+						<f:facet name="header">
+							<h:outputText value="#{i18n.label_status }" />
+						</f:facet>
+						<h:outputText value="#{i18n[registerVar.status.key] }" styleClass="less2" />
+					</p:column>
+					
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="#{i18n.label_email }" />
+						</f:facet>
+						<h:outputText value="#{registerVar.contact.email }" styleClass="less2"  />
+					</p:column>
+					
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="#{i18n.label_telephone }" />
+						</f:facet>
+						<h:outputText value="#{registerVar.contact.telephone1 }" styleClass="less2" />
+					</p:column>
+				</p:dataTable>
+
+				<p:spacer height="20" />
+		
+				<cb:fieldsetExportOptions tableId=":formResult:tableResult" 
+					flagExcel="true" flagPDF="false"  
+					fileName="NovosParticipantesEmMegaEvento" 
+					/>
+			</p:fieldset>
+	
+		</p:outputPanel>
+	
+	</h:form>
+
+
+</ui:define>
+</ui:composition>

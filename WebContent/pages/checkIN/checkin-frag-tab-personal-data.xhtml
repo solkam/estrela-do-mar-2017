@@ -1,0 +1,151 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:fragment xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:cb="http://java.sun.com/jsf/composite/component">
+
+<p:panel>
+
+	<cb:globalMessages />
+
+	<h:panelGrid columns="2" cellpadding="10">
+		<p:outputLabel for="inRootSchool" value="#{i18n.label_root_school}" styleClass="destak4 req" />
+		<h:panelGrid>
+			<p:selectOneMenu id="inRootSchool" value="#{checkInBean.selectedRegister.contact.rootSchool}" required="true">
+				<f:selectItem itemLabel="--" noSelectionOption="true" />
+				<f:selectItems value="#{enumHelper.schools}" var="schoolRow"
+					itemValue="#{schoolRow}" itemLabel="#{i18n[schoolRow.key]}" />
+			</p:selectOneMenu>
+			<p:message for="inRootSchool" />
+		</h:panelGrid>
+	</h:panelGrid>
+
+
+	<h:panelGrid columns="2" width="100%" cellpadding="10">
+		<h:panelGrid >
+			<p:outputLabel for="inEmail" value="#{i18n.label_email}" styleClass="less2 req" />
+			<p:inputText id="inEmail" value="#{checkInBean.selectedRegister.contact.email }" size="45" required="true" />
+			<p:message for="inEmail" />
+		</h:panelGrid>
+
+		<h:panelGrid >
+			<p:outputLabel for="inName" value="#{i18n.label_new_name_if_have}" styleClass="less2" />
+			<p:inputText id="inName" value="#{checkInBean.selectedRegister.contact.name }" size="30" />
+			<p:message for="inName" />
+		</h:panelGrid>
+
+		<h:panelGrid >
+			<p:outputLabel for="inCivilName" value="#{i18n.label_civil_name_complete}" styleClass="less2 req" />
+			<p:inputText id="inCivilName" value="#{checkInBean.selectedRegister.contact.civilName }" size="45" required="true" />
+			<p:message for="inCivilName" />
+		</h:panelGrid>
+
+
+		<h:panelGrid >
+			<p:outputLabel for="inTel" value="#{i18n.label_telephone_with_format}" styleClass="less2 req" />
+			<p:inputText id="inTel" value="#{checkInBean.selectedRegister.contact.telephone1 }" required="true" />
+			<p:message for="inTel" />
+		</h:panelGrid>
+
+		<h:panelGrid >
+			<p:outputLabel for="inAddress" value="#{i18n.label_address}" styleClass="less2 req" />
+			<p:inputText id="inAddress" value="#{checkInBean.selectedRegister.contact.address }" size="45" required="true" />
+			<p:message for="inAddress" />
+		</h:panelGrid>
+
+		<h:panelGrid >
+			<p:outputLabel for="incep" value="#{i18n.label_zip_code}" styleClass="less2" />
+			<p:inputText id="incep" value="#{checkInBean.selectedRegister.contact.zipPostal }" size="45" />
+			<p:message for="incep" />
+		</h:panelGrid>
+
+		<h:panelGrid >
+			<p:outputLabel value="#{i18n.label_city}" styleClass="less2 req" />
+			<p:inputText id="inCity" value="#{checkInBean.selectedRegister.contact.city }" size="45" required="true" />
+			<p:message for="inCity" />
+		</h:panelGrid>
+
+		<h:panelGrid >
+			<p:outputLabel for="inCountry" value="#{i18n.label_country}" styleClass="less2 req" />
+			<p:inputText id="inCountry" value="#{checkInBean.selectedRegister.contact.country }" size="45" required="true" />
+			<p:message for="inCountry" />
+		</h:panelGrid>
+
+		<h:panelGrid id="displayDocIde">
+			<p:outputLabel for="idDocCPF" value="#{i18n.label_document_identity}" styleClass="less2 req" />
+			
+			<h:panelGrid>
+			
+				<h:panelGrid columns="2" cellpadding="5">
+					<h:outputText value="Sou brasileiro?" styleClass="destak4" />
+					<p:selectBooleanButton value="#{checkInBean.flagBrazilian}"
+						onLabel="#{i18n.label_yes}" onIcon="ui-icon-check" 
+						offLabel="#{i18n.label_no}" offIcon="ui-icon-close" >
+							<p:ajax process="@this" global="false" update="displayDocIde" />
+					</p:selectBooleanButton>
+				</h:panelGrid>
+
+				<h:panelGrid columns="2" cellpadding="5" rendered="#{checkInBean.flagBrazilian}">
+					<h:outputText value="CPF" styleClass="destak3" />
+					<h:panelGrid>
+						<p:inputMask mask="999.999.999-99" id="idDocCPF" value="#{checkInBean.selectedRegister.contact.identityDocument}" 
+							required="true" requiredMessage="CPF é obrigatório" size="20" 
+							/>
+						<p:message for="idDocCPF" />
+					</h:panelGrid>
+				</h:panelGrid>
+	
+				<h:panelGrid columns="2" cellpadding="5" rendered="#{not checkInBean.flagBrazilian}">
+					<p:selectOneMenu value="#{checkInBean.selectedRegister.contact.identityDocumentType }" required="true" >
+						<f:selectItems value="#{enumHelper.documentTypes}" var="typeVar" 
+							itemValue="#{typeVar}" itemLabel="#{typeVar}" />
+					</p:selectOneMenu>
+					<h:panelGrid>
+						<p:inputText id="inDoc"	value="#{checkInBean.selectedRegister.contact.identityDocument }" 
+							required="true" requiredMessage="Documento é obrigatório" size="20" 
+							/>
+						<p:message for="inDoc" />
+					</h:panelGrid>
+				</h:panelGrid>
+				
+			</h:panelGrid>
+		</h:panelGrid>
+
+
+		<h:panelGrid >
+			<p:outputLabel for="inBirth" value="#{i18n.label_birthdate}" styleClass="less2 req" />
+			<p:calendar id="inBirth" value="#{checkInBean.selectedRegister.contact.birthDate }" size="15"
+				required="true" pattern="dd/MM/yyyy" navigator="true" 
+				/>
+			<p:message for="inBirth" />
+		</h:panelGrid>
+
+		<h:panelGrid >
+			<p:outputLabel for="inSex" value="#{i18n.label_sex}" styleClass="less2 req" />
+			<p:selectOneRadio id="inSex" value="#{checkInBean.selectedRegister.contact.gender }" required="true" >
+				<f:selectItem itemValue="M" itemLabel="#{i18n.GENDER_MALE}"   />
+				<f:selectItem itemValue="F" itemLabel="#{i18n.GENDER_FEMALE}" />
+			</p:selectOneRadio>
+			<p:message for="inSex" />
+		</h:panelGrid>
+		
+		<h:panelGrid columns="1">
+			<p:outputLabel for="inTSize" value="#{i18n.label_tshirt_size}" styleClass="less2 req"  />
+			<p:selectOneButton id="inTSize" value="#{checkInBean.selectedRegister.contact.tshirtSize }" required="true" >
+				<f:selectItems value="#{enumHelper.tshirtSizes}" var="sizeRow"
+					itemValue="#{sizeRow}" itemLabel="#{sizeRow}" />
+			</p:selectOneButton>
+			<p:message for="inTSize" />
+		</h:panelGrid>
+		
+
+	</h:panelGrid>
+
+	<p:separator />
+
+</p:panel>
+
+
+</ui:fragment>

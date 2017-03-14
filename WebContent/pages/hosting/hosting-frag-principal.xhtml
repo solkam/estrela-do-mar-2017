@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:fragment xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:cb="http://java.sun.com/jsf/composite/component">
+
+<h:form id="formPrincipal">
+
+	<cb:globalMessages />
+
+	<h:panelGrid columns="2" cellpadding="5">
+
+		<p:outputLabel for="inRoomType" value="#{i18n.label_room_type}" styleClass="less2 req" />
+		<h:panelGrid cellpadding="0">
+			<p:selectOneMenu id="inRoomType" value="#{hostingBean.hosting.roomType}" required="true" converter="#{roomTypeConverter}">
+				<f:selectItems value="#{hostingBean.comboRoomTypes }" var="typeRow"
+					itemValue="#{typeRow}" itemLabel="#{typeRow.description}" />
+			</p:selectOneMenu>
+			<p:message for="inRoomType" />
+		</h:panelGrid>
+
+		<p:outputLabel for="inHostingArea" value="#{i18n.label_hosting_area}" styleClass="less2 req" />
+		<h:panelGrid cellpadding="0">
+			<p:inputText id="inHostingArea" value="#{hostingBean.hosting.hostingArea}" size="20" required="true" />
+			<p:message for="inHostingArea" />
+		</h:panelGrid>
+	
+		<p:outputLabel for="inHostingNumber" value="#{i18n.label_hosting_number}" styleClass="less2 req" />
+		<h:panelGrid cellpadding="0">
+			<p:inputText id="inHostingNumber" value="#{hostingBean.hosting.hostingNumber}" size="20" required="true" />
+			<p:message for="inHostingNumber" />
+		</h:panelGrid>
+	
+		<p:outputLabel for="inNote" value="#{i18n.label_note}" styleClass="less2 " />
+		<h:panelGrid cellpadding="0">
+			<p:inputTextarea id="inNote" value="#{hostingBean.hosting.note}" rows="2" cols="30" />
+			<p:message for="inNote" />
+		</h:panelGrid>
+	</h:panelGrid>
+	
+	<p:toolbar>
+		<p:toolbarGroup>
+			<p:commandButton icon="ui-icon-check" value="Salvar Quarto"
+				action="#{hostingBean.saveHosting()}"
+				update=":regionConfigRoom :tabviewRooms:formRoomPending :tabviewRooms:formRoomConfirmed" />
+		</p:toolbarGroup>
+		
+		<p:toolbarGroup align="right">
+			<p:menuButton value="Remover">
+				<p:menuitem icon="ui-icon-trash" value="#{i18n.label_yes}"
+					process="@this"
+					action="#{hostingBean.removeHosting()}"
+					update=":regionConfigRoom :tabviewRooms:formRoomPending :tabviewRooms:formRoomConfirmed"
+					oncomplete="if (args.sucessOnly) DialogRoom.hide()"
+					/>
+				<p:menuitem icon="ui-icon-close" value="#{i18n.label_no}"
+					process="@none" update="@none" global="false"
+					/>
+			</p:menuButton>
+		</p:toolbarGroup>
+	</p:toolbar>
+
+</h:form>
+			
+			
+
+
+</ui:fragment>

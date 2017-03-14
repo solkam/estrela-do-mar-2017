@@ -1,0 +1,1934 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-mappings version="2.1"
+	xmlns="http://xmlns.jcp.org/xml/ns/persistence/orm" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence/orm http://xmlns.jcp.org/xml/ns/persistence/orm_2_1.xsd">
+
+<named-query name="searchDuplicatedContactByEmail">
+		<query>
+			select c
+			from Contact c
+			group by c.email
+			having count(c) > 1
+		</query>
+	</named-query>
+
+	<named-query name="searchDuplicatedContactByCivilName">
+		<query>
+			select c
+			from Contact c
+			group by c.civilName
+			having count(c) > 1
+		</query>
+	</named-query>
+	
+	<named-query name="searchDuplicatedContactByName">
+		<query>
+			select c
+			from Contact c
+			where c.name is not null 
+			and length(trim(c.name)) > 0 
+			group by c.name 
+			having count(c) > 1
+		</query>
+	</named-query>
+
+
+	<named-query name="searchContactByEmail">
+		<query>
+			select c
+			from Contact c
+			where c.email = :pEmail
+		</query>
+	</named-query>
+
+	<named-query name="searchContactByCivilName">
+		<query>
+			select c
+			from Contact c
+			where c.civilName = :pCivilName
+		</query>
+	</named-query>
+	
+	<named-query name="searchContactByName">
+		<query>
+			select c
+			from Contact c
+			where c.name = :pName
+			order by c.id 
+		</query>
+	</named-query>
+	
+	<named-query name="findUserByContact">
+		<query>
+			select u
+			from UserCB u
+			where u.contact = :pContact
+		</query>
+	</named-query>
+	
+	<named-query name="searchContactAutoProductor">
+		<query>
+			select distinct c
+			from Contact c
+			where c = c.productorContact
+			or    c = c.productorContact2
+		</query>
+	</named-query>
+
+
+<!-- user -->
+
+ 	<named-query name="searchUserByAccessibleProfiles">
+		<query>
+			SELECT u
+			FROM UserCB u
+			WHERE u.profile IN (:pProfiles)
+			ORDER BY u.id
+		</query>
+	</named-query>
+ 
+	<named-query name="findUserByUsernameAndPassword">
+		<query>
+			SELECT u
+			FROM UserCB u
+				join u.contact c
+			WHERE c.email    = :pUsername
+			AND   u.password = :pPassword
+		</query>
+	</named-query>
+	
+	<named-query name="searchUserByContact">
+		<query>
+			SELECT u
+			FROM UserCB u
+			WHERE u.contact = :pContact
+		</query>
+	</named-query>
+	
+	<named-query name="findUserByEmail">
+		<query>
+			SELECT u
+			FROM UserCB u
+			WHERE u.contact.email = :pEmail
+		</query>
+	</named-query>
+	
+	<named-query name="searchUserByCity">
+		<query>
+			SELECT u
+			FROM UserCB u
+				join u.allowedCities c 
+			WHERE c = :pCity
+		</query>
+	</named-query>
+
+
+
+<!-- pesquisas das dependencia de contact (merge) -->
+
+	<named-query name="User.searchByContact_2">
+		<query>
+			select u
+			from UserCB u
+			where u.contact = :pContact
+		</query>
+	</named-query>
+
+	<named-query name="Integrant.searchByContact_2">
+		<query>
+			select i
+			from Integrant i
+			where i.contact = :pContact
+		</query>
+	</named-query>
+
+	<named-query name="Outcoming.searchByContact_2">
+		<query>
+			select o
+			from Outcoming o
+			where o.responsable = :pContact
+		</query>
+	</named-query>
+
+	<named-query name="Staff.searchByContact_2">
+		<query>
+			select s
+			from Staff s
+			where s.contact = :pContact
+		</query>
+	</named-query>
+
+	<named-query name="Facilitator.searchByContact_2">
+		<query>
+			select f
+			from Facilitator f
+			where f.contact = :pContact
+		</query>
+	</named-query>
+
+	<named-query name="Participant.searchByContact_2">
+		<query>
+			select p
+			from Participant p
+			where p.contact = :pContact
+		</query>
+	</named-query>
+
+	<named-query name="Register.searchByContact_2">
+		<query>
+			select r
+			from Register r
+			where r.contact = :pContact
+		</query>
+	</named-query>
+
+	<named-query name="ContactTrainned.searchByContact">
+		<query>
+			select c
+			from Contact c
+			where c.trainnerContact = :pContact
+		</query>
+	</named-query>
+
+	<named-query name="ProductedContact.searchByContact">
+		<query>
+			select c
+			from Contact c
+			where c.productorContact = :pContact
+		</query>
+	</named-query>
+
+	<named-query name="searchAccountByContact">
+		<query>
+			select a
+			from Account a
+			where a.contact = :pContact
+		</query>
+	</named-query>
+	
+	<named-query name="searchHostingSugestedByContact">
+		<query>
+			select hs
+			from HostingSugested hs
+			where hs.contact = :pContact
+		</query>
+	</named-query>
+	
+
+	<!-- Profession -->
+	<named-query name="searchProfession">
+		<query>
+			select p
+			from Profession p
+			order by p.name
+		</query>
+	</named-query>
+
+	<named-query name="searchActiveProfession">
+		<query>
+			select p
+			from Profession p
+			where p.flagActive = true
+			order by p.name
+		</query>
+	</named-query>
+
+	<named-query name="findProfessionByName">
+		<query>
+			select p
+			from Profession p
+			where p.name = :pName
+		</query>
+	</named-query>
+	
+	<named-query name="searchProfessionByContact">
+		<query>
+			select p
+			from Contact c join c.professions p
+			where c = :pContact
+			order by p.name
+		</query>
+	</named-query>
+	
+	
+	<!-- Module -->
+	<named-query name="searchModuleBySchool">
+		<query>
+			select m
+			from Module m
+			where m.school = :pSchool
+			order by m.id, m.sigla, m.descriptionPT
+		</query>
+	</named-query>
+
+
+	
+	
+	
+<!-- Mega Event -->
+<!-- ********** -->
+	<named-query name="MegaEvent.searchActive">
+		<query>
+			SELECT me
+			FROM MegaEvent me
+			WHERE me.flagActive = TRUE
+		</query>
+	</named-query>
+	
+	<named-query name="MegaEvent.findCurrent">
+		<query>
+			SELECT me
+			FROM MegaEvent me
+			WHERE me.flagCurrent = TRUE
+		</query>
+	</named-query>
+	
+	<named-query name="MegaEvent.updateCurrentIsFalse">
+		<query>
+			UPDATE MegaEvent me
+			SET me.flagCurrent = FALSE
+		</query>
+	</named-query>
+	
+	<named-query name="MegaEvent.findByName">
+		<query>
+			SELECT me
+			FROM MegaEvent me
+			WHERE me.name = :pName
+		</query>
+	</named-query>
+	
+	<named-query name="searchActivePendentMegaEventByContact">
+		<query>
+			select me
+			from MegaEvent me
+			where me.flagActive = true 
+			and not exists (
+				select 1
+				from Register r
+				where r.megaEvent = me
+				and r.contact = :pContact 
+				)
+			order by me.beginDate desc 
+		</query>
+	</named-query>
+	
+	<named-query name="searchActiveMegaEventByDate">
+		<query>
+			select me
+			from MegaEvent me
+			where me.beginDate &lt;= :pDate
+			and   me.endDate   &gt;= :pDate
+			order by me.beginDate 
+		</query>
+	</named-query>
+	
+	<named-query name="searchFutureMegaEventByActualRegister">
+		<query>
+			select futureME
+			from MegaEvent futureME
+			where futureME.flagActive = TRUE
+			and   futureME.beginDate > :pActualMegaEventBeginDate
+			and not exists (select 1
+			                from Register r 
+			                where r.megaEvent = futureME
+			                and   r.contact   = :pContact
+			               )
+			order by futureME.beginDate
+		</query>
+	</named-query>
+	
+	
+
+<!-- Event Week -->
+<!-- ********** -->
+	<named-query name="EventWeek.searchByMegaEvent">
+		<query>
+			SELECT ew
+			FROM EventWeek ew
+			WHERE ew.megaEvent = :pMegaEvent
+			ORDER BY ew.beginDate
+		</query>
+	</named-query>	
+	
+	<named-query name="searchEventWeekOficialByMegaEvent">
+		<query>
+			select ew
+			from EventWeek ew
+			where ew.megaEvent = :pMegaEvent
+			and  ew.flagOficial = true
+			order by ew.beginDate, ew.name
+		</query>
+	</named-query>	
+	
+	<named-query name="findCurrentEventWeekByMegaEvent">
+		<query>
+			select w
+			from EventWeek w
+			where w.megaEvent = :pMegaEvent
+			and   :pNow between w.beginDate and w.endDate
+		</query>
+	</named-query>
+	
+	<named-query name="EventWeek.findByMegaEventAndBetweenDate">
+		<description>Informe 7.6: Movimentacao de Pessoas</description>
+		<query>
+			SELECT DISTINCT ew
+			FROM EventWeek ew
+			WHERE ew.megaEvent = :pMegaEvent
+			AND   ew.flagOficial   = :pOficial
+			AND   :pDate BETWEEN ew.beginDate AND ew.endDate	
+		</query>
+	</named-query>
+	
+
+
+
+<!-- Event -->
+<!-- ***** -->
+	<named-query name="Event.searchByEventWeek">
+		<query>
+			SELECT e
+			FROM Event e
+			WHERE e.eventWeek = :pEventWeek
+			ORDER BY e.name, e.school, e.module
+		</query>
+	</named-query>
+
+	<named-query name="searchEventNotSelectedByEventWeekAndRegister">
+		<query>
+			select e
+			from Event e
+			where e.eventWeek = :pEventWeek
+			and not exists (
+				select 1
+				from RegisterDetail rd
+				where rd.register = :pRegister
+				and   rd.event = e
+				)
+			order by e.school, e.module, e.name
+		</query>
+	</named-query>
+
+	<named-query name="Event.searchByMegaEvent">
+		<query>
+			SELECT e
+			FROM Event e
+			WHERE e.eventWeek.megaEvent = :pMegaEvent
+			ORDER BY e.eventWeek.name, e.beginDate, e.name
+		</query>
+	</named-query>
+	
+	<named-query name="Event.searchByRegister">
+		<query>
+			SELECT e
+			FROM RegisterDetail rd
+				join rd.event e
+			WHERE rd.register = :pRegister
+			order by e.school, e.module, e.name
+		</query>
+	</named-query>
+	
+	<named-query name="searchEventByMegaEventAndEventTypes">
+		<query>
+			select e
+			from Event e
+				join e.eventWeek w
+			where e.eventWeek.megaEvent = :pMegaEvent
+			and   e.type                in :pEventTypes
+			order by e.school, e.module, e.name
+		</query>
+	</named-query>
+	
+	<named-query name="searchFutureEventsWithSameFormation">
+		<query>
+			select e
+			from Event e
+			where e.school = :pSchool
+			and   e.module = :pModule
+			and   e.beginDate > :pBeginDate
+			order by e.school, e.module, e.name
+		</query>
+	</named-query>
+	
+	<named-query name="findRegisterDetailByEventAndRegister">
+		<query>
+			select rd
+			from RegisterDetail rd
+			where rd.event = :pEvent
+			and   rd.register = :pRegister
+			order by rd.id
+		</query>
+	</named-query>
+
+	
+	
+<!-- Register -->
+<!-- ******** -->
+	<named-query name="searchActiveRegistersByContact">
+		<query>
+			select r
+			from Register r
+			where r.contact = :pContact
+			and   r.megaEvent.flagActive = true
+			order by r.updateDate desc
+		</query>
+	</named-query>
+
+	<named-query name="Register.searchByContact">
+		<query>
+			SELECT r
+			FROM Register r
+			WHERE r.contact = :pContact
+			ORDER BY r.createDate
+		</query>
+	</named-query>
+
+        
+	<named-query name="findRegisterByMegaEventAndContact">
+		<query>
+			select r
+			from Register r
+			where r.megaEvent = :pMegaEvent
+			and   r.contact   = :pContact
+		</query>
+	</named-query>
+
+	<named-query name="Register.searchByMegaEvent">
+		<query>
+			SELECT r
+			FROM Register r
+			WHERE r.megaEvent = :pMegaEvent
+			ORDER BY r.contact.civilName
+		</query>
+	</named-query>
+	
+	<named-query name="searchRegisterByMegaEventAndListOfStatusOrNameOrCivilNameOrIdOrEmail">
+		<query>
+			SELECT DISTINCT r
+			FROM Register r
+			WHERE r.megaEvent = :pMegaEvent
+			AND   r.status    IN (:pListOfStatus) 
+			AND (  r.contact.name      like :pName
+		  		OR r.contact.civilName like :pCivilName
+		  		OR r.contact.email     like :pEmail
+		 	    OR r.id                   = :pId
+		 	    )
+		 	ORDER BY r.contact.civilName
+		</query>
+	</named-query>
+	
+	<named-query name="Register.searchByMegaEventAndNameOrCivilNameOrEmailOrId">
+		<query>
+			select distinct r
+			from Register r
+			where r.megaEvent = :pMegaEvent
+			and (  r.contact.name      like :pName
+			    or r.contact.civilName like :pCivilName
+			    or r.contact.email     like :pEmail
+			    or r.id	               =    :pId
+			    )
+			order by r.contact.civilName
+		</query>
+	</named-query>
+	
+	<named-query name="searchRegisterByMegaEventAndContact">
+		<query>
+			select r
+			from Register r
+			where r.megaEvent = :pMegaEvent
+			and   r.contact   = :pContact
+			order by r.id
+		</query>
+	</named-query>
+	
+	<named-query name="Register.findByMegaEventAndEmail">
+		<query>
+			SELECT r
+			FROM Register r
+			WHERE r.megaEvent = :pMegaEvent
+			AND   r.contact.email = :pEmail
+		</query>
+	</named-query>
+	
+	<named-query name="searchDistinctRegisterByEventWeekAndStatusList">
+		<query>
+			SELECT DISTINCT r
+			FROM RegisterDetail rd join rd.register r
+			WHERE rd.eventWeek = :pEventWeek
+			AND   r.status in (:pStatusList)
+			ORDER BY r.contact.civilName
+		</query>
+	</named-query>
+	
+	<named-query name="searchRegisterByMegaEventAndBetweenPreviewCheckoutDateAndStatus">
+		<query>
+			select r
+			from Register r
+			where r.megaEvent = :pMegaEvent
+			and   r.previewCheckoutDate between :pInitialDate and :pEndDate
+			and   r.status = :pStatus
+			order by r.contact.civilName
+		</query>
+	</named-query>
+	
+	<named-query name="searchRegisterByMegaEventAndContactName">
+		<query>
+			select r
+			from Register r
+			where r.megaEvent = :pMegaEvent
+			and (r.contact.name      like :pContactName 
+			     or
+			     r.contact.civilName like :pContactName
+			    )
+			order by r.contact.civilName 
+		</query>
+	</named-query>
+	
+	<named-query name="searchRegisterByMegaEventListAndStatusList">
+		<query>
+			select distinct r
+			from Register r
+				join r.contact c
+			where r.megaEvent in (:pMegaEventList)
+			and   r.status    in (:pStatusList)
+			order by c.name, c.civilName
+		</query>
+	</named-query>
+	
+	<named-query name="searchRegisterByMegaEventAndStatusAndEventPresence">
+		<query>
+			select r
+			from Register r
+				join r.details rd
+			where r.megaEvent = :pMegaEvent
+			and   r.status    = :pStatus
+			and   rd.presence = :pEventPresence
+		</query>
+	</named-query>	
+	
+	<named-query name="searchRegisterByMegaEventAndStatusList">
+		<query>
+			select r
+			from Register r
+				join r.contact c
+			where r.megaEvent = :pMegaEvent
+			and   r.status IN (:pRegisterStatusList)
+			order by c.civilName
+		</query>
+	</named-query>
+	
+	<named-query name="searchRegisterByListOfEventAndListOfStatus">
+		<query>
+			select distinct r
+			from Register r
+				join r.details rd
+				join r.contact c
+			where r.status IN (:pListOfStatus)
+			and   rd.event IN (:pListOfEvent)
+			order by c.civilName
+		</query>
+	</named-query>
+	
+	
+	
+	
+
+
+<!-- Register Detail -->
+<!-- *************** -->
+	<named-query name="findRegisterDetailByRegisterAndEvent">
+		<query>
+			select d
+			from RegisterDetail d
+			where d.register = :pRegister
+			and   d.event    = :pEvent
+		</query>
+	</named-query>
+
+	<named-query name="RegisterDetail.removeByRegister">
+		<query>
+			DELETE FROM RegisterDetail rd
+			WHERE rd.register = :pRegister
+		</query>
+	</named-query>
+
+	<named-query name="RegisterDetail.searchByEvent">
+		<query>
+			SELECT rd
+			FROM RegisterDetail rd join fetch rd.register
+			WHERE rd.event = :pEvent
+			ORDER BY rd.register.contact.civilName
+		</query>
+	</named-query>
+	
+	<named-query name="RegisterDetail.searchByMegaEvent">
+		<query>
+			SELECT rd
+			FROM RegisterDetail rd join fetch rd.register
+			WHERE rd.register.megaEvent = :pMegaEvent
+		</query>
+	</named-query>
+	
+	<named-query name="RegisterDetail.serchByRegisterAndEventWeek">
+		<query>
+			SELECT rd
+			FROM RegisterDetail rd
+			WHERE rd.register  = :pRegister
+			AND   rd.eventWeek = :pEventWeek
+		</query>
+	</named-query>
+
+	<named-query name="RegisterDetail.searchByEventWeek">
+		<query>
+			SELECT rd
+			FROM RegisterDetail rd join fetch rd.register 
+			WHERE rd.eventWeek = :pEventWeek
+			ORDER BY rd.register
+		</query>
+	</named-query>
+	
+	<named-query name="searchRegisterDetailByEventAndInPresenceAndInRegister">
+		<query>
+			select d
+			from RegisterDetail d
+			where d.event           = :pEvent
+			and   d.presence        = :pPresence
+			and   d.register.status = :pRegisterStatus
+			order by d.register.contact.civilName
+		</query>
+	</named-query>
+	
+	<named-query name="searchRegisterDetailByEventAndStatusAndPresence">
+		<query>
+			select distinct d
+			from RegisterDetail d
+			where d.event           IN (:pEvents)
+			and   d.register.status = :pStatus
+			and   d.presence        = :pPresence
+			order by d.register.contact.civilName
+		</query>
+	</named-query>
+	
+	
+	
+	
+	
+	
+<!-- Register Docket -->
+<!-- *************** -->
+	<named-query name="RegisterDocket.findByRegister">
+		<query>
+			select d
+			from RegisterDocket d
+			where d.register = :pRegister
+		</query>
+	</named-query>
+
+
+
+<!-- Medical  -->
+<!-- ******* -->
+	<named-query name="searchMedicalQuestion">
+		<query>
+			select q
+			from MedicalQuestion q
+			order by q.number
+		</query>
+	</named-query>
+
+	<named-query name="searchActiveMedicalQuestion">
+		<query>
+			SELECT q
+			FROM MedicalQuestion q
+			WHERE q.flagActive = TRUE
+			ORDER BY q.number
+		</query>
+	</named-query>
+	
+	<named-query name="searchMedicalAnswerByRegister">
+		<query>
+			select ma
+			from MedicalAnswer ma
+			where ma.register = :pRegister
+			order by ma.question.number
+		</query>
+	</named-query>
+	
+	<named-query name="searchMedicalAnswerByQuestion">
+		<query>
+			select ma
+			from MedicalAnswer ma join ma.question q
+			where q = :pQuestion
+			order by q.number
+		</query>
+	</named-query>
+	
+
+
+
+<!-- Informes  -->
+<!-- ********* -->
+	<named-query name="EventWeekSummary.searchByMegaEvent">
+		<query>
+			SELECT new com.cb.mundo.model.dto.EventWeekSummary( rd.eventWeek, SUM(rd.value) )
+			FROM RegisterDetail rd
+			WHERE rd.register.megaEvent = :pMegaEvent
+			GROUP BY rd.eventWeek
+			ORDER BY rd.eventWeek
+		</query>
+	</named-query>
+	
+	<named-query name="RegisterSummary.searchByMegaEventAndContact">
+		<query>
+			select new com.cb.mundo.model.dto.RegisterSummary( r, SUM(rd.value) )
+			from Register r, IN (r.details) rd
+			where r.megaEvent = :pMegaEvent
+			and   r.contact   = :pContact
+			group by r.contact
+		</query>
+	</named-query>
+	
+	<named-query name="EventWeekSummary.searchByRegister">
+		<query>
+			SELECT new com.cb.mundo.model.dto.EventWeekSummary( rd.eventWeek, SUM(rd.value) )
+			FROM RegisterDetail rd
+			WHERE rd.register = :pRegister
+			GROUP BY rd.eventWeek
+			ORDER BY rd.eventWeek
+		</query>
+	</named-query>
+	
+        <named-query name="paymentCurrencyList">
+                <query>
+                        SELECT pc
+                        FROM PaymentCurrency pc
+                </query>
+	</named-query>
+        
+	<named-query name="EventSummary.searchByMegaEvent">
+		<query>
+			SELECT new com.cb.mundo.model.dto.EventSummary( rd.event, SUM(rd.value) )
+			FROM RegisterDetail rd
+			WHERE rd.register.megaEvent = :pMegaEvent
+			GROUP BY rd.event
+		</query>
+	</named-query>
+	
+	<named-query name="RegisterPaymentMethodSummary.searchByMegaEventAndDates">
+		<query>
+			SELECT new com.cb.mundo.model.dto.RegisterPaymentMethodSummary( p.method, SUM(p.value) )
+			FROM RegisterDetail rd, IN (rd.payments) p
+			WHERE rd.register.megaEvent = :pMegaEvent
+			AND   p.date BETWEEN :pFirstDate AND :pLastDate
+			GROUP BY p.method
+		</query>
+	</named-query>
+	
+	<named-query name="RegisterDetailPayment.searchByMegaEventAndMethodAndBetweenDates">
+		<query>
+			SELECT p
+			FROM RegisterDetailPayment p
+			WHERE p.registerDetail.register.megaEvent = :pMegaEvent
+			AND   p.method = :pPaymentMethod
+			AND   p.date BETWEEN :pFirstDate AND :pLastDate
+		</query>
+	</named-query>
+
+        <named-query name="RegisterDetailPayment.searchPaymentsByRegisterDetail">
+		<query>
+			SELECT p
+			FROM RegisterDetailPayment p
+			WHERE p.registerDetail = :pRegisterDetail
+		</query>
+	</named-query>
+
+	<named-query name="countInsideOnesByMegaEventAndDate">
+		<description>Informe 7.6: Movimentacao de Pessoas</description>
+		<query>
+			SELECT count(r)
+			FROM Register r
+			WHERE r.megaEvent = :pMegaEvent
+			AND :pDate > r.previewCheckinDate 
+			AND r.previewCheckoutDate > :pDate 
+		</query>
+	</named-query>
+	
+	<named-query name="countArrivingOnesByMegaEventAndDate">
+		<description>Informe 7.6: Movimentacao de Pessoas</description>
+		<query>
+			SELECT count(r)
+			FROM Register r
+			WHERE r.megaEvent         = :pMegaEvent
+			AND r.previewCheckinDate  = :pDate
+		</query>
+	</named-query>
+	
+	<named-query name="countLeavingOnesByMegaEventAndDate">
+		<description>Informe 7.6: Movimentacao de Pessoas</description>
+		<query>
+			SELECT count(r)
+			FROM Register r
+			WHERE r.megaEvent           = :pMegaEvent
+			AND r.previewCheckoutDate = :pDate
+		</query>
+	</named-query>
+	
+	<named-query name="RegisterDetail.searchByMegaEventAndDate">
+		<description>
+			Informe 7.7: Pessoas no MegaEvento por Data
+			Considera apenas eventos do tipo FORMATION e STAFF
+		</description>
+		<query>
+			SELECT rd
+			FROM RegisterDetail rd
+			WHERE rd.register.megaEvent = :pMegaEvent
+			AND   :pDate BETWEEN rd.eventWeek.beginDate AND rd.eventWeek.endDate
+			AND   rd.event.type IN ('FORMATION', 'STAFF')
+			ORDER BY rd.register.contact.civilName
+		</query>
+	</named-query>
+        
+        <named-query name="RegisterDetail.searchByEventWeekEventAndEventPresence">
+		<query>
+			SELECT rd
+			FROM RegisterDetail rd
+			WHERE rd.event = :pEvent
+                        AND rd.eventWeek = :pEventWeek
+                        AND rd.presence = :pPresence
+                        AND rd.register = :pRegister
+		</query>
+	</named-query>
+	
+	<named-query name="searchRegisterByMegaEventAndStatusAndBetweenPreviewCheckinDates">
+		<description>
+			Informe Pessoas para Checkin por Data (Check-in previsto)
+		</description>
+		<query>
+			select r
+			from Register r
+			where r.megaEvent = :pMegaEvent
+			and   r.status    = :pStatus
+			and   r.previewCheckinDate between :pDate1 and :pDate2
+			order by r.contact.civilName
+		
+		</query>
+	</named-query>	
+	
+	<named-query name="searchRegisterByMegaEventAndStatusAndBetweenCheckinDates">
+		<description>
+			Informe Pessoas para Checkin por Data (Check-in real)
+		</description>
+		<query>
+			select r
+			from Register r
+			where r.megaEvent = :pMegaEvent
+			and   r.status    = :pStatus
+			and   r.checkin.checkinDate between :pDate1 and :pDate2
+			order by r.contact.civilName
+		
+		</query>
+	</named-query>	
+
+
+	<named-query name="MedicalAnswer.searchWithLimitationByMegaEventAndDates">
+		<query>
+			SELECT distinct ma
+			FROM MedicalAnswer ma
+			WHERE ma.booleanAnswer = TRUE
+			AND ma.register.megaEvent = :pMegaEvent
+			AND (
+				ma.register.createDate BETWEEN :pCreateInitDate AND :pCreateEndDate 
+				OR 
+				ma.register.updateDate BETWEEN :pUpdateInitDate AND :pUpdateEndDate
+				) 
+			ORDER BY ma.register.contact.civilName, ma.question.number
+		</query>
+	</named-query>
+	
+	<named-query name="Contact.searchProductorByMegaEvent">
+		<query>
+			select distinct c
+			from Register r join r.contact c
+			where c.flagProductor = true
+			and   r.megaEvent = :pMegaEvent
+			order by c.civilName
+		</query>
+	</named-query>
+	
+	<named-query name="findAccountByContact">
+		<query>
+			select a
+			from Account a
+			where a.contact = :pContact
+		</query>
+	</named-query>	
+	
+	<named-query name="searchRegisterWithoutTransportByMegaEventAndDirection">
+		<query>
+			select r1
+			from Register r1
+			where r1.megaEvent = :pMegaEvent
+			and   r1.status IN ( :pStatusArray )
+			and not exists 
+				(select 1
+				 from Transport t join t.registers r2
+				 where r2 = r1
+				 and   t.megaEvent = :pMegaEvent
+				 and   t.direction = :pDirection
+				)
+			order by r1.contact.name, r1.contact.civilName
+		</query>
+	</named-query>
+		
+
+
+
+<!-- Transport -->
+<!-- ********* -->
+	<named-query name="searchTransportByRegister">
+		<query>
+			select t
+			from Transport t join t.registers r
+			where r = :pRegister
+			order by t.id
+		</query>
+	</named-query>
+        
+	<named-query name="listAllTransportClassification">
+		<query>
+			select t
+			from TransportClassification t
+		</query>
+	</named-query>
+	
+	<named-query name="searchTransportByMegaEventAndDirection">
+		<query>
+			select t
+			from Transport t 
+			where t.megaEvent = :pMegaEvent
+			and   t.direction = :pDirection
+			order by t.date
+		</query>
+	</named-query>
+
+
+<!-- Seminar Complementar -->
+<!-- ******************** -->
+	<named-query name="searchSeminarComplementarEventByEventWeek">
+		<query>
+			select e
+			from Event e
+			where e.eventWeek = :pEventWeek
+			and   e.type      = :pType
+			order by e.beginDate
+		</query>
+	</named-query>
+	
+
+	
+<!-- Hosting -->
+<!-- ******* -->
+	<named-query name="searchHostingNotConfirmedButWithSugestedsByMegaEvent">
+		<query>
+			select distinct h
+			from Hosting h join fetch h.sugesteds 
+			where h.megaEvent = :pMegaEvent
+			and not exists (select 1 from HostingConfirmed hc where hc.hosting = h)
+			order by h.roomType
+		</query>
+	</named-query>
+	
+	<named-query name="searchRegisterWithoutHostingByMegaEvent">
+		<query>
+			select r
+			from Register r
+			where r.megaEvent = :pMegaEvent
+			and   not exists (select 1 from HostingConfirmed hc where hc.register = r)
+			and   not exists (select 1 from HostingSugested  hs where hs.contact = r.contact) 
+			order by r.createDate
+		</query>
+	</named-query>
+	
+	<named-query name="searchHostingWithConfirmedsByMegaEvent">
+		<query>
+			select distinct h
+			from Hosting h join fetch h.confirmeds 
+			where h.megaEvent = :pMegaEvent
+			order by h.roomType
+		</query>
+	</named-query>
+	
+	<named-query name="searchRegisterByMegaEventContactNameOrCivilNameOrCity">
+		<query>
+			select distinct r
+			from Register r join r.contact c
+			where r.megaEvent = :pMegaEvent
+			and (  c.name      like :pContactName
+			    or c.civilName like :pContactCivilName
+		        or c.city      like :pContactCity
+			    )
+			order by c.civilName 
+		</query>
+	</named-query>
+	
+	<named-query name="searchHostingConfirmedByRegister">
+		<query>
+			select hc
+			from HostingConfirmed hc
+			where hc.register = :pRegister
+		</query>
+	</named-query>
+	
+	<named-query name="findHostingByMegaEventAndAreaAndNumber">
+		<query>
+			select h
+			from Hosting h
+			where h.megaEvent     = :pMegaEvent
+			and   h.hostingArea   = :pHostingArea
+			and   h.hostingNumber = :pHostingNumber
+		</query>
+	</named-query>
+	
+	<named-query name="findHostingBySugestedContact">
+		<query>
+			select h
+			from HostingSugested hs join hs.hosting h
+			where hs.contact = :pContact
+		</query>
+	</named-query>
+	
+	<named-query name="searchReportHostingByOccupantDtosByMegaEvent">
+		<query>
+			select new com.cb.mundo.model.dto.ReportHostingByOccupantDTO(c, h)
+			from HostingConfirmed hc 
+				join hc.register r 
+				join hc.hosting h
+				join r.contact c
+			where r.megaEvent = :pMegaEvent
+			order by c.civilName
+		</query>
+	</named-query>
+	
+	<named-query name="searchConfigParam">
+		<query>
+			select cp
+			from ConfigParam cp
+			order by cp.paramName
+		</query>
+	</named-query>
+        
+        
+	<!--
+	*** Company
+	-->        
+	<named-query name="Company.listAll">
+	    <query>
+	        SELECT c 
+	        FROM Company c
+	    </query>
+	</named-query>
+	
+	<named-query name="Company.searchByIdentitySerie">
+	    <query>
+	        SELECT c 
+	        FROM Company c
+	        WHERE c.identitySerie like :cIdentitySerie
+	    </query>
+	</named-query>
+	
+	<named-query name="Company.searchByName">
+	    <query>
+	        SELECT c 
+	        FROM Company c
+	        WHERE c.name like :cName
+	    </query>
+	</named-query>
+        
+	<!-- Account receivable -->
+	<named-query name="AccountReceivable.listDetails">
+	    <query>
+	        SELECT rdard
+	        FROM RegisterDetailAccountReceivableDetail rdard
+	        WHERE rdard.accountReceivable = :pAccountReceivable
+	        ORDER BY rdard.feeNumber
+	    </query>
+	</named-query>
+        
+	<named-query name="AccountReceivable.listObservations">
+	    <query>
+	        SELECT rdao
+	        FROM RegisterDetailAccountReceivableObservation rdao
+	        WHERE rdao.accountReceivableOwner = :pAccountReceivable
+	        ORDER BY rdao.obsSystemDate
+	    </query>
+	</named-query>
+	
+	<named-query name="AccountReceivable.listDetailUpToProjectedPaymentDate">
+	    <query>
+	        SELECT rdad
+	        FROM RegisterDetailAccountReceivableDetail rdad
+	        WHERE rdad.paymentDateProjected = :pProjectedPaymentDate
+	        ORDER BY rdad.accountReceivable.registerDetail.register.contact.civilName
+	    </query>
+	</named-query>
+	
+	<named-query name="AccountReceivable.listDetailNotPaidUpToProjectedPaymentDate">
+	    <query>
+	        SELECT rdad
+	        FROM RegisterDetailAccountReceivableDetail rdad
+	        	join rdad.accountReceivable accRec
+	        	join accRec.registerDetail  regDet
+	        	join regDet.register        reg
+	        WHERE rdad.paymentDateProjected &lt;= :pUpToProjectedPaymentDate
+	        AND reg.megaEvent = :pMegaEvent
+	        AND rdad.status &lt;&gt; :pStatus
+	        ORDER BY reg.contact.civilName
+	               , regDet.event.name
+	               , rdad.feeNumber
+	        
+	    </query>
+	</named-query>
+	
+	
+	<!-- Room Typs -->
+	<named-query name="searchRoomType">
+		<query>
+			select t
+			from RoomType t
+			order by t.description
+		</query>
+	</named-query>
+
+	<named-query name="searchActiveRoomType">
+		<query>
+			select t
+			from RoomType t
+			where t.flagActive = TRUE
+			order by t.description
+		</query>
+	</named-query>
+
+	<!-- Management  -->
+
+	<named-query name="searchBalanceMegaEventPresenceByEventDTO">
+		<query>
+			SELECT new com.cb.mundo.model.dto.BalanceMegaEventPresenceByEventDTO(ew , e, rd.presence, sum(rd.value), count(r))
+			FROM RegisterDetail rd
+				join rd.register r
+				join rd.event e
+				join rd.eventWeek ew					
+			WHERE r.megaEvent = :pMegaEvent and r.status = :pStatus
+			GROUP BY ew, e, rd.presence
+			
+		</query>
+	</named-query>
+	
+	<named-query name="searchBalanceMegaEventMethodByEventDTO">
+		<query>
+			SELECT new com.cb.mundo.model.dto.BalanceMegaEventMethodByEventDTO(ew , e, rd.presence, p.method,  sum(p.value))
+			FROM RegisterDetail rd
+				join rd.register r
+				join rd.event e
+				join rd.eventWeek ew
+			    left join rd.payments p
+				join r.contact c
+			WHERE r.megaEvent = :pMegaEvent and r.status = :pStatus
+			GROUP BY ew, e, rd.presence, p.method
+		</query>
+	</named-query>
+	
+	
+	<named-query name="searchDebtDTOByMegaEvents">
+		<query>
+			select new com.cb.mundo.model.dto.DebtDTO(r.megaEvent, r, rd.event, SUM(rd.value))
+			from RegisterDetail       rd
+				join rd.register      r
+				join r.contact        c
+			where r.megaEvent IN (:pMegaEvents)
+			and   r.status    IN (:pRegisterStatusList)
+			group by r.megaEvent, r, rd.event
+			order by r.megaEvent.name, c.civilName, rd.event.module, rd.event.name
+		</query>
+	</named-query>
+	
+	<named-query name="totalizeValuePaidByMegaEventAndRegisterAndEvent">
+		<query>
+			select SUM( pay.value )
+			from RegisterDetailPayment   pay
+				 join pay.registerDetail rd
+				 join rd.register        r
+			where r.megaEvent = :pMegaEvent
+			and   r           = :pRegister
+			and   rd.event    = :pEvent
+		</query>
+	</named-query>
+	
+	
+	<named-query name="searchComissionDetailDTOByMegaEvent">
+		<query>
+			select new com.cb.mundo.model.dto.ComissionDetailDTO(c, e, rd)
+			from RegisterDetail  rd
+				join rd.register r
+				join rd.event    e
+				join r.contact   c
+			where r.megaEvent = :pMegaEvent
+			and   rd.presence = :pPresence 
+			and   e.flagCommissionable = TRUE
+			order by c.civilName
+		</query>
+	</named-query>
+
+
+
+	<!-- city -->
+
+	<named-query name="searchCity">
+		<query>
+			SELECT c
+			FROM City c
+			ORDER BY c.name
+		</query>
+	</named-query>
+	
+	<named-query name="searchCityByFlagActive">
+		<query>
+			select c
+			from City c
+			where c.flagActive = :pFlagActive
+			order by c.name
+		</query>
+	</named-query>
+	
+	<named-query name="searchCityByCountry">
+		<query>
+			SELECT c
+			FROM City c
+			WHERE c.country = :pCountry
+			AND c.flagActive = TRUE
+			ORDER BY c.name
+		</query>
+	</named-query>
+	
+	<named-query name="findCityByName">
+		<query>
+			SELECT c
+			FROM City c
+			WHERE LOWER(c.name) = :pName
+		</query>
+	</named-query>
+	
+	<named-query name="findCityTeamByCityAndSchool">
+		<query>
+			select ct
+			from CityTeam ct
+			where ct.city   = :pCity
+			and   ct.school = :pSchool
+		</query>
+	</named-query>	
+	
+	
+	<!-- country -->
+	
+	<named-query name="searchCountry">
+		<query>
+			SELECT c
+			FROM Country c
+			ORDER BY c.name
+		</query>
+	</named-query>
+	
+	<named-query name="findCountryByName">
+		<query>
+			SELECT c
+			FROM Country c
+			WHERE LOWER(c.name) = :pName
+		</query>
+	</named-query>
+	
+	<named-query name="searchCountryByFlagActive">
+		<query>
+			select c
+			from Country c
+			where c.flagActive = :pFlagActive
+			order by c.name
+		</query>
+	</named-query>	
+
+
+	<!-- contact -->
+
+	<named-query name="Contact.findByName">
+		<query>
+			SELECT c
+			FROM Contact c
+			WHERE LOWER(c.name) = :pName
+		</query>
+	</named-query>
+	
+	<named-query name="Contact.findByCivilName">
+		<query>
+			SELECT c
+			FROM Contact c
+			WHERE LOWER(c.civilName) = :pCivilName
+		</query>
+	</named-query>
+	
+	
+	<named-query name="Contact.findByEmail">
+		<query>
+			SELECT c
+			FROM Contact c
+			WHERE LOWER(c.email) = :pEmail
+		</query>
+	</named-query>	
+
+	<named-query name="Contact.searchByCivilNameOrNewName">
+		<query>
+			SELECT c
+			FROM Contact c
+			WHERE LOWER(c.name)      like :pNewName
+			OR    LOWER(c.civilName) like :pCivilName
+			ORDER BY c.civilName
+		</query>
+	</named-query>
+	
+	<named-query name="Contact.searchByCivilNameOrNameOrEmailOrCity">
+		<query>
+			SELECT c
+			FROM Contact c
+			WHERE LOWER(c.civilName) like :pCivilName
+			OR    LOWER(c.name)      like :pName
+			OR    LOWER(c.email)     like :pEmail
+			OR    LOWER(c.city)      like :pCity
+			ORDER BY c.civilName
+		</query>
+	</named-query>
+	
+	
+	<named-query name="Contact.searchProductorByCivilNameOrNewName">
+		<query>
+			SELECT c
+			FROM Contact c
+			WHERE c.flagProductor = TRUE
+			AND (
+				LOWER(c.name)      like :pNewName
+				OR    
+				LOWER(c.civilName) like :pCivilName
+				)
+			ORDER BY c.civilName
+		</query>
+	</named-query>
+
+	<named-query name="Contact.searchTrainnerByCivilNameOrNewName">
+		<query>
+			SELECT c
+			FROM Contact c
+			WHERE c.trainnerType IS NOT NULL
+			AND (
+				LOWER(c.name)      like :pNewName
+				OR    
+				LOWER(c.civilName) like :pCivilName
+				)
+			ORDER BY c.civilName
+		</query>
+	</named-query>
+
+	<named-query name="Contact.searchAll">
+		<query>
+			SELECT c
+			FROM Contact c
+			ORDER BY c.civilName
+		</query>
+	</named-query>
+	
+	<named-query name="Contact.searchByTrainner">
+		<query>
+			SELECT c
+			FROM Contact c
+			WHERE c.trainnerContact = :pTrainner
+		</query>
+	</named-query>
+	
+	<named-query name="Contact.searchByProductor">
+		<query>
+			SELECT c
+			FROM Contact c
+			WHERE c.productorContact = :pProductor
+		</query>
+	</named-query>
+
+
+	<!-- facilitator -->
+
+	<named-query name="Facilitator.searchBySchool">
+		<query>
+			SELECT f
+			FROM Facilitator f
+			WHERE f.school = :pSchool
+			AND f.flagActive = true
+			ORDER BY f.contact.name
+		</query>
+	</named-query>
+
+	<named-query name="Facilitator.findBySchoolAndContact">
+		<query>
+			SELECT f
+			FROM Facilitator f
+			WHERE f.school  = :pSchool
+			AND   f.contact = :pContact
+		</query>
+
+	</named-query>
+
+	<named-query name="Facilitator.inactivateByContact">
+		<query>
+			UPDATE Facilitator f
+			SET f.flagActive = FALSE
+			WHERE f.contact = :pContact
+		</query>
+	</named-query>
+	
+	<named-query name="Facilitator.searchByContact">
+		<query>
+			SELECT f
+			FROM Facilitator f
+			WHERE f.contact = :pContact
+		</query>
+	</named-query>
+	
+	<named-query name="Facilitator.searchAll">
+		<query>
+			SELECT f
+			FROM Facilitator f
+			ORDER BY f.contact.name
+		</query>
+	</named-query>
+	
+	
+
+
+	
+
+	<!-- production -->
+
+	<named-query name="Production.searchBySchoolAndCity">
+		<query>
+			SELECT p
+			FROM Production p
+			WHERE p.school = :pSchool
+			AND   p.city   = :pCity
+			ORDER BY p.firstDate
+		</query>
+	</named-query>
+
+	<named-query name="findProductionBySchoolAndCityAndStatus">
+		<query>
+			SELECT p
+			FROM Production p
+			WHERE p.school = :pSchool
+			AND   p.city   = :pCity
+			AND   p.status = :pStatus
+		</query>
+	</named-query>
+
+	<named-query name="Production.searchOrderByFirstDate">
+		<query>
+			SELECT p1
+			FROM Production p1
+			ORDER BY p1.firstDate
+		</query>
+	</named-query>
+	
+	<named-query name="Production.searchByFacilitator">
+		<query>
+			SELECT p
+			FROM Production p
+			WHERE p.facilitator1 = :pFacilitator
+			OR    p.facilitator2 = :pFacilitator
+			OR    p.facilitator3 = :pFacilitator
+			OR    p.facilitator4 = :pFacilitator
+		</query>
+	</named-query>
+	
+	<named-query name="Production.searchByCity">
+		<query>
+			SELECT p
+			FROM Production p
+			WHERE p.city = :pCity
+		</query>
+	</named-query>
+	
+	<named-query name="searchProductionBySchoolAndCityAndStatus">
+		<query>
+			select p
+			from Production p
+			where p.school = :pSchool
+			and   p.city   = :pCity
+			and   p.status = :pStatus
+		</query>
+	</named-query>
+	
+	<named-query name="searchProductionByFacilitatorAndDates">
+		<query>
+			select distinct p
+			from Production p
+			where (p.facilitator1 = :pFacilitator
+			or     p.facilitator2 = :pFacilitator
+			or     p.facilitator3 = :pFacilitator
+			or     p.facilitator4 = :pFacilitator
+			)
+			and p.firstDate = :pDate1
+			and p.lastDate  = :pDate2
+		</query>
+	</named-query>
+	
+
+	<!-- participant -->
+
+	<named-query name="Participant.searchByProduction">
+		<query>
+			SELECT pp
+			FROM Participant pp
+			WHERE pp.production = :pProduction
+			ORDER BY pp.contact.civilName
+		</query>
+	</named-query>
+	
+	<named-query name="Participant.searchByContact">
+		<query>
+			SELECT p
+			FROM Participant p
+			WHERE p.contact = :pContact
+		</query>
+	</named-query>
+	
+
+	<!-- certificate -->
+
+	<named-query name="searchCertificateByProduction">
+		<query>
+			SELECT c
+			FROM Certificate c
+			WHERE c.production = :pProduction
+			ORDER BY c.number
+		</query>
+	</named-query>
+	
+	<named-query name="findCertificateNumberBySchoolAndModule">
+		<query>
+			SELECT cn
+			FROM CertificateNumber cn
+			WHERE cn.school = :pSchool
+			AND   cn.module = :pModule
+		</query>
+	</named-query>
+	
+	<named-query name="removeCertificateByProduction">
+		<query>
+			DELETE FROM Certificate c
+			WHERE c.production = :pProduction
+		</query>
+	</named-query>
+	
+	
+	<!--  named-query name="removeAllCertificateConfigItems">
+		<query>
+			DELETE FROM CertificateConfigItem
+		</query>
+	</named-query-->
+	
+	
+	<!-- named-query name="removerAllCertificateNumber">
+		<query>
+			DELETE FROM CertificateNumber
+		</query>
+	</named-query -->
+	
+	<named-query name="searchCertificateConfigItemBySchoolAndModuleAndNumberOfFacilitor">
+		<query>
+			SELECT item
+			FROM CertificateConfigItem item
+			WHERE item.school = :pSchool
+			AND   item.module = :pModule
+			AND   item.numberOfFacilitator = :pNumber
+			ORDER BY item.displayOrder
+		</query>
+	</named-query>
+	
+	
+	
+<!-- integrant -->
+
+	<named-query name="Integrant.searchByProduction">
+		<query>
+			SELECT pi
+			FROM Integrant pi
+			WHERE pi.production = :pProduction
+			ORDER BY pi.contact.civilName
+		</query>
+	</named-query>
+	
+	<named-query name="Integrant.searchByContact">
+		<query>
+			SELECT i
+			FROM Integrant i
+			WHERE i.contact = :pContact
+		</query>
+	</named-query>
+	
+
+<!-- staff -->
+
+	<named-query name="Staff.searchByProduction">
+		<query>
+			SELECT s
+			FROM Staff s
+			WHERE s.production = :pProduction
+			ORDER BY s.contact.civilName
+		</query>
+	</named-query>
+
+	<named-query name="Staff.searchByContact">
+		<query>
+			SELECT s
+			FROM Staff s
+			WHERE s.contact = :pContact
+		</query>
+	</named-query>
+	
+	<named-query name="Staff.searchByContactAndProduction">
+		<query>
+			SELECT s
+			FROM Staff s
+			WHERE s.contact = :pContact
+			AND   s.production = :pProduction
+		</query>
+	</named-query>
+
+
+<!-- incoming -->
+
+	<named-query name="Incoming.searchByProduction">
+		<query>
+			SELECT i
+			FROM Incoming i
+			WHERE i.production = :pProduction
+			ORDER BY i.category
+		</query>
+	</named-query>
+
+	<named-query name="Incoming.searchByProductionAndCategory">
+		<query>
+			SELECT i
+			FROM Incoming i
+			WHERE i.production = :pProduction
+			AND i.category = :pCategory
+			ORDER BY i.date
+		</query>
+	</named-query>
+	
+	<named-query name="Incoming.removeByParticipant">
+		<query>
+			DELETE
+			FROM Incoming i
+			WHERE i.participant = :pParticipant
+		</query>
+	</named-query>
+	
+	<named-query name="Incoming.removeByStaff">
+		<query>
+			DELETE
+			FROM Incoming i
+			WHERE i.staff = :pStaff
+		</query>
+	</named-query>
+	
+	<named-query name="Incoming.searchByCityAndPaymentMethod">
+		<query>
+			SELECT i
+			FROM Incoming i
+			WHERE i.production.city = :pCity
+			AND   i.paymentMethod = :pPaymentMethod
+			ORDER BY i.date
+		</query>
+	</named-query>
+	
+	<named-query name="searchIncomingByProductionAndStaffContact">
+		<query>
+			SELECT i
+			FROM Incoming i
+			WHERE i.production    = :pProduction
+			AND   i.staff.contact = :pContact
+		</query>
+	</named-query>
+	
+	<named-query name="searchIncomingByParticipant">
+		<query>
+			select inc
+			from Incoming inc
+			where inc.participant = :pParticipant
+		</query>
+	</named-query>
+	
+
+
+<!-- outcoming -->
+
+	<named-query name="Outcoming.searchByProduction">
+		<query>
+			SELECT o
+			FROM Outcoming o
+			WHERE o.production = :pProduction
+			ORDER BY o.category
+		</query>
+	</named-query>
+
+	<named-query name="Outcoming.searchByProductionAndCategory">
+		<query>
+			SELECT o
+			FROM Outcoming o
+			WHERE o.production = :pProduction
+			AND o.category = :pCategory
+			ORDER BY o.date 
+		</query>
+	</named-query>
+	
+	<named-query name="Outcoming.searchByContact">
+		<query>
+			SELECT o
+			FROM Outcoming o
+			WHERE o.responsable = :pContact
+		</query>
+	</named-query>
+	
+	<named-query name="searchOutcomingByProductionAndContact">
+		<query>
+			SELECT o
+			FROM Outcoming o
+			WHERE o.production  = :pProduction
+			AND   o.responsable = :pContact
+			ORDER BY o.description
+		</query>
+	</named-query>
+	
+	
+<!-- Contact (for production) -->	
+	<named-query name="searchStaffContactByProduction">
+		<query>
+			SELECT DISTINCT s.contact
+			FROM Staff s
+			WHERE s.production = :pProduction
+		</query>
+	</named-query>
+
+
+
+    <!-- recipient informes --> 
+
+	<named-query name="searchRecipientInformeBySchoolAndInformeType">
+		<query>
+	       select r
+	       from RecipientInforme r
+	       where r.school = :pSchool
+	       and r.informeType = :pInformeType
+	       order by r.informeType
+	   </query>
+	</named-query>
+
+	<named-query name="searchRecipientInformeByInformeType">
+		<query>
+			select r
+			from RecipientInforme r
+			where r.informeType = :pInformeType
+			order by r.school
+		</query>
+	</named-query>
+	
+	
+	<!-- City Team Member -->
+	
+	<named-query name="searchCityTeamMemberByCityAndSchool">
+		<query>
+			select m
+			from CityTeamMember m
+				join m.cityTeam c
+			where c.city   = :pCity
+			and   c.school = :pSchool
+			order by m.contact
+		</query>
+	</named-query>
+	
+ 
+ 
+    <!-- reports -->
+ 	
+	<named-query name="PaymentMethodSummary.searchGroupByCity">
+		<query>
+			SELECT new com.cb.mundo.model.dto.PaymentMethodSummary(i.paymentMethod, SUM(i.value) )
+			FROM Incoming i
+			WHERE i.production.city = :pCity
+			GROUP BY i.paymentMethod
+		</query>
+	</named-query>
+	
+	
+	<named-query name="findFeedbackByProduction">
+		<query>
+			select f
+			from Feedback f
+			where f.production = :pProduction
+		</query>
+	</named-query>
+	
+
+	<named-query name="findRendicionByProduction">
+		<query>
+			select r
+			from Rendicion r
+			where r.production = :pProduction
+		</query>
+	</named-query>
+	
+	
+	<named-query name="searchContactBySchoolAlreadyParticipated">
+		<query>
+			select distinct c
+			from Production prod
+				join prod.participants part
+				join part.contact c
+			where prod.school = :pSchool
+			and   prod.module IN (:pModuleList)
+			order by c.civilName
+		</query>
+	</named-query>
+	
+	
+    <!-- mgmt reports 
+	
+	<named-query name="searchRendicionAdminDTOByYearAndMonths">
+		<query>
+			select new com.cb.mundo.model.dto.RendicionAdminDTO(p.school)
+			from Rendicion r
+				join r.production p
+			where YEAR(p.firstDate) = :pYear
+			and   MONTH(p.firstDate) IN (:pMonths)
+			group by p.school
+		</query>
+	</named-query>
+    
+    <named-query name="totalizeRendicionPaymentBySchoolAndYearAndMounths">
+    	<query>
+    		select SUM( pay.paymentValue )
+    		from RendicionPayment   pay
+    			join pay.rendicion  r
+    			join r.production   pro
+    		where pro.school           =   :pSchool
+    		and   YEAR(pro.firstDate)  =   :pYear
+    		and   MONTH(pro.firstDate) IN (:pMonths)
+    	</query>
+    </named-query>
+    -->
+
+
+</entity-mappings>

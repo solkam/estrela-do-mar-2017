@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	template="/WEB-INF/design/_template-main.xhtml">
+
+<ui:define name="controls" />
+
+<ui:define name="options" />
+	 	 
+<ui:define name="content">
+
+	<h:outputText value="Quero pesquisar se meus dados já estão cadastrados" styleClass="destak1" />
+
+	<h:form>
+		<p:panel header="Pesquisar">
+			<h:panelGrid columns="4" cellpadding="5" >
+				<h:panelGrid>
+					<h:outputText value="Nome novo:" />
+					<p:inputText size="30" value="#{signupBean.name}" />
+				</h:panelGrid>
+				
+				<h:panelGrid>
+					<h:outputText value="Nome civil:" />
+					<p:inputText size="30" value="#{signupBean.civilName }" />
+				</h:panelGrid>
+				
+				<h:panelGrid rendered="false">
+					<h:outputText value="Email:" />
+					<p:inputText size="30" value="#{signupBean.email }" />
+				</h:panelGrid>
+
+				<p:commandButton icon="ui-icon-search" value="Pesquisar"
+					update="@form"
+					action="#{signupBean.search }" />
+
+			</h:panelGrid>
+					
+			<p:messages />
+
+			<p:dataTable var="c" value="#{signupBean.contacts }" emptyMessage="Nada foi encontrado">
+				<p:column headerText="Nome Novo">
+					#{c.name }
+				</p:column>
+				
+				<p:column headerText="Nome civil">
+					#{c.civilName }
+				</p:column>
+				
+				<p:column headerText="Email" rendered="false">
+					#{c.email }
+				</p:column>
+				
+				<p:column style="width:5%">
+					<p:commandButton icon="ui-icon-check" value="Sou eu"
+						action="#{signupBean.defineContactForUser(c) }"
+						ajax="false" />
+				</p:column>
+			</p:dataTable>
+		</p:panel>
+	</h:form>
+	
+	<p:toolbar>
+		<p:toolbarGroup>
+				<p:button icon="ui-icon-arrowthick-1-w" value="Voltar ao Login" outcome="/login.xhtml" />
+		</p:toolbarGroup>
+		
+		<p:toolbarGroup align="right">
+			<h:panelGrid columns="2">
+				<h:outputText value="Não encontrei meus dados pessoais..." />
+				<p:button icon="ui-icon-plus" value="Quero preencher" outcome="/pages/signup/signup-form.xhtml"   />
+			</h:panelGrid>
+		</p:toolbarGroup>
+	</p:toolbar>
+
+
+</ui:define>
+</ui:composition>

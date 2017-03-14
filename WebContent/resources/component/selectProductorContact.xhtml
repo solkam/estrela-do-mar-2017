@@ -1,0 +1,83 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:cc="http://java.sun.com/jsf/composite"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:cb="http://java.sun.com/jsf/composite/component"
+	xmlns:p="http://primefaces.org/ui">
+
+<cc:interface>
+	<cc:attribute name="value" required="true" />
+</cc:interface>
+
+<cc:implementation>
+
+	<h:panelGrid columns="3" cellpadding="5">
+		<h:outputText value="#{i18n.label_search_by_name_new_or_civil}:" styleClass="less2" />
+		<p:inputText value="#{selectProductorContactBean.contactName}" />
+		<p:commandButton icon="ui-icon-search" action="#{selectProductorContactBean.search }"
+			oncomplete="DialogSelectProductorContact.show()"
+			update="displayContacts" />
+	</h:panelGrid>
+	
+	<p:separator />
+	
+	<p:outputPanel id="displayProductorInfos">
+		<h:panelGrid columns="2" cellpadding="5">
+			<h:outputText value="#{i18n.label_productor_name}:" styleClass="less2" />
+			<h:outputText value="#{cc.attrs.value.fullDesc }" styleClass="destak2" />
+			
+			<h:outputText value="#{i18n.label_productor_email}:" styleClass="less2" />
+			<h:outputText value="#{cc.attrs.value.email }" styleClass="destak2" />
+			
+		</h:panelGrid>
+	
+		<p:separator />
+		
+		<h:panelGrid style="width:100%; text-align:rigth;">
+			<p:commandButton icon="ui-icon-close" value="#{i18n.label_to_remove_productor }" 
+				rendered="#{not empty cc.attrs.value.id}"
+				update="displayProductorInfos @form" >
+				
+				<f:setPropertyActionListener target="#{cc.attrs.value}" value="#{null}" />
+			</p:commandButton>
+		</h:panelGrid>
+
+	</p:outputPanel>
+	
+	
+	<p:dialog widgetVar="DialogSelectProductorContact" header="#{i18n.label_select_productor }" dynamic="true" >
+		<p:panel id="displayContacts" styleClass="scrollable1">
+			<p:dataTable value="#{selectProductorContactBean.contacts}" var="contactRow" emptyMessage="#{i18n.msg_no_result_found }">
+				
+				<p:column headerText="#{i18n.label_civil_name }" sortBy="#{contactRow.civilName }">
+					#{contactRow.civilName }
+				</p:column>
+				
+				<p:column headerText="#{i18n.label_new_name }" sortBy="#{contactRow.name }">
+					#{contactRow.name }
+				</p:column>
+				
+				<p:column headerText="#{i18n.label_email }" sortBy="#{contactRow.email }">
+					#{contactRow.email }
+				</p:column>
+				
+				<p:column>
+					<p:commandButton icon="ui-icon-check" title="#{i18n.label_to_select }"
+						oncomplete="DialogSelectProductorContact.hide()"
+						update="@form" >
+						<f:setPropertyActionListener value="#{contactRow }" target="#{cc.attrs.value}"  />
+					</p:commandButton>
+				</p:column>
+				
+			</p:dataTable>
+		</p:panel>
+		
+		<p:commandButton icon="ui-icon-zoomout" value="#{i18n.label_new_search }" onclick="DialogSelectProductorContact.hide()" />
+	
+	</p:dialog>
+
+</cc:implementation>
+
+</html>

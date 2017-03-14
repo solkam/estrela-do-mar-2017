@@ -1,0 +1,24 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:cc="http://java.sun.com/jsf/composite"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+<cc:interface>
+	<cc:attribute name="text" required="true" />
+</cc:interface>
+
+<cc:implementation>
+
+	<p:fieldset styleClass="helpPanel">
+		<h:panelGrid columns="2" cellpadding="10">
+			<h:graphicImage library="img" name="icon_help.png" />
+			<h:outputText value="#{cc.attrs.text}" />
+		</h:panelGrid>
+	</p:fieldset>
+
+</cc:implementation>
+
+</html>

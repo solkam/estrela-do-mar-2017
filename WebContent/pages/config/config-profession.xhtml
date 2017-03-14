@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:cb="http://java.sun.com/jsf/composite/component"
+	template="/WEB-INF/design/_decorate-contact.xhtml">
+
+<ui:define name="headerConfig">
+	#{i18n.label_profession_config}
+</ui:define>
+
+<ui:define name="contentConfig">
+
+	<h:form id="formConfigProfessions">
+	
+		<p:panel header="#{i18n.label_profession_config}">
+	
+			<p:commandButton icon="ui-icon-plus" value="#{i18n.label_profession_new}"
+				action="#{configProfessionBean.resetProfession}"
+				oncomplete="DialogConfigProfession.show()"
+				update=":formConfigProfession" />
+				
+			<p:messages globalOnly="true" />
+			
+			<h:outputText value="#{i18n.msg_no_result_found }" 
+				rendered="#{empty configProfessionBean.professions }" />
+			
+			<p:dataTable value="#{configProfessionBean.professions }" var="professionRow"
+				rendered="#{not empty configProfessionBean.professions }" >
+				
+				<p:column headerText="#" styleClass="colCenter col10p">
+					<h:outputText value="#{professionRow.id}" styleClass="less3" />
+				</p:column>
+			
+				<p:column headerText="#{i18n.label_profession_name}" sortBy="#{professionRow.name}" styleClass="col60p">
+					#{professionRow.name}
+				</p:column>
+			
+				<p:column headerText="#{i18n.label_flag_active}" sortBy="#{professionRow.name}" styleClass="col60p colCenter">
+					<cb:displayFlagActive flag="#{professionRow.flagActive}" />					
+				</p:column>
+
+				<p:column headerText="#{i18n.label_note}" styleClass="colCenter col10p">
+					<cb:displayNote note="professionRow.note" />
+				</p:column>
+
+				<p:column styleClass="colCenter col10p" >
+					<p:commandButton icon="ui-icon-pencil" title="#{i18n.label_profession_edit} #{professionRow.name}"
+						oncomplete="DialogConfigProfession.show()"
+						update=":formConfigProfession"  >
+					
+							<f:setPropertyActionListener target="#{configProfessionBean.profession}" value="#{professionRow}" />	
+					</p:commandButton>
+				</p:column>
+
+			</p:dataTable>		
+		</p:panel>
+	</h:form>
+	
+<!-- Dialog Profession -->
+<!-- ************** -->
+<p:dialog widgetVar="DialogConfigProfession" header="#{i18n.label_profession}"  
+	modal="true" dynamic="true" closeOnEscape="true" maximizable="true">
+	
+	<h:form id="formConfigProfession">
+	
+		<p:panel>
+			<h:panelGrid cellpadding="5">
+				<h:panelGrid cellpadding="0">
+					<p:outputLabel for="inName" value="#{i18n.label_name}" styleClass="less2 req" />
+					<p:inputText id="inName" value="#{configProfessionBean.profession.name}"
+						required="true" size="60" maxlength="60" />
+					<p:message for="inName" />
+				</h:panelGrid>
+			
+				<h:panelGrid cellpadding="0">
+					<p:outputLabel for="inFlagActive" value="#{i18n.label_flag_active}" styleClass="less2 req" />
+					<p:selectBooleanButton id="inFlagActive" value="#{configProfessionBean.profession.flagActive}"
+						onIcon="ui-icon-check" onLabel="#{i18n.label_yes}" 
+						offIcon="ui-icon-close" offLabel="#{i18n.label_no}"
+						required="true" />
+					<p:message for="inFlagActive" />
+				</h:panelGrid>
+
+				<h:panelGrid cellpadding="0">
+					<p:outputLabel for="inNote" value="#{i18n.label_note}" styleClass="less2" />
+					<p:inputTextarea id="inNote" value="#{configProfessionBean.profession.note}"
+						rows="3" cols="80" />
+					<p:message for="inNote" />
+				</h:panelGrid>
+
+			</h:panelGrid>
+		</p:panel>
+		
+		<p:messages globalOnly="true" />
+
+		<p:commandButton icon="ui-icon-check" value="#{i18n.label_profession_save}"
+			action="#{configProfessionBean.saveProfession()}"
+			update="@form :formConfigProfessions"
+			oncomplete="if (args.sucessOnly) DialogConfigProfession.hide()" 
+			/>
+			
+	</h:form>
+</p:dialog>
+
+
+</ui:define>
+</ui:composition>

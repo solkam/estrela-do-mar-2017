@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:cb="http://java.sun.com/jsf/composite/component"
+	template="/WEB-INF/design/_decorate-report.xhtml">
+<ui:define name="reportContent" >
+
+<p:panel header="Informe de Quartos">
+	<h:form id="formFilter">
+		
+		<h:panelGrid columns="2" cellpadding="5">
+			<p:outputLabel value="Mega Evento: " styleClass="less2" />
+			<h:outputText value="#{reportHostingBean.currentMegaEvent.name}" styleClass="destak1" />
+		</h:panelGrid>
+		
+	</h:form>
+	
+	<p:separator />	
+	
+	<h:form id="formResult">
+	
+		<cb:globalMessages />
+		
+		<p:tabView>
+		
+			<p:tab title="Visão por Quarto">
+			
+				<p:outputPanel rendered="#{not empty reportHostingBean.hostingByRoomDtos}">
+				
+				
+					<fieldset>
+						<legend>Opções para Exportar</legend>
+						<h:panelGrid columns="2" cellpadding="5">
+			
+							<h:commandLink>
+								<h:panelGrid columns="2" cellpadding="5">
+									<p:graphicImage library="img" name="icon_export_excel2013_40.png" />
+									<h:outputText value="Excel" styleClass="destak4" />
+								</h:panelGrid>
+								<p:dataExporter target="tableHostingByRoom" type="xls" fileName="RoomList" />
+							</h:commandLink>
+						</h:panelGrid>
+					</fieldset>
+					
+					<p:spacer height="20" />
+				
+				
+					<p:dataTable id="tableHostingByRoom" value="#{reportHostingBean.hostingByRoomDtos}" var="dtoVar">
+			
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="Hospede 1" />
+							</f:facet>
+							<h:outputText value="#{dtoVar.roomMateContact1.fullDesc}" styleClass="destak4" />
+						</p:column>
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="CPF" />
+							</f:facet>
+							<h:outputText value="#{dtoVar.roomMateContact1.fullIdentityDocument }" />
+						</p:column>
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="Nascimento" />
+							</f:facet>
+							<h:outputText value="#{dtoVar.roomMateContact1.birthDate }" >
+								<f:convertDateTime pattern="dd/MM/yyyy" />
+							</h:outputText>
+						</p:column>
+
+
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="Hospede 2" />
+							</f:facet>
+							<h:outputText value="#{dtoVar.roomMateContact2.fullDesc}" styleClass="destak4" />
+						</p:column>
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="CPF" />
+							</f:facet>
+							<h:outputText value="#{dtoVar.roomMateContact2.fullIdentityDocument }" />
+						</p:column>
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="Nascimento" />
+							</f:facet>
+							<h:outputText value="#{dtoVar.roomMateContact2.birthDate }" >
+								<f:convertDateTime pattern="dd/MM/yyyy" />
+							</h:outputText>
+						</p:column>
+						
+		
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="Hospede 3" />
+							</f:facet>
+							<h:outputText value="#{dtoVar.roomMateContact3.fullDesc}" styleClass="destak4" />
+						</p:column>
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="CPF" />
+							</f:facet>
+							<h:outputText value="#{dtoVar.roomMateContact3.fullIdentityDocument }" />
+						</p:column>
+
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="Nascimento" />
+							</f:facet>
+							<h:outputText value="#{dtoVar.roomMateContact3.birthDate }" >
+								<f:convertDateTime pattern="dd/MM/yyyy" />
+							</h:outputText>
+						</p:column>
+			
+			
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="Hospede 4" />
+							</f:facet>
+							<h:outputText value="#{dtoVar.roomMateContact4.fullDesc}" styleClass="destak4" />
+						</p:column>
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="CPF" />
+							</f:facet>
+							<h:outputText value="#{dtoVar.roomMateContact4.fullIdentityDocument }" />
+						</p:column>
+
+
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="Hospede 5" />
+							</f:facet>
+							<h:outputText value="#{dtoVar.roomMateContact5.fullDesc}" styleClass="destak4" />
+						</p:column>
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="CPF" />
+							</f:facet>
+							<h:outputText value="#{dtoVar.roomMateContact5.fullIdentityDocument }" />
+						</p:column>
+						
+						
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="Hospede 6" />
+							</f:facet>
+							<h:outputText value="#{dtoVar.roomMateContact6.fullDesc}" styleClass="destak4" />
+						</p:column>
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="CPF" />
+							</f:facet>
+							<h:outputText value="#{dtoVar.roomMateContact6.fullIdentityDocument }" />
+						</p:column>
+						
+
+
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="Nascimento" />
+							</f:facet>
+							<h:outputText value="#{dtoVar.roomMateContact4.birthDate }" >
+								<f:convertDateTime pattern="dd/MM/yyyy" />
+							</h:outputText>
+						</p:column>
+						
+
+						<p:column sortBy="#{dtoVar.hosting.roomType.description}">
+							<f:facet name="header">
+								<h:outputText value="#{i18n.label_room_type}" />
+							</f:facet>
+							<h:outputText value="#{dtoVar.hosting.roomType.description}" styleClass="destak3" />
+						</p:column>
+						
+						<p:column styleClass="colCenter" sortBy="#{dtoVar.hosting.hostingArea}">
+							<f:facet name="header">
+								<h:outputText value="#{i18n.label_hosting_area}" />
+							</f:facet>
+							<h:outputText value="#{dtoVar.hosting.hostingArea}" styleClass="destak2" />
+						</p:column>
+					
+						<p:column styleClass="colCenter" sortBy="#{dtoVar.hosting.hostingNumber}">
+							<f:facet name="header">
+								<h:outputText value="#{i18n.label_hosting_number}" />
+							</f:facet>
+							<h:outputText value="#{dtoVar.hosting.hostingNumber}" styleClass="destak2" />
+						</p:column>
+			
+			
+						<p:column styleClass="colCenter col5p" sortBy="#{dtoVar.hosting.confirmedsAvailable}">
+							<f:facet name="header">
+								<h:outputText value="Vagas" />
+							</f:facet>
+							<h:outputText value="#{dtoVar.hosting.confirmedsAvailable}" />
+						</p:column>
+			
+						<p:column headerText="Status"  styleClass="colCenter col5p" exportable="false">
+							<cb:displayRoomOccupancy hosting="#{dtoVar.hosting}" />
+						</p:column>
+						
+			
+					</p:dataTable>
+					
+					<p:spacer height="20" />
+					
+					<fieldset>
+						<legend>#{i18n.label_export_options}</legend>
+						
+						<h:commandLink>
+							<h:panelGrid columns="2" cellpadding="2">
+								<p:graphicImage library="img" name="icon_export_excel2013_40.png" />
+								<h:outputText value="#{i18n.label_export_to_excel}" />
+							</h:panelGrid>
+							<p:dataExporter target="tableHostingByRoom" type="xls" fileName="InformeQuartos_VisaoPorQuarto" />
+						</h:commandLink>
+					</fieldset>
+
+				</p:outputPanel>
+			</p:tab>
+			
+			
+			<p:tab title="Visão por Ocupante">
+				<p:outputPanel rendered="#{not empty reportHostingBean.hostingByOccupantDtos}">
+				
+					<p:dataTable id="tableHostingByOccupant" value="#{reportHostingBean.hostingByOccupantDtos}" var="dtoVar">
+						<p:column sortBy="#{dtoVar.roomMateContact.civilName}">
+							<f:facet name="header">
+								Nome civil
+							</f:facet>
+							<h:outputText value="#{dtoVar.roomMateContact.civilName}" styleClass="destak2" />
+						</p:column>
+						
+						<p:column sortBy="#{dtoVar.roomMateContact.name}">
+							<f:facet name="header">
+								Nome novo
+							</f:facet>
+							<h:outputText value="#{dtoVar.roomMateContact.name}" />
+						</p:column>
+
+						<p:column>
+							<f:facet name="header">
+								Endereço
+							</f:facet>
+							<h:outputText value="#{dtoVar.roomMateContact.address}" />
+						</p:column>
+
+						<p:column sortBy="#{dtoVar.roomMateContact.city}">
+							<f:facet name="header">
+								Cidade
+							</f:facet>
+							<h:outputText value="#{dtoVar.roomMateContact.city}" />
+						</p:column>
+
+						<p:column>
+							<f:facet name="header">
+								Nro Doc Identidade
+							</f:facet>
+							<h:outputText value="#{dtoVar.roomMateContact.identityDocument}" />
+						</p:column>
+
+						<p:column>
+							<f:facet name="header">
+								Tipo Doc Identidade
+							</f:facet>
+							<h:outputText value="#{dtoVar.roomMateContact.identityDocumentType}" />
+						</p:column>
+
+						<p:column>
+							<f:facet name="header">
+								Data Nascimento
+							</f:facet>
+							<h:outputText value="#{dtoVar.roomMateContact.birthDate}" >
+								<f:convertDateTime pattern="dd/MM/yyyy"     />
+							</h:outputText>
+						</p:column>
+						
+
+						<p:column styleClass="colCenter" >
+							<f:facet name="header">
+								<h:outputText value="#{i18n.label_hosting_area}" />
+							</f:facet>
+							<h:outputText value="#{dtoVar.hosting.hostingArea}" />
+						</p:column>
+					
+						<p:column styleClass="colCenter" >
+							<f:facet name="header">
+								<h:outputText value="#{i18n.label_hosting_number}" />
+							</f:facet>
+							<h:outputText value="#{dtoVar.hosting.hostingNumber}" />
+						</p:column>
+					</p:dataTable>
+				
+					<p:spacer height="20" />
+					
+					<fieldset>
+						<legend>#{i18n.label_export_options}</legend>
+						
+						<h:commandLink>
+							<h:panelGrid columns="2" cellpadding="2">
+								<p:graphicImage library="img" name="icon_export_excel2013_40.png" />
+								<h:outputText value="#{i18n.label_export_to_excel}" />
+							</h:panelGrid>
+							<p:dataExporter target="tableHostingByOccupant" type="xls" fileName="InformeQuartos_VisaoPorOcupante" />
+						</h:commandLink>
+					</fieldset>
+				
+				</p:outputPanel>
+			
+			</p:tab>
+		</p:tabView>
+
+
+	</h:form>
+</p:panel>
+
+</ui:define>
+</ui:composition>

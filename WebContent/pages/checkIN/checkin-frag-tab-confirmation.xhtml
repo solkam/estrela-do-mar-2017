@@ -1,0 +1,348 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:fragment xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:cb="http://java.sun.com/jsf/composite/component">
+
+<h:panelGrid style="text-align:center;" width="100%">
+	<p:commandButton icon="ui-icon-check" value="#{i18n.label_to_confirm_checkin}"
+		action="#{checkInBean.confirmCheckin}"
+		update="@form" 
+		widgetVar="ButtonConfirmCheckin"
+		oncomplete="ButtonConfirmCheckin.disable()" 
+		/>
+		
+	<cb:globalMessages />
+	<p:growl globalOnly="true" />
+
+</h:panelGrid>
+
+<p:toolbar rendered="#{checkInBean.selectedRegister.statusCheckedIn }">
+	<p:toolbarGroup>
+		<h:outputText value="#{i18n.label_print_options}" />
+		
+		<p:separator />
+		
+		<p:commandButton icon="ui-icon-print" value="#{i18n.label_print_checkin_confirmation}" type="button">
+			<p:printer target="panelCheckinConfirmation" />
+		</p:commandButton>
+	
+		<p:commandButton icon="ui-icon-print" value="#{i18n.label_medical_form_print}"
+			update=":formMedicalPrint"
+			oncomplete="DialogPrintMedicalForm.show()" />
+
+		<p:commandButton icon="ui-icon-print" value="#{i18n.label_responsability_release_print} (em PT)" rendered="false"
+			 type="button" onclick="DialogPrintReleaseResponsabilityPT.show()" />
+
+		<p:commandButton icon="ui-icon-print" value="#{i18n.label_responsability_release_print} (en ES)" rendered="false"
+			 type="button" onclick="DialogPrintReleaseResponsabilityES.show()" />
+			
+	</p:toolbarGroup>
+</p:toolbar>
+
+<p:panel id="panelCheckinConfirmation">
+	<p:panel>
+		<h:panelGrid columns="2" rules="cols" cellpadding="10">
+			<h:panelGrid>
+				<h:outputText value="#{i18n.label_checkin_confirmation}" styleClass="destak2" />
+				<h:outputText value="#{i18n.label_temporary_comprovant}" styleClass="less2" />
+			</h:panelGrid>
+
+			<h:panelGrid columns="2" cellpadding="5">
+				<h:graphicImage library="img"
+					name="#{sessionHolder.currentMegaEvent.type.image }" />
+				<h:panelGroup>
+					<h:outputText value="#{sessionHolder.currentMegaEvent.name }"
+						styleClass="destak2" />
+					<br />
+					<h:outputText
+						value="#{sessionHolder.currentMegaEvent.descDates}"
+						styleClass="less2" />
+				</h:panelGroup>
+			</h:panelGrid>
+		</h:panelGrid>
+	</p:panel>
+	
+	<fieldset>
+		<legend>#{i18n.label_register_number}</legend>
+		<h:outputText value="#{checkInBean.selectedRegister.id }" styleClass="destak1" />
+	</fieldset>
+	
+	<h:panelGrid columns="4" cellpadding="0" cellspacing="0" width="100%">
+		<h:panelGroup>
+		<fieldset style="height:200px">
+			<legend>#{i18n.label_personal_data}</legend>
+			
+				<h:panelGrid columns="2" cellpadding="3">
+					<h:outputText value="#{i18n.label_name}:" styleClass="less2" />
+					<h:outputText value="#{checkInBean.selectedRegister.contact.fullDesc }" styleClass="destak2" />
+		
+					<h:outputText value="#{i18n.label_email}:" styleClass="less2" />
+					<h:outputText value="#{checkInBean.selectedRegister.contact.email }" />
+
+					<h:outputText value="#{i18n.label_city}:" styleClass="less2" />
+					<h:outputText value="#{checkInBean.selectedRegister.contact.city }" />
+
+					<h:outputText value="#{i18n.label_country}:" styleClass="less2" />
+					<h:outputText value="#{checkInBean.selectedRegister.contact.country }" />
+
+					<h:outputText value="#{i18n.label_productor}:" styleClass="less2" />
+					<h:panelGroup>
+						<h:outputText value="#{checkInBean.selectedRegister.contact.productorContact.fullDesc}" styleClass="destak3"
+							rendered="#{not empty checkInBean.selectedRegister.contact.productorContact}" />
+						<h:outputText value="#{i18n.msg_no_productor_selected}"
+							rendered="#{empty checkInBean.selectedRegister.contact.productorContact}" />
+					</h:panelGroup>
+				</h:panelGrid>
+		</fieldset>
+		</h:panelGroup>
+
+		<h:panelGroup>
+			<fieldset style="height:200px">
+				<legend>#{i18n.label_trip_infos}</legend>
+	
+				<h:panelGrid columns="2" cellpadding="3">
+					<h:outputText value="#{i18n.label_arrival_date}:" styleClass="less2" />
+					<cb:outputDate value="#{checkInBean.selectedRegister.tripInfo.tripArrivalDate }" styleClass="destak3" />
+	
+					<h:outputText value="#{i18n.label_arrival_hour}:" styleClass="less2" />
+					<cb:outputTime value="#{checkInBean.selectedRegister.tripInfo.tripArrivalTime }" styleClass="destak3" />
+					
+					<p:spacer height="5" />
+					<p:spacer height="5" />
+	
+					<h:outputText value="#{i18n.label_departure_date}:" styleClass="less2" />
+					<cb:outputDate value="#{checkInBean.selectedRegister.tripInfo.tripDepartureDate }" styleClass="destak3" />
+	
+					<h:outputText value="#{i18n.label_departure_hour}:" styleClass="less2" />
+					<cb:outputTime value="#{checkInBean.selectedRegister.tripInfo.tripDepartureTime }" styleClass="destak3" />
+				</h:panelGrid>
+	
+				<h:panelGrid columns="3" cellpadding="5" rendered="#{not empty checkInBean.selectedRegister.tripInfo.tripNote }" >
+					<h:outputText value="#{i18n.label_note}:" styleClass="less2" />
+					<h:graphicImage id="imgTripNote" library="img" name="icon_note_36.png" />
+					<p:tooltip for="imgTripNote" value="#{checkInBean.selectedRegister.tripInfo.tripNote }" />
+				</h:panelGrid>
+	
+			</fieldset>
+		</h:panelGroup>	
+		
+		<h:panelGroup>
+			<fieldset style="height:200px">
+				<legend>#{i18n.label_dates}</legend>
+	
+				<h:panelGrid columns="2" cellpadding="3">
+					<h:outputText value="#{i18n.label_checkin_date}:" styleClass="less2" />
+					<cb:outputDate value="#{checkInBean.selectedRegister.checkin.checkinDate }" styleClass="destak3" />
+	
+					<h:outputText value="#{i18n.label_preview_checkout_date}:" styleClass="less2" />
+					<cb:outputDate value="#{checkInBean.selectedRegister.previewCheckoutDate }" styleClass="destak3" />
+				</h:panelGrid>
+			</fieldset>
+		</h:panelGroup>	
+		
+		<h:panelGroup>
+			<fieldset style="height:200px">
+				<legend>#{i18n.label_note_about_register}</legend>
+					<h:panelGrid cellpadding="5">
+						<p:inputTextarea value="#{checkInBean.selectedRegister.note}" rows="4" cols="50" />
+						<cb:helpPanel text="#{i18n.text_help_note_about_register}" />
+					</h:panelGrid>
+			</fieldset>
+		</h:panelGroup>
+
+	</h:panelGrid>
+
+	<fieldset>
+		<legend>#{i18n.label_events}</legend>
+		
+		
+		<!-- eventos dos meus dependentes -->
+		<ui:repeat var="dependRegisterRow" value="#{reg.dependentRegisters}">
+		
+			<p:dataTable var="detailRow" value="#{dependRegisterRow.details}" 
+				rendered="#{not empty dependRegisterRow.details}">
+				
+				<p:column headerText="#{i18n.label_week_or_phase}" styleClass="col10p">
+					#{detailRow.eventWeek.name }
+				</p:column>
+
+				<p:column headerText="#{i18n.label_dependents}" styleClass="col10p">
+					#{detailRow.register.contact.civilName }
+				</p:column>
+
+				<p:column headerText="#{i18n.label_presence}" styleClass="col10p">
+					<h:outputText value="#{detailRow.event.name}" />
+					<br />
+					<h:outputText value="#{i18n[detailRow.presence.key]}" styleClass="less2" />
+				</p:column>
+
+				<p:column headerText="#{i18n.label_value}" styleClass="col10p colCenter">
+					<cb:outputCurrency value="#{detailRow.value}" />
+				</p:column>
+
+				<p:column headerText="#{i18n.label_paid_value}"  styleClass="col10p colCenter">
+					<cb:outputCurrency value="#{detailRow.calculatedPaidValue}" styleClass="paid" />
+				</p:column>
+
+				<p:column headerText="#{i18n.label_pendent_value}"  styleClass="col10p colCenter">
+					<cb:outputCurrency value="#{detailRow.calculatedPendentValue}" styleClass="pendent" />
+				</p:column>
+
+				<p:column headerText="#{i18n.label_payments }"  styleClass="col40p colCenter">
+					<h:outputText value="#{i18n.label_no_payments }" styleClass="less2"
+						rendered="#{empty detailRow.payments}" />
+
+					<p:dataTable value="#{detailRow.payments}" var="payment"
+						rendered="#{not empty detailRow.payments}">
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="#{i18n.label_payment_method }"
+									styleClass="less2" />
+							</f:facet>
+							<h:outputText value="#{i18n[payment.method.key]}"
+								styleClass="less2" />
+						</p:column>
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="#{i18n.label_sale_order }"
+									styleClass="less2" />
+							</f:facet>
+							<h:outputText value="#{payment.saleOrder}"
+								styleClass="less2" />
+						</p:column>
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="#{i18n.label_date}" styleClass="less2" />
+							</f:facet>
+							<cb:outputDate value="#{payment.date}" styleClass="less2" />
+						</p:column>
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="#{i18n.label_value }"
+									styleClass="less2" />
+							</f:facet>
+							<cb:outputCurrency value="#{payment.value}"
+								styleClass="less2" />
+						</p:column>
+					</p:dataTable>
+				</p:column>
+
+			</p:dataTable>
+		</ui:repeat>
+		
+		
+		<!-- meus eventos -->
+		<p:dataTable value="#{checkInBean.selectedRegister.details }" var="detailRow" 
+			emptyMessage="#{i18n.msg_no_event_selected }">
+			
+			<p:column headerText="#{i18n.label_week_or_phase}" styleClass="col10p">
+				#{detailRow.eventWeek.name }
+			</p:column>
+
+			<p:column headerText="#{i18n.label_event}" styleClass="col10p">
+				#{detailRow.event.displayNameOrSchool }
+			</p:column>
+
+			<p:column headerText="#{i18n.label_presence}" styleClass="col10p">
+				#{i18n[detailRow.presence.key]}
+			</p:column>
+
+			<p:column headerText="#{i18n.label_value}" styleClass="col10p colCenter">
+				<cb:outputCurrency value="#{detailRow.value}" />
+				
+				<f:facet name="footer">
+					<cb:outputCurrency
+						value="#{checkInBean.selectedRegister.calculatedTotalValue}"
+						styleClass="destak4" />
+				</f:facet>
+			</p:column>
+
+			<p:column headerText="#{i18n.label_paid_value}"  styleClass="col10p colCenter">
+				<cb:outputCurrency value="#{detailRow.calculatedPaidValue}" styleClass="paid" />
+				
+				<f:facet name="footer">
+					<cb:outputCurrency
+						value="#{checkInBean.selectedRegister.calculatedPaidValue}"
+						styleClass="destak4 paid" />
+				</f:facet>
+			</p:column>
+
+			<p:column headerText="#{i18n.label_pendent_value}"  styleClass="col10p colCenter">
+				<cb:outputCurrency value="#{detailRow.calculatedPendentValue}" styleClass="pendent" />
+				
+				<f:facet name="footer">
+					<cb:outputCurrency
+						value="#{checkInBean.selectedRegister.calculatedPendentValue}"
+						styleClass="destak4 pendent" />
+				</f:facet>
+			</p:column>
+
+			<p:column headerText="#{i18n.label_payments }"  styleClass="col40p colCenter">
+				<h:outputText value="#{i18n.label_no_payments }" styleClass="less2"
+					rendered="#{empty detailRow.payments}" />
+
+				<p:dataTable value="#{detailRow.payments}" var="payment"
+					rendered="#{not empty detailRow.payments}">
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="#{i18n.label_payment_method }"
+								styleClass="less2" />
+						</f:facet>
+						<h:outputText value="#{i18n[payment.method.key]}"
+							styleClass="less2" />
+					</p:column>
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="#{i18n.label_sale_order }"
+								styleClass="less2" />
+						</f:facet>
+						<h:outputText value="#{payment.saleOrder}"
+							styleClass="less2" />
+					</p:column>
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="#{i18n.label_date}" styleClass="less2" />
+						</f:facet>
+						<cb:outputDate value="#{payment.date}" styleClass="less2" />
+					</p:column>
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="#{i18n.label_value }"
+								styleClass="less2" />
+						</f:facet>
+						<cb:outputCurrency value="#{payment.value}"
+							styleClass="less2" />
+					</p:column>
+				</p:dataTable>
+			</p:column>
+		</p:dataTable>
+		
+
+	</fieldset>								
+
+	<p:panel header="#{i18n.label_checkin_confirmation_info}"
+		rendered="#{checkInBean.selectedRegister.statusCheckedIn }">
+		
+		<h:panelGrid columns="2" cellpadding="5">
+			<h:outputText value="#{i18n.label_register_status}" />
+			<h:outputText value="#{i18n[checkInBean.selectedRegister.status.key] }"
+				styleClass="destak2" />
+
+			<h:outputText value="#{i18n.label_checkin_date}:" />
+			<cb:outputDate value="#{checkInBean.selectedRegister.checkin.checkinDate }"
+				styleClass="destak2" />
+
+			<h:outputText value="#{i18n.label_responsable_user}:" />
+			<h:outputText value="#{checkInBean.selectedRegister.checkin.checkinUser.username }"
+				styleClass="destak2" />
+
+		</h:panelGrid>
+	</p:panel>
+
+</p:panel>
+
+
+</ui:fragment>

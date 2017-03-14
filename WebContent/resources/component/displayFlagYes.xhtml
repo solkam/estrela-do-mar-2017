@@ -1,0 +1,21 @@
+<!DOCTYPE html >
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:cc="http://java.sun.com/jsf/composite"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:h="http://java.sun.com/jsf/html">
+
+<cc:interface>
+	<cc:attribute name="flag" required="true" type="java.lang.Boolean" />
+</cc:interface>
+
+<cc:implementation>
+
+	<h:panelGroup>
+		<h:graphicImage library="img" name="icone_shadow_check_on_24.png" rendered="#{cc.attrs.flag }" />
+	</h:panelGroup>
+
+</cc:implementation>
+
+</html>

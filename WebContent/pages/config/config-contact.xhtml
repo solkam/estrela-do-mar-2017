@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:cb="http://java.sun.com/jsf/composite/component"
+	template="/WEB-INF/design/_decorate-contact.xhtml">
+
+<ui:define name="headerConfig">
+	#{i18n.label_contact_config}
+</ui:define>
+
+<ui:define name="contentConfig">
+
+	<h:form id="formConfigContacts">
+		<p:panel header="#{i18n.label_contact_config }">
+			<fieldset>
+				<legend>#{i18n.label_search_by_keyword}:</legend>
+			
+				<h:panelGrid columns="2" cellpadding="5">
+					<h:panelGrid>
+						<p:inputText id="inKeyWord" value="#{configContactBean.keyword}" 
+							size="60" maxlength="60" style="font-size:2em;" />
+							
+						<h:outputText value="#{i18n.label_search_for_contact_by}" styleClass="less1" />
+					</h:panelGrid>
+					
+					<p:commandButton icon="ui-icon-search" value="#{i18n.label_contact_search}" 
+						action="#{configContactBean.searchByKeyword}"
+						update="@form" />
+				
+				</h:panelGrid>
+			</fieldset>
+			
+			<p:spacer height="10" />
+		
+			<fieldset>
+				<legend>#{i18n.label_search_by_first_letter_of_name_or_civil_name}:</legend>
+			
+				<h:panelGrid columns="26" cellpadding="2">
+					<p:commandButton value="A" action="#{configContactBean.searchByFirstCaracter('a') }" process="@this" update="@form"  />
+					<p:commandButton value="B" action="#{configContactBean.searchByFirstCaracter('b') }" process="@this" update="@form"  />
+					<p:commandButton value="C" action="#{configContactBean.searchByFirstCaracter('c') }" process="@this" update="@form"  />
+					<p:commandButton value="D" action="#{configContactBean.searchByFirstCaracter('d') }" process="@this" update="@form"  />
+					<p:commandButton value="E" action="#{configContactBean.searchByFirstCaracter('e') }" process="@this" update="@form"  />
+					<p:commandButton value="F" action="#{configContactBean.searchByFirstCaracter('f') }" process="@this" update="@form"  />
+					<p:commandButton value="G" action="#{configContactBean.searchByFirstCaracter('g') }" process="@this" update="@form"  />
+					<p:commandButton value="H" action="#{configContactBean.searchByFirstCaracter('h') }" process="@this" update="@form"  />
+					<p:commandButton value="I" action="#{configContactBean.searchByFirstCaracter('i') }" process="@this" update="@form"  />
+					<p:commandButton value="J" action="#{configContactBean.searchByFirstCaracter('j') }" process="@this" update="@form"  />
+					<p:commandButton value="K" action="#{configContactBean.searchByFirstCaracter('k') }" process="@this" update="@form"  />
+					<p:commandButton value="L" action="#{configContactBean.searchByFirstCaracter('l') }" process="@this" update="@form"  />
+					<p:commandButton value="M" action="#{configContactBean.searchByFirstCaracter('m') }" process="@this" update="@form"  />
+					<p:commandButton value="N" action="#{configContactBean.searchByFirstCaracter('n') }" process="@this" update="@form"  />
+					<p:commandButton value="O" action="#{configContactBean.searchByFirstCaracter('o') }" process="@this" update="@form"  />
+					<p:commandButton value="P" action="#{configContactBean.searchByFirstCaracter('p') }" process="@this" update="@form"  />
+					<p:commandButton value="Q" action="#{configContactBean.searchByFirstCaracter('q') }" process="@this" update="@form"  />
+					<p:commandButton value="R" action="#{configContactBean.searchByFirstCaracter('r') }" process="@this" update="@form"  />
+					<p:commandButton value="S" action="#{configContactBean.searchByFirstCaracter('s') }" process="@this" update="@form"  />
+					<p:commandButton value="T" action="#{configContactBean.searchByFirstCaracter('t') }" process="@this" update="@form"  />
+					<p:commandButton value="U" action="#{configContactBean.searchByFirstCaracter('u') }" process="@this" update="@form"  />
+					<p:commandButton value="V" action="#{configContactBean.searchByFirstCaracter('v') }" process="@this" update="@form"  />
+					<p:commandButton value="X" action="#{configContactBean.searchByFirstCaracter('x') }" process="@this" update="@form"  />
+					<p:commandButton value="Y" action="#{configContactBean.searchByFirstCaracter('y') }" process="@this" update="@form"  />
+					<p:commandButton value="W" action="#{configContactBean.searchByFirstCaracter('w') }" process="@this" update="@form"  />
+					<p:commandButton value="Z" action="#{configContactBean.searchByFirstCaracter('z') }" process="@this" update="@form"  />
+				</h:panelGrid>
+			</fieldset>
+		
+			<p:separator />
+
+			<p:commandButton icon="ui-icon-plus" value="#{i18n.label_contact_new}"
+				action="#{configContactBean.resetContact}"
+				oncomplete="DialogConfigContact.show()"
+				update=":regionConfigContact" />
+
+			<p:outputPanel id="displayContacts">
+			
+				<cb:globalMessages />
+			
+				<h:outputText value="#{i18n.msg_no_result_found}" styleClass="less2"
+					rendered="#{empty configContactBean.contacts}" />
+				
+				<p:dataTable value="#{configContactBean.contacts }" var="contactRow" 
+					rendered="#{not empty configContactBean.contacts}" >
+					
+					<p:column headerText="#" styleClass="col5p">
+						<h:outputText value="#{contactRow.id}" styleClass="less3" />						
+					</p:column>
+				
+					<p:column headerText="#{i18n.label_new_name}" styleClass="col10p" sortBy="#{contactRow.name}">
+						#{contactRow.name}
+					</p:column>
+				
+					<p:column headerText="#{i18n.label_civil_name}" styleClass="col30p" sortBy="#{contactRow.civilName}">
+						#{contactRow.civilName}
+					</p:column>
+	
+					<p:column headerText="#{i18n.label_email}" styleClass="col20p" sortBy="#{contactRow.email}">
+						#{contactRow.email}
+					</p:column>
+	
+					<p:column headerText="#{i18n.label_city}" styleClass="col20p" sortBy="#{contactRow.city}" >
+						#{contactRow.city}
+					</p:column>
+
+					<p:column headerText="#{i18n.label_is_productor}" styleClass="colCenter col5p">
+						<h:graphicImage library="img" name="icon_productor_green_24.png"
+							rendered="#{contactRow.flagProductor}" />
+					</p:column>
+
+					<p:column headerText="#{i18n.label_is_trainner}" styleClass="colCenter col5p">
+						<h:outputText value="#{i18n[contactRow.trainnerType.key]}" />
+					</p:column>
+
+					<p:column styleClass="colCenter col5p" >
+						<p:commandButton icon="ui-icon-pencil" title="#{i18n.label_edit_contact}"
+							action="#{configContactBean.manageContact( contactRow )}" 
+							oncomplete="DialogConfigContact.show()"
+							update=":regionConfigContact"  
+							/>
+					</p:column>
+
+				</p:dataTable>		
+			</p:outputPanel>
+
+		</p:panel>
+	</h:form>
+
+<!-- Dialog Contact -->
+<!-- ************** -->
+<p:dialog widgetVar="DialogConfigContact" header="#{i18n.label_contact}"  
+	modal="true" dynamic="true" closeOnEscape="true" maximizable="true"
+	position="top" width="90%" height="90%">
+	
+	<p:outputPanel id="regionConfigContact">
+	
+		<p:panelGrid columns="6" rendered="#{not configContactBean.contact.transient}">
+			<h:outputText value="ID" styleClass="less2" />
+			<h:outputText value="Nome Civil" styleClass="less2" />
+			<h:outputText value="Nome Novo" styleClass="less2" />
+			<h:outputText value="Escola Raiz" styleClass="less2" />
+			<h:outputText value="Cidade" styleClass="less2" />
+			<h:outputText value="País" styleClass="less2" />
+
+			<h:outputText value="#{configContactBean.contact.id}" styleClass="destak3" />
+			<h:outputText value="#{configContactBean.contact.civilName}" styleClass="destak3" />
+			<h:outputText value="#{configContactBean.contact.name}" styleClass="destak3" />
+			<h:outputText value="#{configContactBean.contact.rootSchool.description}" styleClass="destak3" />
+			<h:outputText value="#{configContactBean.contact.city}" styleClass="destak3" />
+			<h:outputText value="#{configContactBean.contact.country}" styleClass="destak3" />
+		</p:panelGrid>
+
+		<p:tabView>
+		
+			<p:tab title="#{i18n.label_principal}">
+				<ui:include src="/pages/config/config-contact-frag-principal.xhtml" />
+			</p:tab>
+
+			<p:tab title="Produtor(es)" rendered="#{not empty configContactBean.contact.id}">
+				<ui:include src="/pages/config/config-contact-frag-productor.xhtml" />
+			</p:tab>
+
+			<p:tab title="#{i18n.label_trainner}" rendered="#{not empty configContactBean.contact.id}">
+				<ui:include src="/pages/config/config-contact-frag-trainner.xhtml" />
+			</p:tab>
+
+			<p:tab title="#{i18n.label_history}" rendered="#{not empty configContactBean.contact.id}">
+				<ui:include src="/pages/config/config-contact-frag-history.xhtml" />
+			</p:tab>
+
+			<p:tab title="#{i18n.label_produted_ones}" rendered="#{not empty configContactBean.contact.id}">
+				<ui:include src="/pages/config/config-contact-frag-produted-ones.xhtml" />
+			</p:tab>
+			
+		</p:tabView>
+			
+	</p:outputPanel>
+</p:dialog>
+
+
+
+</ui:define>
+</ui:composition>

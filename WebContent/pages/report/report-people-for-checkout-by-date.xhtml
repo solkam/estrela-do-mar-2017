@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:cb="http://java.sun.com/jsf/composite/component"
+	template="/WEB-INF/design/_decorate-report.xhtml">
+
+<ui:define name="reportContent" >
+
+<h:form id="formResult">
+
+	<p:panel id="panelCheckoutByDate" header="#{i18n.report_people_for_checkout_by_date }">
+	
+		<h:panelGrid columns="5" cellpadding="5">
+			<h:panelGrid>
+				<h:outputText value="MegaEvento: " />
+				<h:outputText value="#{reportBean.currentMegaEvent.name }" styleClass="destak1" />
+			</h:panelGrid>
+			
+			<h:panelGrid>
+				<h:outputText value="#{i18n.label_initial_date }: " />
+				<p:calendar id="calInitDate" value="#{reportCheckOutByDateBean.initialDate}" 
+					pattern="dd/MM/yyyy"    size="10" showOn="button" 
+					required="true" 
+					/>
+				<p:message for="calInitDate" />
+			</h:panelGrid>
+
+			<h:panelGrid>
+				<h:outputText value="#{i18n.label_end_date }: " />
+				<p:calendar id="calEndDate" value="#{reportCheckOutByDateBean.endDate}" 
+					pattern="dd/MM/yyyy"    size="10" showOn="button" 
+					required="true"
+					/>
+				<p:message for="calEndDate" />
+			</h:panelGrid>
+			
+			<h:panelGrid>
+				<h:outputText value="#{i18n.label_status }: " />
+				<h:panelGrid columns="2" cellpadding="5">
+					<p:graphicImage library="img" name="#{reportCheckOutByDateBean.filterStatus.image}" />
+					<h:outputText value="#{i18n[reportCheckOutByDateBean.filterStatus.key]}" styleClass="less2" />
+				</h:panelGrid>
+			</h:panelGrid>
+
+			<p:commandButton icon="ui-icon-search" value="#{i18n.label_to_search}"
+				action="#{reportCheckOutByDateBean.search}"
+				update="@form" 
+				/>
+
+		</h:panelGrid>
+	
+		<p:spacer height="5" />
+		<p:separator />
+		<p:spacer height="5" />
+		
+		<cb:globalMessages />
+
+		<h:outputText value="#{i18n.msg_no_result_found }" styleClass="req" 
+			rendered="#{empty reportCheckOutByDateBean.registers}"/>
+
+		<p:outputPanel rendered="#{not empty reportCheckOutByDateBean.registers }">
+		
+			<p:fieldset legend="#{i18n.label_export_options}" toggleable="true" collapsed="true">
+				<h:panelGrid columns="2" >
+					<p:commandButton type="button" icon="ui-icon-print" value="#{i18n.label_to_print }">
+						<p:printer target="panelCheckoutByDate" />
+					</p:commandButton>
+				
+					<p:commandButton  ajax="false" icon="ui-icon-calendar" value="#{i18n.label_to_export_to_excel }">
+						<p:dataExporter target="dtCheckout" type="xls" fileName="#{reportCheckOutByDateBean.filename }"  />
+					</p:commandButton>
+				</h:panelGrid>
+			</p:fieldset>		
+			
+			<p:dataTable id="dtCheckout" value="#{reportCheckOutByDateBean.registers }" var="registerRow" >
+				<p:column>
+					<f:facet name="header">#</f:facet>
+					<h:outputText value="#{registerRow.id}" styleClass="less2" />
+				</p:column>
+				
+				<p:column sortBy="#{registerRow.contact.civilName }">
+					<f:facet name="header">
+						<h:outputText value="#{i18n.label_civil_name }" />
+					</f:facet>
+					
+					<h:outputText value="#{registerRow.contact.civilName }" styleClass="destak4" />
+				</p:column>
+				
+				<p:column  sortBy="#{registerRow.contact.name }">
+					<f:facet name="header">
+						<h:outputText value="#{i18n.label_new_name }"  />
+					</f:facet>
+					
+					<h:outputText value="#{registerRow.contact.name }" />
+				</p:column>
+				
+				<p:column  sortBy="#{registerRow.contact.city}">
+					<f:facet name="header">
+						<h:outputText value="#{i18n.label_city}" />
+					</f:facet>
+					
+					<h:outputText value="#{registerRow.contact.city}" />
+				</p:column>
+				
+				<p:column  sortBy="#{registerRow.contact.country }">
+					<f:facet name="header">
+						<h:outputText value="#{i18n.label_country }" />
+					</f:facet>
+					
+					<h:outputText value="#{registerRow.contact.country }" />
+				</p:column>
+				
+				<p:column sortBy="#{registerRow.previewCheckinDate }" >
+					<f:facet name="header">
+						<h:outputText value="#{i18n.label_checkin_date }" />
+					</f:facet>
+					
+					<h:outputText value="#{registerRow.previewCheckinDate }" >
+						<f:convertDateTime pattern="dd/MM/yyyy"     />
+					</h:outputText>
+				</p:column>
+	
+				<p:column sortBy="#{registerRow.previewCheckoutDate }" styleClass="colCenter">
+					<f:facet name="header">
+						<h:outputText value="#{i18n.label_preview_checkout_date }"  />
+					</f:facet>
+					
+					<h:outputText value="#{registerRow.previewCheckoutDate }" styleClass="destak3">
+						<f:convertDateTime pattern="dd/MM/yyyy"     />
+					</h:outputText>
+				</p:column>
+				
+				<p:column styleClass="colCenter" exportable="false">
+					<cb:displayRegisterStatus register="#{registerRow}" />
+				</p:column>
+				
+				<p:column styleClass="colCenter">
+					<f:facet name="header">
+						<h:outputText value="#{i18n.label_status }" />
+					</f:facet>
+					<h:outputText value="#{i18n[registerRow.status.key]}" styleClass="less2" />
+				</p:column>
+
+			</p:dataTable>		
+		</p:outputPanel>
+	
+	</p:panel>
+	
+	
+</h:form>
+
+</ui:define>
+	
+
+</ui:composition>

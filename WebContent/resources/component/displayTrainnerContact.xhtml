@@ -1,0 +1,42 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:cc="http://java.sun.com/jsf/composite"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+<cc:interface>
+	<cc:attribute name="contact" required="true" />
+</cc:interface>
+
+<cc:implementation>
+
+	<h:panelGroup>
+		<h:outputText value="#{i18n.msg_no_trainner_selected }" styleClass="less2 warning"
+			rendered="#{empty cc.attrs.contact.id}" />
+	
+		<p:panelGrid columns="2" 
+			rendered="#{not empty cc.attrs.contact.id}" >
+	
+			<f:facet name="header">
+				<h:outputText value="#{i18n.label_trainner}" styleClass="destak3" />
+			</f:facet>
+	
+			<h:outputText value="#{i18n.label_new_name}:" styleClass="less2" />
+			<h:outputText value="#{cc.attrs.contact.name }" styleClass="destak2" />
+			
+			<h:outputText value="#{i18n.label_civil_name}:" styleClass="less2" />
+			<h:outputText value="#{cc.attrs.contact.civilName }" styleClass="destak2" />
+	
+			<h:outputText value="#{i18n.label_root_school }:" styleClass="less2" />
+			<h:outputText value="#{cc.attrs.contact.rootSchool.description }" styleClass="destak3" />
+	
+			<h:outputText value="#{i18n.label_city}:" styleClass="less2" />
+			<h:outputText value="#{cc.attrs.contact.city }" styleClass="destak3" />
+		</p:panelGrid>
+	</h:panelGroup>
+
+</cc:implementation>
+
+</html>

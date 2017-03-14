@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+	
+<h:head>
+	<title>#{i18n.title_app }</title>
+	
+	<h:outputStylesheet name="style_estrela.css" library="css" />
+	
+	<style>
+		body {
+			padding: 0;
+			margin: 0;
+		}
+		
+		#topbar {
+			width:100%;
+			margin: 0;
+			vertical-align:middle;
+		}
+	
+		#content {
+			margin: 0;
+			width: 100%;
+			vertical-align:middle;
+		}
+		
+	</style>
+</h:head>
+
+<h:body>
+
+	<div id="topbar">
+		<ui:include src="/WEB-INF/design/topbar.xhtml" />
+	</div>
+
+	<div id="content">
+		<ui:insert name="content" >
+			conteudo precisa ser definido pela pagina
+		</ui:insert>
+	</div>
+
+</h:body>
+</html>

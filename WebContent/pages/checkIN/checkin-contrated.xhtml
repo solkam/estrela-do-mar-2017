@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+
+<ui:fragment xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:cb="http://java.sun.com/jsf/composite/component"
+	template="/WEB-INF/design/_template-main.xhtml">
+
+<h:form id="formCheckInContrated">
+
+	<p:panel header="#{i18n.label_contrated_checkin_confirmation }" rendered="#{not empty checkInContratedBean.register.id}">
+		<p:messages globalOnly="true" />
+		<p>#{i18n.text_your_checkin_as_contrated_is_confirmed} <span class="destak1">#{checkInContratedBean.register.id}</span>.</p>	
+	</p:panel>
+	
+	<p:panel header="#{i18n.label_personal_data }">
+	
+		<h:panelGrid columns="2" width="100%" cellpadding="3">
+			<h:panelGrid columns="1">
+				<h:outputLabel value="#{i18n.label_email}: (*)" styleClass="less2" />
+				<p:inputText id="inEmail" value="#{checkInContratedBean.emailForSearch }"
+					size="45" required="true" label="#{i18n.label_email}" >
+				
+					<p:ajax event="blur" listener="#{checkInContratedBean.onBlurEmail }" update="@form" />
+				</p:inputText>
+					
+				<p:message for="inEmail" />
+			</h:panelGrid>
+	
+			<h:panelGrid columns="1">
+				<h:outputLabel value="#{i18n.label_civil_name_complete}: (*)" styleClass="less2" />
+				<p:inputText id="inCivilName"
+					value="#{checkInContratedBean.contact.civilName }" size="45"
+					required="true" label="#{i18n.label_civil_name}" />
+				<p:message for="inCivilName" />
+			</h:panelGrid>
+	
+	
+			<h:panelGrid columns="1">
+				<h:outputLabel value="#{i18n.label_telephone_with_format}: (*)" styleClass="less2" />
+				<p:inputText id="inTel"
+					value="#{checkInContratedBean.contact.telephone1 }" required="true"
+					label="#{i18n.label_telephone}" />
+				<p:message for="inTel" />
+			</h:panelGrid>
+	
+			<h:panelGrid columns="1">
+				<h:outputLabel value="#{i18n.label_address}: (*)"  styleClass="less2" />
+				<p:inputText id="inAddress"
+					value="#{checkInContratedBean.contact.address }" size="45"
+					required="true" label="#{i18n.label_address}" />
+				<p:message for="inAddress" />
+			</h:panelGrid>
+	
+			<h:panelGrid columns="1">
+				<h:outputLabel value="#{i18n.label_city}: (*)" styleClass="less2" />
+				<p:inputText id="inCity" value="#{checkInContratedBean.contact.city }"
+					size="45" required="true" label="#{i18n.label_city}" />
+				<p:message for="inCity" />
+			</h:panelGrid>
+	
+			<h:panelGrid columns="1">
+				<h:outputLabel value="#{i18n.label_country}: (*)" styleClass="less2" />
+				<p:inputText id="inCountry"
+					value="#{checkInContratedBean.contact.country }" size="45"
+					required="true" label="#{i18n.label_country}" />
+				<p:message for="inCountry" />
+			</h:panelGrid>
+	
+			<h:panelGrid columns="1">
+				<h:outputLabel value="#{i18n.label_document_type_with_examples}: (*)" styleClass="less2" />
+				<cb:selectDocumentType id="inDocType"
+					value="#{checkInContratedBean.contact.identityDocumentType }"
+					required="true" label="#{i18n.label_document_type}" />
+				<p:message for="inDocType" />
+			</h:panelGrid>
+	
+			<h:panelGrid columns="1">
+				<h:outputLabel value="#{i18n.label_document_identity}: (*)" styleClass="less2" />
+				<p:inputText id="inDoc"
+					value="#{checkInContratedBean.contact.identityDocument }" required="true"
+					label="#{i18n.label_document_identity}" />
+				<p:message for="inDoc" />
+			</h:panelGrid>
+	
+			<h:panelGrid columns="1">
+				<h:outputLabel value="#{i18n.label_birthdate_with_format}: (*)" styleClass="less2" />
+				<p:calendar id="inBirth" value="#{checkInContratedBean.contact.birthDate }" 
+					pattern="dd/MM/yyyy"    size="10" showOn="button" 
+					navigator="true" yearRange="c-90:c+5" required="true"  
+					/>
+				<p:message for="inBirth" />
+			</h:panelGrid>
+	
+			<h:panelGrid columns="1">
+				<h:outputLabel value="#{i18n.label_sex}: (*)" styleClass="less2" />
+				<p:selectOneRadio id="inSex"
+					value="#{checkInContratedBean.contact.gender }" required="true"
+					label="#{i18n.label_sex}">
+					<f:selectItem itemValue="M" itemLabel="#{i18n.GENDER_MALE}"   />
+					<f:selectItem itemValue="F" itemLabel="#{i18n.GENDER_FEMALE}" />
+				</p:selectOneRadio>
+				<p:message for="inSex" />
+			</h:panelGrid>
+		</h:panelGrid>
+	
+	</p:panel>
+	
+	<p:panel header="#{i18n.label_contrated_data }">
+
+		<h:panelGrid columns="2" width="100%">
+			<h:panelGrid>
+				<h:outputText value="#{i18n.label_week_or_phase }:" styleClass="less2" />
+				<p:selectOneMenu value="#{checkInContratedBean.selectedEventWeek.id}" >
+					<f:selectItems value="#{checkInContratedBean.weeks}" var="week"
+						itemLabel="#{week.name }" itemValue="#{week.id }" />
+				</p:selectOneMenu>
+			</h:panelGrid>
+		
+			<h:panelGrid>
+				<h:outputText value="#{i18n.label_note }:" styleClass="less2" />
+				<p:inputTextarea value="#{checkInContratedBean.note }" rows="2" cols="40" />
+			</h:panelGrid>
+		</h:panelGrid>
+		
+	</p:panel>
+	
+	<p:toolbar>
+		<p:toolbarGroup>
+			<p:commandButton icon="ui-icon-check" value="#{i18n.label_confirm_checkin_contrated }"
+				action="#{checkInContratedBean.confirmCheckin }"
+				update="@form" 
+				/>
+		</p:toolbarGroup>
+		<p:toolbarGroup align="right">
+			<p:commandButton icon="ui-icon-plus" value="#{i18n.label_new_checkin_contrated }"
+				action="#{checkInContratedBean.reset }"
+				process="@this"
+				update="@form" 
+				/>
+		</p:toolbarGroup>
+	</p:toolbar>
+
+	<p:growl globalOnly="true" />
+
+</h:form>
+
+</ui:fragment>

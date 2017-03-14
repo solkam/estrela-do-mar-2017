@@ -1,0 +1,27 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:fragment xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:cb="http://java.sun.com/jsf/composite/component">
+
+<h:panelGrid columns="3" cellpadding="5">
+
+	<p:panel header="Produtor 1" style="height:300px">
+		<cb:displayProductorContact contact="#{checkInBean.selectedRegister.contact.productorContact}" />
+	</p:panel>
+
+	<p:panel header="Produtor 2" style="height:300px">
+		<cb:displayProductorContact contact="#{checkInBean.selectedRegister.contact.productorContact2}" />
+	</p:panel>
+	
+	<p:panel header="Treinador" style="height:300px">
+		<cb:displayTrainnerContact contact="#{checkInBean.selectedRegister.contact.trainnerContact}" />
+	</p:panel>
+	
+</h:panelGrid>
+
+
+
+</ui:fragment>

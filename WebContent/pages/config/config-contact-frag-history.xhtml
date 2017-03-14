@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:fragment xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:cb="http://java.sun.com/jsf/composite/component">
+
+<h:panelGrid columns="2" cellpadding="5">
+	<h:outputText value="#{i18n.label_megaevents_already_participated}:" styleClass="less1" />
+	<h:outputText value="#{configContactBean.historicalRegisters.size() }" styleClass="destak2" />
+</h:panelGrid>
+
+<p:scrollPanel mode="native" style="height:400px"
+	rendered="#{not empty configContactBean.historicalRegisters}" >
+
+	<p:dataTable value="#{configContactBean.historicalRegisters}" var="registerRow" >
+		
+		<p:column headerText="#{i18n.label_megaevent}">
+			<h:outputText value="#{registerRow.megaEvent.name}" styleClass="destak2" />
+		</p:column>
+	
+		<p:column headerText="#{i18n.label_total}" style="text-align:center;">
+			<cb:outputCurrency value="#{registerRow.calculatedTotalValue}" styleClass="destak4" />
+		</p:column>
+	
+				<p:column headerText="#{i18n.label_total_payment}" style="text-align:center;">
+			<cb:outputCurrency value="#{registerRow.calculatedPaidValue}" styleClass="paid" />
+		</p:column>
+
+		<p:column headerText="#{i18n.label_pendent_value}" style="text-align:center;">
+			<cb:outputCurrency value="#{registerRow.calculatedPendentValue}" styleClass="pendent" />
+		</p:column>
+
+		<p:column headerText="#{i18n.label_status}" style="text-align:center;">
+			<h:graphicImage library="img" name="icon_checked_shield_green_32.png" 
+				title="#{i18n.msg_}"
+				rendered="#{registerRow.paymentOK}" 
+				/>
+			<h:graphicImage library="img" name="icon_cancel_red_32.png" 
+				rendered="#{not registerRow.paymentOK}" 
+				/>
+		</p:column>
+
+	</p:dataTable>
+</p:scrollPanel>
+
+</ui:fragment>

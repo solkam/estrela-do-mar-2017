@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:cb="http://java.sun.com/jsf/composite/component"
+	template="/WEB-INF/design/_template-main.xhtml">
+
+<ui:define name="content">
+
+<cb:barPanel imageName="option_checkout_75.png"
+	moduleName="#{i18n.title_checkout }"
+	megaEvent="#{sessionHolder.currentMegaEvent }"
+	/>
+
+<p:panel>
+	<h:form id="formCheckoutSearch">
+	
+		<h:panelGrid columns="3" cellpadding="5">
+
+			<h:outputText value="#{i18n.label_search_for_checkout }" />
+
+			<h:panelGrid>
+				<p:inputText value="#{checkOutBean.keyword }" size="30" style="font-size:1.5em"  />
+				<h:outputText value="#{i18n.label_search_for_checkout_by }" styleClass="less2" />
+			</h:panelGrid>
+			
+			<p:commandButton icon="ui-icon-search" value="#{i18n.label_to_search }"
+				action="#{checkOutBean.searchByKeywork }" 
+				update="@form" />
+		
+		</h:panelGrid>
+		
+		<p:spacer height="5" />
+		
+		<cb:globalMessages />
+		<p:growl />
+	
+		<p:dataTable var="registerRow" value="#{checkOutBean.registers }" emptyMessage="#{i18n.msg_no_result_found }" >
+		
+			<p:column headerText="#">
+				<h:outputText value="#{registerRow.id }" styleClass="less2" />
+			</p:column>
+		
+			<p:column headerText="#{i18n.label_new_name }" sortBy="#{registerRow.contact.name }">
+				#{registerRow.contact.name }
+			</p:column>
+
+			<p:column headerText="#{i18n.label_civil_name }" sortBy="#{registerRow.contact.civilName }">
+				#{registerRow.contact.civilName }
+			</p:column>
+			
+			<p:column headerText="#{i18n.label_checkin_date }" style="text-align:center" sortBy="#{registerRow.previewCheckinDate }">
+				<cb:outputDate value="#{registerRow.checkin.checkinDate }" />
+			</p:column>
+			
+			<p:column headerText="#{i18n.label_preview_checkout_date }" style="text-align:center" sortBy="#{registerRow.previewCheckoutDate }">
+				<cb:outputDate value="#{registerRow.previewCheckoutDate }" />
+			</p:column>
+			
+			<p:column headerText="#{i18n.label_status}" styleClass="colCenter" sortBy="#{registerRow.status}" >
+				<h:graphicImage library="img" name="#{registerRow.status.image}" title="#{i18n[registerRow.status.key]}" />
+			</p:column>
+			
+			<p:column style="width:5%">
+				<p:commandButton icon="ui-icon-arrowreturnthick-1-n" value="#{i18n.label_checkout }"
+					action="#{checkOutBean.selectRegister(registerRow) }"
+					oncomplete="DialogCheckout.show()"
+					update=":formCheckoutConfirm"
+					/>
+			</p:column>
+		</p:dataTable>
+		
+		<cb:legendRegisterStatus />		
+		
+	</h:form>
+</p:panel>
+	
+<p:dialog header="#{i18n.title_checkout}" widgetVar="DialogCheckout" modal="true" maximizable="true">
+	<h:form id="formCheckoutConfirm">
+
+		<cb:helpPanel text="#{i18n.text_help_about_checkout}" />
+
+		<p:panel header="#{i18n.label_personal_data }" >
+			<h:panelGrid columns="2" cellpadding="5">
+				<h:outputText value="#{i18n.label_register_number }:" />
+				<h:outputText value="#{checkOutBean.selectedRegister.id}" styleClass="destak2" />
+			
+				<h:outputText value="#{i18n.label_new_name }:" />
+				<h:outputText value="#{checkOutBean.selectedRegister.contact.name}" styleClass="destak2" />
+
+				<h:outputText value="#{i18n.label_civil_name }:" />
+				<h:outputText value="#{checkOutBean.selectedRegister.contact.civilName}" styleClass="destak2" />
+			
+				<h:outputText value="#{i18n.label_checkin_date }:" />
+				<cb:outputDate value="#{checkOutBean.selectedRegister.previewCheckinDate}" styleClass="destak2" />
+			
+				<h:outputText value="#{i18n.label_preview_checkout_date }:" />
+				<cb:outputDate value="#{checkOutBean.selectedRegister.previewCheckoutDate}" styleClass="destak2" />
+
+			</h:panelGrid>
+		</p:panel>
+		
+		<p:spacer height="10" />
+
+		<p:panel header="#{i18n.label_payment_data }">
+			<h:panelGrid columns="2" rules="cols" cellpadding="20">
+			
+				<h:panelGrid columns="2" cellpadding="5">
+					<h:outputText value="#{i18n.label_total_payment_value }:" />
+					<cb:outputCurrency value="#{checkOutBean.selectedRegister.calculatedTotalValue }" styleClass="destak3"  />
+		
+					<h:outputText value="#{i18n.label_paid_value }:" styleClass="paid" />
+					<cb:outputCurrency value="#{checkOutBean.selectedRegister.calculatedPaidValue }" styleClass="destak3 paid" />
+				
+					<h:outputText value="#{i18n.label_pendent_value }:" styleClass="pendent" />
+					<cb:outputCurrency value="#{checkOutBean.selectedRegister.calculatedPendentValue}" styleClass="destak3 pendent" />
+				</h:panelGrid>
+				
+				<h:panelGroup>
+					<h:graphicImage library="img" name="icon_green_80.png" rendered="#{checkOutBean.selectedRegister.paymentOK}" />
+					<h:graphicImage library="img" name="icon_red_80.png"   rendered="#{not checkOutBean.selectedRegister.paymentOK}" />
+				</h:panelGroup>
+				
+			</h:panelGrid>
+
+		</p:panel>
+		
+		<p:messages />
+
+		<p:panel header="#{i18n.label_checkout_confirmation_info }"
+			rendered="#{not empty checkOutBean.selectedRegister.checkout.checkoutDate}" >
+		
+			<h:panelGrid columns="2" cellpadding="5">
+				<h:outputText value="#{i18n.label_register_status}" />
+				<h:panelGrid columns="2" cellpadding="2">
+					<h:graphicImage library="img" name="#{checkOutBean.selectedRegister.status.image}" />
+					<h:outputText value="#{i18n[checkOutBean.selectedRegister.status.key] }"
+						styleClass="destak2" />
+				</h:panelGrid>
+
+				<h:outputText value="#{i18n.label_checkout_date}:" />
+				<cb:outputDate value="#{checkOutBean.selectedRegister.previewCheckoutDate }"
+					styleClass="destak2" />
+
+				<h:outputText value="#{i18n.label_responsable_user}:" />
+				<cb:outputDate value="#{checkOutBean.selectedRegister.checkout.checkoutUser.username }"
+					styleClass="destak2" />
+
+			</h:panelGrid>
+		
+		</p:panel>
+		
+		<p:spacer height="10" />
+
+		<h:panelGrid style="width:100%; text-align:center;">
+			<p:commandButton widgetVar="BtnConfirmCheckout" icon="ui-icon-check" value="#{i18n.label_to_confirm_checkout }"
+				action="#{checkOutBean.confirmCheckout }"
+				update="@form :formCheckoutSearch"
+				oncomplete="BtnConfirmCheckout.disable()"
+				/>
+		</h:panelGrid>
+		
+	</h:form>
+</p:dialog>
+	
+	
+</ui:define>
+</ui:composition>

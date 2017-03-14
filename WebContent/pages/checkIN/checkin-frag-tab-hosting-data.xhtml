@@ -1,0 +1,31 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:fragment xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:cb="http://java.sun.com/jsf/composite/component">
+
+<p:panel>
+
+	<h:panelGrid columns="3" cellpadding="5">
+		<h:outputText value="#{i18n.label_hosting_area}:" />
+		<p:inputText id="inhostingArea"
+			value="#{checkInBean.selectedRegister.hosting.hostingArea }"
+			styleClass="destak2" required="false"
+			label="#{i18n.label_hosting_area}" />
+		<p:message for="inhostingArea" />
+
+		<h:outputText value="#{i18n.label_hosting_number}:" />
+		<p:inputText id="inhostingNumber"
+			value="#{checkInBean.selectedRegister.hosting.hostingNumber }"
+			styleClass="destak2" required="false"
+			label="#{i18n.label_hosting_number}" />
+		<p:message for="inhostingNumber" />
+	</h:panelGrid>
+
+	<cb:globalMessages />
+
+</p:panel>
+
+</ui:fragment>

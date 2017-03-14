@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:cb="http://java.sun.com/jsf/composite/component"
+	template="/WEB-INF/design/_template-main.xhtml">
+
+<ui:define name="content" >
+
+<cb:barPanel imageName="option_myregisteredones_75.png" 
+	moduleName="#{i18n.title_myregisteredones }" 
+	/>
+
+<p:panel>
+
+	<h:form id="formSearch">
+		<fieldset>
+			<legend>#{i18n.label_search}</legend>
+			
+			<h:panelGrid columns="5" cellpadding="5" >
+				<h:panelGrid cellpadding="0">
+					<h:outputText value="#{i18n.label_megaevent }" styleClass="less2" />
+					<p:selectOneMenu value="#{myRegisteredOnesBean.selectedMegaEvent }" style="width:250px"
+						converter="#{megaEventConverter}" >
+	
+						<f:selectItems value="#{myRegisteredOnesBean.comboMegaEvents }" var="megaEventRow"
+							itemValue="#{megaEventRow }" itemLabel="#{megaEventRow.name }" 
+							/>
+						<p:ajax event="change" listener="#{myRegisteredOnesBean.onMegaEventChange }" update="selEventWeek selEvent" />
+					</p:selectOneMenu>
+				</h:panelGrid>
+				
+				<h:panelGrid cellpadding="0">
+					<h:outputText value="#{i18n.label_week_or_phase }" styleClass="less2" />
+					<p:selectOneMenu id="selEventWeek" value="#{myRegisteredOnesBean.selectedEventWeek }" style="width:250px"
+						converter="#{eventWeekConverter}" >
+					
+						<f:selectItems value="#{myRegisteredOnesBean.comboEventWeeks }" var="weekRow"
+							itemValue="#{weekRow }" itemLabel="#{weekRow.name }" 
+							/>
+						<p:ajax event="change" listener="#{myRegisteredOnesBean.onEventWeekChange }" update="selEvent" />
+					</p:selectOneMenu>
+				</h:panelGrid>
+				
+				<h:panelGrid cellpadding="0">
+					<h:outputText value="#{i18n.label_event }" styleClass="less2" />
+					<p:selectOneMenu id="selEvent" value="#{myRegisteredOnesBean.selectedEvent }" style="width:250px"
+						converter="#{eventConverter}" >
+					
+						<f:selectItems value="#{myRegisteredOnesBean.comboEvents}" var="eventRow"
+							itemValue="#{eventRow }" itemLabel="#{eventRow.displayNameOrSchool }" 
+							/>
+					</p:selectOneMenu>
+				</h:panelGrid>
+				
+				<h:panelGrid cellpadding="0">
+					<p:outputLabel for="selPresences" value="#{i18n.label_presence }" styleClass="less2" />
+					<p:selectManyCheckbox id="selPresences" value="#{myRegisteredOnesBean.selectedPresences }"
+						converter="#{eventPresenceConverter}" layout="pageDirection" required="true" >
+					
+						<f:selectItems value="#{enumHelper.eventPresencesParticipantAndStaff}" var="presenceRow"
+							itemValue="#{presenceRow }" itemLabel="#{i18n[presenceRow.key] }" 
+							/>
+					</p:selectManyCheckbox>
+					<p:message for="selPresences" />
+				</h:panelGrid>
+	
+				<p:commandButton icon="ui-icon-search" value="#{i18n.label_to_search }"
+					action="#{myRegisteredOnesBean.search}"
+					update="@form :formResults" 
+					/>
+			</h:panelGrid>	
+		</fieldset>
+		
+		<p:separator />
+		
+		<p:commandButton id="btnAdd" icon="ui-icon-plus" value="#{i18n.label_add_registered_one }"
+			action="#{myRegisteredOnesBean.resetRegister}"
+			oncomplete="DialogRO.show()"
+			update=":regionRO" 
+			/>
+	</h:form>
+	
+			
+	<h:form id="formResults">
+	
+		<cb:globalMessages />
+			
+		<p:spacer height="10" style="display:block;" />
+		
+		<p:dataTable value="#{myRegisteredOnesBean.registerDetails }" var="detailRow"
+			rendered="#{not empty myRegisteredOnesBean.registerDetails }">
+
+			<p:column headerText="#{i18n.label_megaevent }" styleClass="col10p">
+				<h:outputText value="#{detailRow.register.megaEvent.name }" styleClass="less1" />
+			</p:column>
+
+			<p:column headerText="#{i18n.label_week_or_phase }" styleClass="col10p">
+				<h:outputText value="#{detailRow.eventWeek.name }" styleClass="less1" />
+			</p:column>
+
+			<p:column headerText="#{i18n.label_event }" sortBy="#{detailRow.event.displayNameOrSchool }" styleClass="col20p">
+				<h:outputText value="#{detailRow.event.displayNameOrSchool }" styleClass="destak4" />
+			</p:column>
+			
+			<p:column headerText="#{i18n.label_civil_name }" sortBy="#{detailRow.register.contact.civilName }" styleClass="col20p">
+				<h:outputText value="#{detailRow.register.contact.civilName }" styleClass="destak4" />
+			</p:column>
+
+			<p:column headerText="#{i18n.label_new_name }" sortBy="#{detailRow.register.contact.name }" styleClass="col10p">
+				<h:outputText value="#{detailRow.register.contact.name }" />
+			</p:column>
+
+			<p:column headerText="#{i18n.label_sex }" styleClass="col5p colCenter">
+				<h:outputText value="#{detailRow.register.contact.gender }" styleClass="less2" />
+			</p:column>
+
+			<p:column headerText="#{i18n.label_tshirt_size }" styleClass="col5p colCenter">
+				<h:outputText value="#{detailRow.register.contact.tshirtSize }" styleClass="less2" />
+			</p:column>
+
+			<p:column headerText="#{i18n.label_presence }" sortBy="#{detailRow.presence }" styleClass="col5p colCenter">
+				<h:outputText value="#{i18n[detailRow.presence.key]}" styleClass="less2" />
+			</p:column>
+
+			<p:column headerText="#{i18n.label_register_date }" sortBy="#{detailRow.register.createDate }" styleClass="col5p colCenter">
+				<cb:outputDate value="#{detailRow.register.createDate}" styleClass="less2" />
+			</p:column>
+
+			<p:column headerText="#{i18n.label_productor }" sortBy="#{detailRow.register.contact.productorContact.shortDesc }" styleClass="col10p colCenter">
+				<h:outputText value="#{detailRow.register.contact.productorContact.shortDesc}" styleClass="less2" />
+			</p:column>
+
+			<p:column headerText="#{i18n.label_status }" sortBy="#{detailRow.presence }" styleClass="col10p colCenter">
+				<cb:displayRegisterStatus register="#{detailRow.register}" />
+			</p:column>
+
+			<p:column styleClass="col5p colCenter">
+				<p:commandButton icon="ui-icon-pencil" title="#{i18n.label_edit_registered_one}"
+					action="#{myRegisteredOnesBean.manageRegister(detailRow.register)}"
+					process="@this"
+					oncomplete="DialogRO.show()"
+					update=":regionRO" 
+					/>
+			</p:column>
+		</p:dataTable>
+
+		<cb:legendRegisterStatus rendered="#{not empty myRegisteredOnesBean.registerDetails }" />
+
+	</h:form>
+	
+</p:panel>
+
+
+<!-- Dialog Registrados -->
+<!-- ****************** -->
+<p:dialog widgetVar="DialogRO" header="#{i18n.label_edit_registered_one }"
+	modal="true" dynamic="true" closeOnEscape="true" maximizable="true"
+	position="top" width="90%" height="90%" >
+
+	<p:outputPanel id="regionRO" >
+	
+		<p:panelGrid columns="2" >
+			<h:outputText value="#{i18n.label_megaevent }:" styleClass="less2 " />
+			
+			<h:outputText value="#{i18n.label_status }:" styleClass="less2" />
+		
+			<h:outputText value="#{myRegisteredOnesBean.register.megaEvent.name}" styleClass="destak2" />
+			<cb:displayRegisterStatus register="#{myRegisteredOnesBean.register}" />
+		</p:panelGrid>
+		
+		<p:spacer height="5" style="display:block" />
+	
+		<cb:globalMessages />
+
+		<p:tabView id="tabviewRO">
+			<p:tab title="#{i18n.label_personal_data }">
+				<ui:include src="/pages/myregisteredones/myregisteredones-frag-contact.xhtml" />
+			</p:tab>
+			
+			<p:tab title="#{i18n.label_events }" rendered="#{not myRegisteredOnesBean.register.transient}">
+				<ui:include src="/pages/myregisteredones/myregisteredones-frag-event.xhtml" />
+			</p:tab>
+
+			<p:tab title="Produtor(es)" rendered="#{not myRegisteredOnesBean.register.transient}">
+				<ui:include src="/pages/myregisteredones/myregisteredones-frag-productor.xhtml" />
+			</p:tab>
+		</p:tabView>
+
+	</p:outputPanel>
+			
+</p:dialog>
+
+</ui:define>
+</ui:composition>

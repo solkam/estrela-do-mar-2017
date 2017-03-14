@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:fragment xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:cb="http://java.sun.com/jsf/composite/component">
+
+<h:panelGrid style="width:100%;text-align:center">
+	<p:commandButton icon="ui-icon-check" value="#{i18n.label_save_productor_and_trainner}"
+		action="#{paymentBean.saveProductorAndTrainner }"
+		update="msgProductorSaved :formRegister:displayDetails" />
+</h:panelGrid>
+
+<p:messages id="msgProductorSaved" />
+<p:separator />
+
+
+<h:panelGrid columns="3" cellpadding="10">
+
+
+	<p:panel header="Produtor 1" style="height:400px">
+		
+		<p:outputPanel id="displayP1">
+			<h:panelGrid cellpadding="0">
+				<h:outputText value="#{i18n.label_search_contact_by_new_name_or_civil_name}" styleClass="less2" />
+									
+				<p:autoComplete value="#{paymentBean.selectedContact.productorContact}"
+					completeMethod="#{autoCompleteContactBean.queryProductorContact }"  
+					var="contactVar" itemValue="#{contactVar}" itemLabel="#{contactVar.fullDesc }"
+					converter="#{contactConverter}"
+					queryDelay="500" size="30" forceSelection="false" minQueryLength="2" scrollHeight="200"
+					styleClass="destak2" >
+				
+					<p:column headerText="#{i18n.label_civil_name}">
+						#{contactVar.civilName}
+					</p:column>
+	
+					<p:column headerText="#{i18n.label_new_name}">
+						#{contactVar.name}
+					</p:column>
+				
+					<p:column headerText="#{i18n.label_city}">
+						#{contactVar.city}
+					</p:column>
+					
+					<p:ajax event="itemSelect" process="@this" update="displayP1" />
+					
+				</p:autoComplete>
+			</h:panelGrid>
+		
+		
+			<h:outputText value="#{i18n.msg_no_productor_selected}" styleClass="less2 req"
+				rendered="#{empty paymentBean.selectedContact.productorContact}" />
+		
+			<p:panelGrid columns="2" 
+				rendered="#{not empty paymentBean.selectedContact.productorContact}" >
+		
+				<h:outputText value="#{i18n.label_civil_name}:" styleClass="less2" />
+				<h:outputText value="#{paymentBean.selectedContact.productorContact.civilName }" styleClass="destak2" />
+		
+				<h:outputText value="#{i18n.label_new_name}:" styleClass="less2" />
+				<h:outputText value="#{paymentBean.selectedContact.productorContact.name }" styleClass="destak2" />
+				
+				<h:outputText value="#{i18n.label_root_school}:" styleClass="less2" />
+				<h:outputText value="#{paymentBean.selectedContact.productorContact.rootSchool.description }" styleClass="destak3" />
+
+				<h:outputText value="#{i18n.label_city}:" styleClass="less2" />
+				<h:outputText value="#{paymentBean.selectedContact.productorContact.city }" styleClass="destak3" />
+				
+				<f:facet name="footer">
+					<p:commandLink icon="ui-icon-close" value="#{i18n.label_to_remove_productor }" styleClass="less2"
+									process="@this"
+									update="displayP1" >
+						<f:setPropertyActionListener target="#{paymentBean.selectedContact.productorContact}" 
+						                             value="#{null}" 
+						                             />
+					</p:commandLink>
+				</f:facet>
+			</p:panelGrid>
+		</p:outputPanel>
+	</p:panel>
+
+
+	<p:panel header="Produtor 2" style="height:400px">
+		
+		<p:outputPanel id="displayP2">
+			<h:panelGrid cellpadding="0">
+				<h:outputText value="#{i18n.label_search_contact_by_new_name_or_civil_name}" styleClass="less2" />
+									
+				<p:autoComplete value="#{paymentBean.selectedContact.productorContact2 }"
+					completeMethod="#{autoCompleteContactBean.queryProductorContact }"  
+					var="contactVar" itemValue="#{contactVar}" itemLabel="#{contactVar.fullDesc }"
+					converter="#{contactConverter}"
+					queryDelay="500" size="30" forceSelection="false" minQueryLength="2" scrollHeight="200"
+					styleClass="destak2" >
+				
+					<p:column headerText="#{i18n.label_civil_name}">
+						#{contactVar.civilName}
+					</p:column>
+	
+					<p:column headerText="#{i18n.label_new_name}">
+						#{contactVar.name}
+					</p:column>
+				
+					<p:column headerText="#{i18n.label_city}">
+						#{contactVar.city}
+					</p:column>
+					
+					<p:ajax event="itemSelect" process="@this" update="displayP2" />
+					
+				</p:autoComplete>
+			</h:panelGrid>
+		
+		
+			<h:outputText value="#{i18n.msg_no_productor_selected}" styleClass="less2 req"
+				rendered="#{empty paymentBean.selectedContact.productorContact2}" />
+		
+			<p:panelGrid columns="2" 
+				rendered="#{not empty paymentBean.selectedContact.productorContact2}" >
+		
+				<h:outputText value="#{i18n.label_civil_name}:" styleClass="less2" />
+				<h:outputText value="#{paymentBean.selectedContact.productorContact2.civilName }" styleClass="destak2" />
+		
+				<h:outputText value="#{i18n.label_new_name}:" styleClass="less2" />
+				<h:outputText value="#{paymentBean.selectedContact.productorContact2.name }" styleClass="destak2" />
+				
+				<h:outputText value="#{i18n.label_root_school}:" styleClass="less2" />
+				<h:outputText value="#{paymentBean.selectedContact.productorContact2.rootSchool.description }" styleClass="destak3" />
+
+				<h:outputText value="#{i18n.label_city}:" styleClass="less2" />
+				<h:outputText value="#{paymentBean.selectedContact.productorContact2.city }" styleClass="destak3" />
+				
+				<f:facet name="footer">
+					<p:commandLink icon="ui-icon-close" value="#{i18n.label_to_remove_productor }" styleClass="less2"
+									process="@this"
+									update="displayP2" >
+						<f:setPropertyActionListener target="#{paymentBean.selectedContact.productorContact2}" 
+						                             value="#{null}" 
+						                             />
+					</p:commandLink>
+				</f:facet>
+			</p:panelGrid>
+		</p:outputPanel>
+	</p:panel>
+
+
+
+	<p:panel header="Treinador" style="height:400px">
+		
+		<p:outputPanel id="displayTrainner">
+		
+			<h:panelGrid cellpadding="0">
+				<h:outputText value="#{i18n.label_search_contact_by_new_name_or_civil_name}" styleClass="less2" />
+									
+				<p:autoComplete value="#{paymentBean.selectedContact.trainnerContact }"
+					completeMethod="#{autoCompleteContactBean.queryTrainnerContact }"  
+					var="contactRow" itemValue="#{contactRow}" itemLabel="#{contactRow.fullDesc }"
+					converter="#{contactConverter}"
+					queryDelay="500" size="30" forceSelection="false" minQueryLength="2" scrollHeight="200"
+					styleClass="destak2" >
+				
+							<p:column headerText="#{i18n.label_civil_name}">
+								#{contactRow.civilName}
+							</p:column>
+			
+							<p:column headerText="#{i18n.label_new_name}">
+								#{contactRow.name}
+							</p:column>
+						
+							<p:column headerText="#{i18n.label_city}">
+								#{contactRow.city}
+							</p:column>
+							
+							<p:ajax process="@this" event="itemSelect" update="displayTrainner" />
+				</p:autoComplete>
+			</h:panelGrid>
+		
+
+			<h:outputText value="#{i18n.msg_no_trainner_selected}" styleClass="less2 req"
+				rendered="#{empty paymentBean.selectedContact.trainnerContact }" />
+		
+			<p:panelGrid columns="2" 
+				rendered="#{not empty paymentBean.selectedContact.trainnerContact}" >
+		
+				<h:outputText value="#{i18n.label_new_name}:" styleClass="less2" />
+				<h:outputText value="#{paymentBean.selectedContact.trainnerContact.name }" styleClass="destak2" />
+				
+				<h:outputText value="#{i18n.label_civil_name}:" styleClass="less2" />
+				<h:outputText value="#{paymentBean.selectedContact.trainnerContact.civilName }" styleClass="destak2" />
+		
+				<h:outputText value="#{i18n.label_root_school}:" styleClass="less2" />
+				<h:outputText value="#{paymentBean.selectedContact.trainnerContact.rootSchool.description }" styleClass="destak2" />
+
+				<h:outputText value="#{i18n.label_city}:" styleClass="less2" />
+				<h:outputText value="#{paymentBean.selectedContact.trainnerContact.city }" styleClass="destak2" />
+				
+				<f:facet name="footer">
+					<p:commandLink icon="ui-icon-close" value="#{i18n.label_to_remove_trainner }"
+						styleClass="less2"
+						process="@this" 
+						update="displayTrainner" >
+						<f:setPropertyActionListener target="#{paymentBean.selectedContact.trainnerContact}" value="#{null}" />
+					</p:commandLink>
+				</f:facet>
+				
+			</p:panelGrid>
+		</p:outputPanel>
+	</p:panel>
+		
+</h:panelGrid>
+
+
+</ui:fragment>

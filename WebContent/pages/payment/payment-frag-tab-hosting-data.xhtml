@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:fragment xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:cb="http://java.sun.com/jsf/composite/component">
+
+<p:outputPanel id="displayHosting">
+
+	<ui:remove>
+	<fieldset>
+		<legend>#{i18n.label_check_dates}</legend>
+	
+		<h:panelGrid columns="2" cellpadding="10" width="100%" 
+			rendered="#{paymentBean.selectedRegister.statusIncomplete or paymentBean.selectedRegister.statusIncomplete}">
+			
+			<h:panelGrid columns="1" >
+				<h:outputText value="#{i18n.label_preview_checkin_date}:" styleClass="less2" />
+				<cb:outputDate value="#{paymentBean.selectedRegister.previewCheckinDate }" styleClass="destak3" />
+			</h:panelGrid>
+			
+			<h:panelGrid columns="1" >
+				<h:outputText value="#{i18n.label_preview_checkout_date}:"  styleClass="less2" />
+				<cb:outputDate value="#{paymentBean.selectedRegister.previewCheckoutDate }"  styleClass="destak3" />
+			</h:panelGrid>
+		</h:panelGrid>
+
+		<h:panelGrid columns="2" cellpadding="10" width="100%" 
+			rendered="#{paymentBean.selectedRegister.statusCheckedIn}">
+			
+			<h:panelGrid columns="1" >
+				<h:outputText value="#{i18n.label_checkin_date}:" styleClass="less2" />
+				<cb:outputDate value="#{paymentBean.selectedRegister.checkin.checkinDate }" styleClass="destak3" />
+			</h:panelGrid>
+			
+			<h:panelGrid columns="1" >
+				<h:outputText value="#{i18n.label_preview_checkout_date}:"  styleClass="less2" />
+				<cb:outputDate value="#{paymentBean.selectedRegister.previewCheckoutDate }"  styleClass="destak3" />
+			</h:panelGrid>
+		</h:panelGrid>
+
+		<h:panelGrid columns="2" cellpadding="10" width="100%" 
+			rendered="#{paymentBean.selectedRegister.statusCheckedOut or paymentBean.selectedRegister.statusMegaEventOut}">
+			
+			<h:panelGrid columns="1" >
+				<h:outputText value="#{i18n.label_checkin_date}:" styleClass="less2" />
+				<cb:outputDate value="#{paymentBean.selectedRegister.checkin.checkinDate }" styleClass="destak3" />
+			</h:panelGrid>
+			
+			<h:panelGrid columns="1" >
+				<h:outputText value="#{i18n.label_checkout_date}:"  styleClass="less2" />
+				<cb:outputDate value="#{paymentBean.selectedRegister.checkout.checkoutDate }"  styleClass="destak3" />
+			</h:panelGrid>
+		</h:panelGrid>
+
+	</fieldset>
+	</ui:remove>
+
+	<fieldset>
+		<legend>#{i18n.label_localization}</legend>
+	
+		<h:panelGrid columns="2" cellpadding="5">
+			<h:outputText value="#{i18n.label_hosting_area}:"    styleClass="less2" />
+			<h:outputText value="#{i18n.label_hosting_number}:"  styleClass="less2" />
+
+			<h:outputText value="#{paymentBean.selectedRegister.hosting.hostingArea }"   styleClass="destak3"  />
+			<h:outputText value="#{paymentBean.selectedRegister.hosting.hostingNumber }" styleClass="destak3"  />
+		</h:panelGrid>
+		
+		<ui:remove>
+			<!-- [24 ABR 2014] Editar hospedagem em funcionalidade propria -->
+			<p:separator />
+			<p:commandButton icon="ui-icon-pencil" value="#{i18n.label_edit_localization_info}"
+				oncomplete="DialogEditHostingInfo.show()"
+				update=":formEditHostingInfo" 
+				/>
+		</ui:remove>
+	</fieldset>
+
+</p:outputPanel>
+
+
+</ui:fragment>

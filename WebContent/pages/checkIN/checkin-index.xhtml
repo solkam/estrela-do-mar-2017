@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:cb="http://java.sun.com/jsf/composite/component"
+	template="/WEB-INF/design/_template-main.xhtml">
+
+<ui:define name="content">
+
+	<cb:barPanel imageName="option_checkin_75.png" 
+		moduleName="#{i18n.label_checkin}" 
+		megaEvent="#{sessionHolder.currentMegaEvent }" 
+		/>
+		
+	<p:tabView activeIndex="0">
+	
+		<p:tab title="#{i18n.label_checkin_participants_and_staffs }" titletip="#{i18n.label_about_checkin_participants_and_staffs}">
+			<ui:include src="/pages/checkIN/checkin-participant-search.xhtml" />
+		</p:tab>
+		
+		<p:tab title="#{i18n.label_checkin_contratated}" titletip="#{i18n.label_about_checkin_contratated}" >
+			<ui:include src="/pages/checkIN/checkin-contrated.xhtml" />
+		</p:tab>
+		
+	</p:tabView>
+		
+
+</ui:define>
+</ui:composition>

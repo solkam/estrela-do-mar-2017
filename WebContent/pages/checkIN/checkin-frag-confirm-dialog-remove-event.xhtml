@@ -1,0 +1,32 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:fragment xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:cb="http://java.sun.com/jsf/composite/component">
+
+
+<!-- ConfirmDialog Remover de Evento -->
+<!-- ******************************* -->
+<p:dialog widgetVar="ConfirmDialogRemoveRegisterDetail"	header="#{i18n.question_sure_to_remove_event}" 
+	closeOnEscape="true" modal="true" position="top">
+	
+	<h:form>
+		<h:panelGrid columns="2" cellpadding="20">
+			<p:commandButton icon="ui-icon-check" value="#{i18n.label_yes}"
+				action="#{checkInEventBean.removeRegisterDetail }"
+				update=":formCheckin"
+				oncomplete="ConfirmDialogRemoveRegisterDetail.hide()" 
+				/>
+	
+			<p:commandButton type="button" icon="ui-icon-close"
+				value="#{i18n.label_no}"
+				onclick="ConfirmDialogRemoveRegisterDetail.hide()" 
+				/>
+		</h:panelGrid>
+	</h:form>
+</p:dialog>
+
+
+</ui:fragment>

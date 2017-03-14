@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:cb="http://java.sun.com/jsf/composite/component"
+	template="/WEB-INF/design/_decorate-register.xhtml">
+
+<ui:define name="stepCondition">
+	<td class="stepNavON">
+		6.#{i18n.label_sale_conditions}
+	</td>
+</ui:define>
+
+<ui:define name="stepContent">
+	<h:form>
+
+		<p:toolbar>
+			<p:toolbarGroup align="left">
+				<p:commandButton ajax="false" icon="ui-icon-circle-triangle-w"
+					value="#{i18n.label_previous }"
+					action="#{registerStepBean.onPrevFromStepCondition }"
+					immediate="true" />
+			</p:toolbarGroup>
+
+			<p:toolbarGroup align="right">
+				<p:commandButton ajax="false" icon="ui-icon-circle-triangle-e"
+					value="#{i18n.label_next}" 
+					iconPos="right"
+					action="#{registerStepBean.onNextFromStepCondition }" />
+			</p:toolbarGroup>
+		</p:toolbar>
+		
+		<p:message for="selSalesTerm" />
+
+		<cb:helpPanel text="#{i18n.text_help_sale_condition }" />
+
+		<p:panel header="#{i18n.label_terms_and_sales_conditions }">
+
+			<h:outputText value="#{registerStepBean.register.megaEvent.saleConditionTerm }"
+				escape="false" />
+
+		</p:panel>
+
+		<h:panelGrid columns="3">
+			<p:selectOneRadio id="selSalesTerm" styleClass="destak2"
+				value="#{registerStepBean.register.saleConditionTermAccepted }"
+				required="true" requiredMessage="#{i18n.msg_sale_condition_accept_error}" >
+			
+				<f:selectItem itemLabel="#{i18n.msg_sale_condition_i_accept}" itemValue="#{true}" />
+			</p:selectOneRadio> 
+				
+			<p:message for="selSalesTerm" />
+		</h:panelGrid>
+	</h:form>
+
+	<p:spacer height="25px" />
+
+</ui:define>
+</ui:composition>

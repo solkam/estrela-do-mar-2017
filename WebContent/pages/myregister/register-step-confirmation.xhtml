@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:cb="http://java.sun.com/jsf/composite/component"
+	template="/WEB-INF/design/_decorate-register.xhtml">
+
+<ui:define name="stepConfirm">
+	<td class="stepNavON">
+		7.#{i18n.label_confirmation }
+	</td>
+</ui:define>
+
+
+<ui:define name="stepContent">
+	<h:form>
+	
+		<p:toolbar>
+			<p:toolbarGroup align="left">
+				<p:commandButton ajax="false" icon="ui-icon-circle-triangle-w" value="#{i18n.label_previous}"
+					action="#{registerStepBean.onPrevFromStepConfirm }" />
+			</p:toolbarGroup>
+
+			<p:toolbarGroup align="right">
+				<p:commandButton ajax="false" icon="ui-icon-circle-triangle-e" value="#{i18n.label_next}" iconPos="right"
+					rendered="false" />
+			</p:toolbarGroup>
+		</p:toolbar>
+	
+		<p:panel id="panelRegisterConfirmation">
+		
+			<h:panelGrid columns="3" cellpadding="2" cellspacing="0" width="100%" >
+				<p:panel header="#{i18n.label_personal_data}:" style="height:250px">
+					<h:panelGrid columns="2">
+						<h:outputLabel value="#{i18n.label_new_name}:" styleClass="less2"/>
+						<h:outputText value="#{registerStepBean.register.contact.name }" styleClass="destak2" />
+		
+						<h:outputLabel value="#{i18n.label_civil_name}:" styleClass="less2"/>
+						<h:outputText value="#{registerStepBean.register.contact.civilName }" styleClass="destak2"  />
+		
+						<h:outputLabel value="#{i18n.label_email}:" styleClass="less2"/>
+						<h:outputText value="#{registerStepBean.register.contact.email }" styleClass="destak4" />
+		
+						<h:outputLabel value="#{i18n.label_telephone}:" styleClass="less2"/>
+						<h:outputText value="#{registerStepBean.register.contact.telephone1 }" styleClass="destak4" />
+
+						<h:outputLabel value="#{i18n.label_city}:" styleClass="less2"/>
+						<h:outputText value="#{registerStepBean.register.contact.city }" styleClass="destak4" />
+
+						<h:outputLabel value="#{i18n.label_country}:" styleClass="less2"/>
+						<h:outputText value="#{registerStepBean.register.contact.country }" styleClass="destak4" />
+
+						<h:outputLabel value="#{i18n.label_productor}:" styleClass="less2"/>
+						<h:outputText value="#{registerStepBean.register.contact.productorContact.shortDesc }" styleClass="destak4" />
+					</h:panelGrid>
+				</p:panel>
+			
+				<p:panel header="#{i18n.label_trip}:" style="height:250px">
+					<h:panelGrid columns="2" cellpadding="5">
+					
+						<h:panelGrid columns="2">
+							<f:facet name="header">
+								<h:outputText value="#{i18n.label_arrival}" styleClass="destak2" />
+								<p:separator />
+							</f:facet>
+						
+							<h:outputText value="#{i18n.label_oficial_checkin_date}:" styleClass="less2" />
+							<cb:outputDate value="#{registerStepBean.register.calculatedCheckinDate }" styleClass="destak3" />
+
+							<h:outputText value="#{i18n.label_preview_checkin_date}:" styleClass="less2"/>
+							<cb:outputDate value="#{registerStepBean.register.previewCheckinDate }" styleClass="destak2" />
+							
+							<p:separator />
+							<p:separator />
+
+							<h:outputText value="#{i18n.label_day}:" styleClass="less2"/>
+							<cb:outputDate value="#{registerStepBean.register.tripInfo.tripArrivalDate }" styleClass="destak4" />
+		
+							<h:outputText value="#{i18n.label_hour}:" styleClass="less2"/>
+							<cb:outputDate value="#{registerStepBean.register.tripInfo.tripArrivalTime }" styleClass="destak4" />
+		
+							<h:outputText value="#{i18n.label_flight_company}:" styleClass="less2"/>
+							<h:outputText value="#{registerStepBean.register.tripInfo.tripArrivalFlightCompany }" styleClass="destak4" />
+		
+							<h:outputText value="#{i18n.label_flight_number}:" styleClass="less2"/>
+							<h:outputText value="#{registerStepBean.register.tripInfo.tripArrivalFlightNumber }" styleClass="destak4" />
+							
+						</h:panelGrid>
+						
+						<h:panelGrid columns="2">
+							<f:facet name="header">
+								<h:outputText value="#{i18n.label_departure}" styleClass="destak2" />
+								<p:separator />
+							</f:facet>
+						
+							<h:outputText value="#{i18n.label_oficial_checkout_date}:" styleClass="less2" />
+							<cb:outputDate value="#{registerStepBean.register.calculatedCheckoutDate }" styleClass="destak3" />
+
+							<h:outputText value="#{i18n.label_preview_checkout_date}:" styleClass="less2"/>
+							<cb:outputDate value="#{registerStepBean.register.previewCheckoutDate }" styleClass="destak2" />
+							
+							<p:separator />
+							<p:separator />
+
+							<h:outputText value="#{i18n.label_day}:" styleClass="less2"/>
+							<cb:outputDate value="#{registerStepBean.register.tripInfo.tripDepartureDate }" styleClass="destak4" />
+		
+							<h:outputText value="#{i18n.label_hour}:" styleClass="less2"/>
+							<cb:outputDate value="#{registerStepBean.register.tripInfo.tripDepartureTime }" styleClass="destak4" />
+		
+							<h:outputText value="#{i18n.label_flight_company}:" styleClass="less2"/>
+							<h:outputText value="#{registerStepBean.register.tripInfo.tripDepartureFlightCompany }" styleClass="destak4" />
+		
+							<h:outputText value="#{i18n.label_flight_number}:" styleClass="less2"/>
+							<h:outputText value="#{registerStepBean.register.tripInfo.tripDepartureFlightNumber }" styleClass="destak4" />
+		
+						</h:panelGrid>
+		
+						<h:panelGrid columns="3" cellpadding="5" rendered="#{not empty registerStepBean.register.tripInfo.tripNote }">
+							<h:outputText value="#{i18n.label_note}:" />
+							<h:graphicImage id="imgTripNote" library="img" name="icon_note_36.png" />
+							<p:tooltip for="imgTripNote" value="#{registerStepBean.register.tripInfo.tripNote }" />
+						</h:panelGrid>
+		
+					</h:panelGrid>
+				</p:panel>
+					
+				<p:panel header="#{i18n.label_note_about_register}" style="height:250px">
+					<h:panelGrid cellpadding="5">
+						<p:inputTextarea value="#{registerStepBean.register.note}" rows="4" cols="50" />
+						<cb:helpPanel text="#{i18n.text_help_note_about_register}" />
+					</h:panelGrid>
+				</p:panel>
+				
+			</h:panelGrid>
+		
+			<p:spacer height="10" />
+	
+			<p:panel header="#{i18n.label_events}:">
+				<h:outputText value="#{registerStepBean.register.megaEvent.name }" styleClass="destak1" />
+				
+				<p:dataTable value="#{registerStepBean.register.allDetails }" var="registerDetailRow" style="width:100%">
+					<p:column headerText="#{i18n.label_week_or_phase}" styleClass="col20p">
+						#{registerDetailRow.eventWeek.name}
+					</p:column>
+					
+					<p:column headerText="#{i18n.label_event}" styleClass="col50p">
+						<h:outputText value="#{registerDetailRow.event.displayNameOrSchool}" styleClass="destak3" />
+						<br />
+						<h:outputText value="#{registerDetailRow.dependentContactName}" styleClass="destak4" />
+						<br />
+						<h:outputText value="#{i18n[registerDetailRow.presence.key] }" styleClass="less1" />
+					</p:column>
+
+					<p:column headerText="#{i18n.label_value}" styleClass="col30p colCenter">
+						<cb:outputCurrency value="#{registerDetailRow.value }" />
+						<f:facet name="footer">
+							<cb:outputCurrency value="#{registerStepBean.register.calculatedTotalValue }" styleClass="destak3" />
+						</f:facet>
+					</p:column>
+				</p:dataTable>
+			</p:panel>
+			
+			<p:spacer height="10" />
+
+			<h:panelGrid style="width:100%; text-align:center" columns="2" >
+				<p:commandButton icon="ui-icon-check" value="#{i18n.label_to_confirm_register}" style="font-size:1.5em"
+					action="#{registerStepBean.confirmRegister }"
+					onclick="DialogAjaxStatus.show();"
+					ajax="false"
+					/>
+
+				<p:dialog widgetVar="DialogAjaxStatus" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+			    	<h:panelGrid columns="2" cellpadding="5">
+				        <p:graphicImage library="img" name="ajaxload_globe_32.gif" cache="true" />
+				        <h:outputText value="#{i18n.msg_processing_your_register_confirmation}" />
+			    	</h:panelGrid>
+				</p:dialog>
+
+			</h:panelGrid>				
+	
+		</p:panel>
+		
+	</h:form>
+	
+	<p:spacer height="25px" />
+	
+</ui:define>
+</ui:composition>

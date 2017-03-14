@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:fragment xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:cb="http://java.sun.com/jsf/composite/component">
+
+
+<h:form id="formConfirmed">
+
+	<cb:globalMessages />
+
+	<fieldset>
+		<legend>Já confirmados</legend>
+
+		<p:panelGrid columns="2">
+			<h:outputText value="Vagas Disponíveis"  styleClass="less2" />
+			<h:outputText value="Ocupação"           styleClass="less2" />
+
+			<h:outputText value="#{hostingBean.hosting.confirmedsAvailable}" styleClass="destak3" />
+			<cb:displayRoomOccupancy hosting="#{hostingBean.hosting}"                     />
+		</p:panelGrid>
+
+		<p:spacer height="10" />
+		
+		<p:dataTable value="#{hostingBean.hosting.confirmeds}" var="confirmedHostingRow"
+			rendered="#{not empty hostingBean.hosting.confirmeds}">
+			
+			<p:column headerText="#{i18n.label_civil_name}" styleClass="col20p">
+				<h:outputText value="#{confirmedHostingRow.register.contact.civilName}" />
+			</p:column>
+	
+			<p:column headerText="#{i18n.label_new_name}" styleClass="col10p">
+				<h:outputText value="#{confirmedHostingRow.register.contact.name}" />
+			</p:column>
+	
+			<p:column headerText="#{i18n.label_age}" styleClass="col10p colCenter">
+				<h:outputText value="#{confirmedHostingRow.register.contact.age}" styleClass="less2" />
+			</p:column>
+
+			<p:column headerText="#{i18n.label_city}" styleClass="col25p">
+				<h:outputText value="#{confirmedHostingRow.register.contact.city}" styleClass="less2" />
+			</p:column>
+			
+			<p:column headerText="#{i18n.label_root_school}" styleClass="col20p">
+				<h:outputText value="#{confirmedHostingRow.register.contact.rootSchool.description}" styleClass="less2" />
+			</p:column>
+
+			<p:column headerText="#{i18n.label_events}" styleClass="col20p">
+				<cb:displayRegisterAllEvents register="#{confirmedHostingRow.register}" />
+			</p:column>
+
+			<p:column styleClass="col5p colCenter">
+				<p:commandButton icon="ui-icon-trash" title="Remover do quarto"
+					process="@this"
+					action="#{hostingBean.removeConfirmedHosting(confirmedHostingRow)}"
+					update="@form :tabviewRooms:formRoomPending :tabviewRooms:formRoomConfirmed" 
+					/>
+			</p:column>
+		</p:dataTable>
+	</fieldset>
+	
+	
+	<p:spacer height="5" />
+	<p:separator />
+	<p:spacer height="5" />
+	
+	
+	<p:fieldset legend="Inscrições disponíveis" toggleable="true" collapsed="false" rendered="#{hostingBean.hosting.flagConfirmedsAvailable}" >
+	
+		<h:panelGrid cellpadding="0">
+			<h:outputText value="(pesquisar pelo nome novo, civil ou cidade)" styleClass="less2" />
+			
+			<p:autoComplete id="acRegister" value="#{hostingBean.selectedRegister}" converter="#{registerConverter}"
+				completeMethod="#{hostingBean.completeRegister}" var="registerRow"
+				itemValue="#{registerRow}" itemLabel="#{registerRow.contact.fullDesc}"
+				queryDelay="750" minQueryLength="2" scrollHeight="200" size="60" >
+				
+				<p:column headerText="ID Inscrição">
+					#{registerRow.id}
+				</p:column>
+
+				<p:column headerText="#{i18n.label_civil_name}">
+					#{registerRow.contact.civilName}
+				</p:column>
+			
+				<p:column headerText="#{i18n.label_new_name}">
+					#{registerRow.contact.name}
+				</p:column>
+
+				<p:column headerText="#{i18n.label_age}">
+					#{registerRow.contact.age}
+				</p:column>
+
+				<p:column headerText="#{i18n.label_city}">
+					#{registerRow.contact.city}
+				</p:column>
+				
+				<p:column headerText="#{i18n.label_root_school}" styleClass="col20p">
+					#{registerRow.contact.rootSchool.description}
+				</p:column>
+				
+				<p:ajax event="itemSelect" process="@this" 
+					listener="#{hostingBean.addSelectRegister}"
+					update="@form :tabviewRooms:formRoomPending :tabviewRooms:formRoomConfirmed" 
+					/>
+			</p:autoComplete>
+
+			<p:message for="acRegister" />
+		</h:panelGrid>
+	</p:fieldset>
+	
+
+	<p:spacer height="5" />
+	<p:separator />
+	<p:spacer height="5" />
+	
+	
+	<p:fieldset legend="Sugeridos inicialmente" rendered="#{not empty hostingBean.hosting.sugesteds}" toggleable="true" collapsed="true">
+		<cb:helpPanel text="Todos os colegas de quartos sugeridos e que estejam inscritos já foram confirmados no quarto" />
+		
+		<p:dataTable value="#{hostingBean.hosting.sugesteds}" var="sugestedHostingRow">
+			
+			<p:column headerText="#{i18n.label_civil_name}" styleClass="col30p">
+				<h:outputText value="#{sugestedHostingRow.contact.civilName}" />
+			</p:column>
+	
+			<p:column headerText="#{i18n.label_new_name}" styleClass="col10p">
+				<h:outputText value="#{sugestedHostingRow.contact.name}" />
+			</p:column>
+	
+			<p:column headerText="#{i18n.label_age}" styleClass="col10p colCenter">
+				<h:outputText value="#{sugestedHostingRow.contact.age}" styleClass="less2" />
+			</p:column>
+
+			<p:column headerText="#{i18n.label_city}" styleClass="col20p">
+				<h:outputText value="#{sugestedHostingRow.contact.city}" styleClass="less2" />
+			</p:column>
+
+			<p:column headerText="#{i18n.label_root_school}" styleClass="col20p">
+				<h:outputText value="#{sugestedHostingRow.contact.rootSchool.description}" styleClass="less2" />
+			</p:column>
+		</p:dataTable>
+	</p:fieldset>
+
+</h:form>
+
+
+</ui:fragment>

@@ -1,0 +1,119 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:fragment xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:cb="http://java.sun.com/jsf/composite/component">
+
+<p:panel>
+
+	<cb:globalMessages />
+
+	<h:panelGrid columns="2" cellpadding="10" width="100%">
+		<h:panelGroup>
+			<p:outputLabel for="calManualCheckinDate" value="#{i18n.label_checkin_date }" styleClass="req" />
+			<p:calendar id="calManualCheckinDate" value="#{checkInBean.manualCheckinDate }"
+				size="10" pattern="dd/MM/yyyy"    showOn="button"
+				required="true" 
+				/>
+			<p:message for="calManualCheckinDate" />
+		</h:panelGroup>
+
+		<h:panelGroup>
+			<p:outputLabel for="calManualCheckoutDate" value="#{i18n.label_checkout_date }" styleClass="req" />
+			<p:calendar id="calManualCheckoutDate" value="#{checkInBean.manualCheckoutDate }"
+				size="10" pattern="dd/MM/yyyy"     showOn="button"
+				required="true"  
+				/>
+			<p:message for="calManualCheckoutDate" />
+		</h:panelGroup>
+
+
+		<h:panelGrid columns="2" cellpadding="5">
+			<f:facet name="header">
+				<h:outputText value=" #{i18n.label_arrival}"
+					styleClass="destak4" />
+				<p:separator />
+			</f:facet>
+
+			<p:outputLabel for="arrivalDate" value="#{i18n.label_day_with_format}" styleClass="req" />
+			<h:panelGrid>
+				<p:calendar id="arrivalDate"
+					value="#{checkInBean.selectedRegister.tripInfo.tripArrivalDate }"
+					pattern="dd/MM/yyyy"   size="10" showOn="button"
+					required="true"    />
+				<p:message for="arrivalDate" />
+			</h:panelGrid>
+
+			<p:outputLabel for="arrivalTime" value="#{i18n.label_hour_with_format}" styleClass="req" />
+			<h:panelGrid>
+				<p:inputMask mask="99:99" id="arrivalTime" size="6" required="true"
+					value="#{checkInBean.selectedRegister.tripInfo.tripArrivalTime }">
+					
+						<f:convertDateTime pattern="HH:mm"   /> 	
+				</p:inputMask>
+				<p:message for="arrivalTime" />
+			</h:panelGrid>
+
+			<p:outputLabel value="#{i18n.label_flight_company}" />
+			<p:inputText
+				value="#{checkInBean.selectedRegister.tripInfo.tripArrivalFlightCompany }"
+				size="20" />
+
+			<p:outputLabel value="#{i18n.label_flight_number}:" />
+			<p:inputText
+				value="#{checkInBean.selectedRegister.tripInfo.tripArrivalFlightNumber }"
+				size="20" />
+
+		</h:panelGrid>
+
+		<h:panelGrid columns="2" cellpadding="5">
+			<f:facet name="header">
+				<h:outputText value="#{i18n.label_departure}"
+					styleClass="destak4" />
+				<p:separator />
+			</f:facet>
+
+			<p:outputLabel for="departureDate"	value="#{i18n.label_day_with_format}" styleClass="req" />
+			<h:panelGrid>
+				<p:calendar id="departureDate"
+					value="#{checkInBean.selectedRegister.tripInfo.tripDepartureDate }"
+					pattern="dd/MM/yyyy"   size="10" showOn="button"
+					required="true"    />
+				<p:message for="departureDate" />
+			</h:panelGrid>
+
+			<p:outputLabel for="departureTime"	value="#{i18n.label_hour_with_format}" styleClass="req" />
+			<h:panelGrid>
+				<p:inputMask mask="99:99" id="departureTime" size="6" required="true"
+					value="#{checkInBean.selectedRegister.tripInfo.tripDepartureTime }">
+
+						<f:convertDateTime pattern="HH:mm"   /> 	
+				</p:inputMask>
+				<p:message for="departureTime" />
+			</h:panelGrid>
+
+			<h:outputText value="#{i18n.label_flight_company}:" />
+			<p:inputText
+				value="#{checkInBean.selectedRegister.tripInfo.tripDepartureFlightCompany }"
+				size="20" />
+
+			<h:outputText value="#{i18n.label_flight_number}:" />
+			<p:inputText
+				value="#{checkInBean.selectedRegister.tripInfo.tripDepartureFlightNumber }"
+				size="20" />
+
+		</h:panelGrid>
+	</h:panelGrid>
+
+	<h:panelGrid columns="2">
+		<h:outputText value="#{i18n.label_note}:" />
+		<p:inputTextarea
+			value="#{checkInBean.selectedRegister.tripInfo.tripNote }" rows="2"
+			cols="120" />
+	</h:panelGrid>
+
+</p:panel>
+
+</ui:fragment>

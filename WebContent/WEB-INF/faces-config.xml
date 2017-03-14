@@ -1,8 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<faces-config
-    xmlns="http://xmlns.jcp.org/xml/ns/javaee"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-facesconfig_2_2.xsd"
-    version="2.2">
+<faces-config xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-facesconfig_2_2.xsd"
+	version="2.2">
+
+	<application>
+		<message-bundle>resources.application</message-bundle>
+		<resource-bundle>
+			<base-name>resources.application</base-name>
+			<var>i18n</var>
+		</resource-bundle>
+		<locale-config>
+			<default-locale>es</default-locale>
+			<supported-locale>es</supported-locale>
+			<supported-locale>pt</supported-locale>
+		</locale-config>
+	</application>
+
+	<factory>
+		<exception-handler-factory>com.cb.estreladomar.controller.exceptionhandler.EstrelaDoMarExceptionHandlerFactory</exception-handler-factory>
+	</factory>
+
+	<lifecycle>
+		<phase-listener>com.cb.estreladomar.controller.phaselistener.SecurityPhaseListener</phase-listener>
+		<phase-listener>com.cb.estreladomar.controller.phaselistener.SucessPhaseListener</phase-listener>
+	</lifecycle>
+
 
 </faces-config>

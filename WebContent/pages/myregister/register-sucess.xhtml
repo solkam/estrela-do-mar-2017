@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:cb="http://java.sun.com/jsf/composite/component"
+	template="/WEB-INF/design/_template-main.xhtml">
+
+<ui:define name="content">
+
+	<cb:globalMessages />
+
+	<h:panelGrid columns="2" cellpadding="5" width="100%">
+		<p:panel header="#{i18n.text_your_register_is_saved}" style="min-height:700px">
+			
+			<p>#{i18n.text_your_register_number_is} <span class="destak1">#{registerStepBean.register.id}</span>.</p>
+			<h:outputText value="#{i18n.text_register_orientations}" escape="false" />
+			
+			<h4>#{i18n.text_you_have_just_registered}</h4>
+			<h:outputText value="#{registerStepBean.register.megaEvent.name }" styleClass="destak2" />
+			
+			<p:scrollPanel style="height:275px" mode="native">
+				<p:dataTable value="#{registerStepBean.register.allDetails }" var="registerDetailRow" >
+					
+					<p:column headerText="#{i18n.label_week_or_phase }" styleClass="col20p">
+						<h:outputText value="#{registerDetailRow.eventWeek.name}" styleClass="destak3" />
+					</p:column>
+
+					<p:column headerText="#{i18n.label_event}" styleClass="col50p">
+						<h:outputText value="#{registerDetailRow.event.displayNameOrSchool}" styleClass="destak3" />
+						<br />
+						<h:outputText value="#{registerDetailRow.dependentContactName}" styleClass="destak4" />
+						<br />
+						<h:outputText value="#{i18n[registerDetailRow.presence.key] }" styleClass="less1" />
+					</p:column>
+
+					<p:column headerText="#{i18n.label_value }" styleClass="col30p colCenter">
+						<cb:outputCurrency value="#{registerDetailRow.value }" />
+						<f:facet name="footer">
+							<cb:outputCurrency value="#{registerStepBean.register.calculatedTotalValue }" styleClass="destak3" />
+						</f:facet>
+					</p:column>
+				</p:dataTable>
+			</p:scrollPanel>
+		</p:panel>
+	
+		<p:panel header="#{i18n.label_payments}" style="min-height:700px">
+			<h:outputText value="#{i18n.text_about_register_and_payment}" escape="false" />
+			<br />
+			<p>
+				<h:link outcome="/pages/myregister/register-payment.xhtml" target="_blank" styleClass="paymentLink" 
+					rendered="false" >
+					#{i18n.text_proceed_to_payment_with_credit_card}
+				</h:link>
+			</p>
+		</p:panel>
+	</h:panelGrid>
+	
+	<p:spacer height="25px" />
+	
+</ui:define>
+</ui:composition>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:cb="http://java.sun.com/jsf/composite/component">
+
+<h:head>
+	<h:outputStylesheet name="style.css" library="css" />
+	<style>
+		#content {
+			width: 70%;
+			font-family: sans-serif;
+		}
+	</style>
+</h:head>
+
+<h:body>
+	<f:metadata>
+		<f:event type="preRenderView" listener="#{registerStepBean.processFailTransbankResponse}" />
+	</f:metadata>
+
+	<center>
+		<div id="content">
+		
+			<p:panel>
+				<f:facet name="header">
+					<h:panelGrid columns="2" cellpadding="10" width="100%">
+						<h:graphicImage library="img" name="logo_cb_principal_100.png" />
+						
+						<h:panelGrid style="text-align:center">
+							<h:outputText value="#{i18n.title_cb_vision}" styleClass="destak1" />
+							<h:outputText value="#{i18n.label_cb_site}" styleClass="destak3" />
+						</h:panelGrid>
+					</h:panelGrid>
+				</f:facet>
+
+				<h:panelGrid columns="2" cellpadding="10" cellspacing="0" width="100%" style="border: 5px solid red" >
+					<h:graphicImage library="img" name="icon_red_80.png" />
+					<h:outputText value="#{i18n.msg_transbank_payment_fail}" styleClass="destak1" style="color:red" />
+				</h:panelGrid>
+				
+			</p:panel>		
+			
+		</div>
+	</center>
+</h:body>
+</html>

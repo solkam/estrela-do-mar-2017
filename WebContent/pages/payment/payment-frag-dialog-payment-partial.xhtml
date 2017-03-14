@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:fragment xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:cb="http://java.sun.com/jsf/composite/component">
+
+<!-- Dialog Pagamentos Parciais -->
+<!-- ************************** -->
+<p:dialog header="#{i18n.label_payments}" widgetVar="DialogPayment" 
+	modal="true" dynamic="true" maximizable="true" closeOnEscape="true"
+	width="90%" height="90%"
+	position="top" >
+	
+	<h:form id="formPartialPayment">
+		<ui:param name="payments" value="#{paymentBean.registerDetail.payments }" />
+		<ui:param name="credits"  value="#{paymentBean.selectedRegister.credits }" />
+	
+		<h:panelGrid columns="2" cellpadding="2">
+			<h:outputText value="#{i18n.label_week_or_phase}:" styleClass="less1" />
+			<h:outputText value="#{paymentBean.registerDetail.eventWeek.name }" styleClass="destak4" />
+
+			<h:outputText value="#{i18n.label_event}:" styleClass="less1" />
+			<h:outputText value="#{paymentBean.registerDetail.event.displayNameOrSchool }" styleClass="destak3" />
+
+			<h:outputText value="#{i18n.label_presence}:" styleClass="less1" />
+			<h:outputText value="#{i18n[paymentBean.registerDetail.presence.key] }" styleClass="destak4" />
+
+			<h:outputText value="#{i18n.label_value}:" styleClass="less1" />
+			<cb:outputCurrency value="#{paymentBean.registerDetail.value }" styleClass="destak4" />
+
+			<h:outputText value="#{i18n.label_paid_value}:" styleClass="paid less1" />
+			<cb:outputCurrency value="#{paymentBean.registerDetail.calculatedPaidValue }" styleClass="paid destak4" />
+
+			<h:outputText value="#{i18n.label_pendent_value}:" styleClass="pendent less1" />
+			<cb:outputCurrency value="#{paymentBean.registerDetail.calculatedPendentValue }" styleClass="pendent destak4" />
+
+			<h:outputText value="#{i18n.label_payments}:" styleClass="less1" />
+			<h:panelGroup>
+				<h:outputText value="#{i18n.msg_no_payment_done }"
+					rendered="#{empty payments }"
+					styleClass="less1" />
+			
+			 	<p:dataTable value="#{payments }" var="paymentRow"
+			 		rendered="#{not empty payments }" >
+
+			 		<p:column headerText="ID">
+			 			<h:outputText value="#{paymentRow.id}" styleClass="less2" />
+			 		</p:column>
+			 		
+			 		<p:column headerText="#{i18n.label_payment_method}">
+			 			<h:outputText value="#{i18n[paymentRow.method.key] }" />
+			 		</p:column>
+			 	
+			 		<p:column headerText="#{i18n.label_sale_order}">
+			 			<h:outputText value="#{paymentRow.saleOrder }" />
+			 		</p:column>
+			 	
+			 		<p:column headerText="#{i18n.label_payment_date}">
+			 			<cb:outputDate value="#{paymentRow.date}" />
+			 		</p:column>
+			 	
+			 		<p:column headerText="#{i18n.label_credit_date}">
+			 			<cb:outputDate value="#{paymentRow.creditDate}" />
+			 		</p:column>
+
+			 		<p:column headerText="#{i18n.label_value}" style="text-align:right;" styleClass="paid">
+			 			<cb:outputCurrency value="#{paymentRow.value}" />
+			 		</p:column>
+			 		
+			 		<p:column headerText="#{i18n.label_note }" style="text-align:center; width:1%">
+			 			<h:graphicImage library="img" name="icon_note_36.png" title="#{paymentRow.note }" rendered="#{not empty paymentRow.note}" />
+			 		</p:column>
+			 		
+			 		<p:column headerText="#{i18n.label_check }" style="text-align:center; width:1%">
+			 			<h:graphicImage id="imgCheck" library="img" name="icon_bank_check71.jpg" rendered="#{paymentRow.methodIsCheck }" />
+			 			<p:tooltip for="imgCheck" value="#{paymentRow.descCheckInfos }" />
+			 		</p:column>
+			 		
+
+			 		<p:column>
+			 			<p:menuButton value="#{i18n.label_to_remove_payment}" >
+							<p:menuitem icon="ui-icon-check" value="#{i18n.label_yes }" 
+								action="#{paymentBean.removePayment(paymentRow)}"
+								process="@this"
+								update=":formPartialPayment"
+								/>
+							<p:menuitem icon="ui-icon-close" value="#{i18n.label_no }"
+								process="@none" update="@none" global="false" 
+								/>
+			 			</p:menuButton>
+			 		</p:column>
+
+
+			 		<p:column>
+			 			<p:commandButton icon="ui-icon-flag" value="#{i18n.label_use_as_credit}"
+			 				action="#{paymentBean.usePaymentAsCredit(paymentRow) }"
+			 				process="@this"
+			 				update="@form :formRegister:tabDetail:displayPayments" 
+			 				/>
+			 		</p:column>
+
+			 	</p:dataTable>
+			</h:panelGroup>
+			
+		</h:panelGrid>
+		
+		<p:separator />
+		
+		<p:fieldset legend="#{i18n.label_new_payment}" toggleable="true">
+		
+			<h:panelGrid columns="2" width="100%">
+				<h:panelGrid>
+					<h:panelGrid columns="4">
+					
+						<h:panelGrid>
+							<p:outputLabel for="selMethod" value="#{i18n.label_payment_method}" styleClass="less2 req" />
+							<h:selectOneMenu id="selMethod" value="#{paymentBean.registerDetailPayment.method}" required="true" >
+								<f:selectItems value="#{enumHelper.megaEventPaymentMethods }" var="pm" itemLabel="#{i18n[pm.key]}" />
+								<p:ajax process="@this" update="displayCheckInputs"  />
+							</h:selectOneMenu>
+							<p:message for="selMethod" />
+						</h:panelGrid>
+			
+						<h:panelGrid>
+							<p:outputLabel for="inOrder" value="#{i18n.label_sale_order}" styleClass="less2" />
+							<p:inputText id="inOrder" value="#{paymentBean.registerDetailPayment.saleOrder}" />
+							<p:message for="inOrder" />
+						</h:panelGrid>
+			
+						<h:panelGrid>
+							<p:outputLabel for="inDate" value="#{i18n.label_date}" styleClass="less2" />
+							<p:calendar id="inDate" value="#{paymentBean.registerDetailPayment.date}"  
+								pattern="dd/MM/yyyy" navigator="true" />
+							<p:message for="inDate" />
+						</h:panelGrid>
+			
+						<h:panelGrid>
+							<p:outputLabel for="inValue" value="#{i18n.label_value}" styleClass="less2 req" />
+							<p:inputText id="inValue" value="#{paymentBean.registerDetailPayment.value}" size="10" required="true" />
+							<p:message for="inValue" />
+						</h:panelGrid>
+
+					</h:panelGrid>
+					
+					<p:outputPanel id="displayCheckInputs" >
+						<h:panelGrid columns="4" rendered="#{paymentBean.registerDetailPayment.methodIsCheck}" >
+							<h:panelGrid >
+								<p:outputLabel for="inChTitular" value="#{i18n.label_check_titular }" styleClass="less2 req" />
+								<p:inputText id="inChTitular" value="#{paymentBean.registerDetailPayment.checkTitular}" size="26" required="true" />
+								<p:message for="inChTitular" />
+							</h:panelGrid>
+				
+							<h:panelGrid >
+								<p:outputLabel for="inChBank" value="#{i18n.label_check_bank}" styleClass="less2" />
+								<p:inputText id="inChBank" value="#{paymentBean.registerDetailPayment.checkBank}" size="20" />
+								<p:message for="inChBank" />
+							</h:panelGrid>
+	
+							<h:panelGrid >
+								<p:outputLabel for="inChAccount" value="#{i18n.label_check_account }" styleClass="less2" />
+								<p:inputText id="inChAccount" value="#{paymentBean.registerDetailPayment.checkAccount}" size="10" />
+								<p:message for="inChAccount" />
+							</h:panelGrid>
+	
+							<h:panelGrid >
+								<p:outputLabel for="inChNumber" value="#{i18n.label_check_number }" styleClass="less2 req" />
+								<p:inputText id="inChNumber" value="#{paymentBean.registerDetailPayment.checkNumber}" size="10" required="true" />
+								<p:message for="inChNumber" />
+							</h:panelGrid>
+						</h:panelGrid>
+					</p:outputPanel>
+		
+					<h:panelGrid>
+						<h:outputText value="#{i18n.label_note}:" styleClass="less2" />
+						<p:inputTextarea id="inNote" value="#{paymentBean.registerDetailPayment.note}" rows="2" cols="90"
+							required="false" label="#{i18n.label_note}" />
+						<p:message for="inNote" />
+					</h:panelGrid>
+					
+				</h:panelGrid>
+
+				<p:commandButton icon="ui-icon-check" value="#{i18n.label_save_new_payment}"
+					action="#{paymentBean.savePartialPayment }"
+					update="@form :formRegister:tabDetail:displayPayments" 
+					/>
+
+			</h:panelGrid>
+		</p:fieldset>
+		
+		<p:spacer height="10px" />
+		
+		<p:fieldset legend="#{i18n.label_credits}" style="border:3px solid #040" toggleable="true">
+			
+				<h:outputText value="#{i18n.msg_no_credits_available }" 
+					rendered="#{empty paymentBean.selectedRegister.credits }"
+					styleClass="less1" />
+			
+				<p:dataTable value="#{paymentBean.selectedRegister.credits }" var="credit"
+					rendered="#{not empty paymentBean.selectedRegister.credits }" >
+				
+					<p:column headerText="#">
+						<h:outputText value="#{credit.id}" styleClass="less3" />
+					</p:column>
+					
+					<p:column headerText="#{i18n.label_payment_method}">
+						<h:outputText value="#{i18n[credit.method.key]}" />
+					</p:column>
+					
+					<p:column headerText="#{i18n.label_sale_order}">
+						<h:outputText value="#{credit.saleOrder }" />
+					</p:column>
+				
+					<p:column headerText="#{i18n.label_credit_date}">
+						<cb:outputDate value="#{credit.date }" />
+					</p:column>
+
+					<p:column headerText="#{i18n.label_payment_date}">
+						<cb:outputDate value="#{credit.paymentDate }" />
+					</p:column>
+
+					<p:column headerText="#{i18n.label_value}" style="text-align:right;">
+						<cb:outputCurrency value="#{credit.value }" styleClass="credit" />
+						<f:facet name="footer">
+							<cb:outputCurrency value="#{paymentBean.selectedRegister.calculatedCreditValue}" styleClass="destak3 credit" />
+						</f:facet>
+					</p:column>
+					
+					<p:column styleClass="col5p colCenter">
+						<p:commandButton icon="ui-icon-link" value="#{i18n.label_use_as_payment}"
+							action="#{paymentBean.useCreditAsPayment(credit, paymentBean.registerDetail) }"
+							process="@this"
+							update="@form :formRegister:tabDetail:displayPayments" 
+							/>
+					</p:column>
+				</p:dataTable>
+		</p:fieldset>
+
+		<cb:globalMessages />
+		
+	</h:form>
+</p:dialog>		
+
+
+
+</ui:fragment>

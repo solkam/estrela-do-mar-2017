@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:logic="http://java.sun.com/jsf/composite/logic_componentes"
+	template="/WEB-INF/design/_template-error.xhtml">
+<ui:define name="content">
+
+	<p:panel>
+		<h:panelGrid cellpadding="10" width="100%" styleClass="colCentro">
+		
+			<h:graphicImage library="img" name="icone_error_fatal_128.png" />
+			
+			<h:panelGroup>
+				<p class="destak1 req">
+					Aconteceu um erro imprevisto e sua sessão foi finalizada. 
+				</p>
+				<p>
+					Clique <a href="login.xhtml">aqui</a> para se autenticar novamente.
+				</p>
+			</h:panelGroup>
+			
+		</h:panelGrid>
+	</p:panel>
+	
+
+</ui:define>
+</ui:composition>

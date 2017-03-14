@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:fragment xmlns="http://www.w3.org/1999/xhtml" 
+      xmlns:ui="http://java.sun.com/jsf/facelets" 
+      xmlns:h="http://java.sun.com/jsf/html" 
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+<h:panelGrid columns="11" cellpadding="5" cellspacing="0" >
+
+	<h:link outcome="/pages/myregister/register-index" rendered="#{viewAcessBean.acessibleForMyRegister }">
+		<h:panelGrid styleClass="optionItem less3" cellpadding="0" cellspacing="5" >
+			<h:graphicImage library="img" name="option_myregister_75.png" />
+			<h:outputText value="#{i18n.title_myregister }" />
+		</h:panelGrid>
+	</h:link>
+		
+	<h:link outcome="/pages/myregisteredones/myregisteredones" rendered="#{viewAcessBean.acessibleForMyRegisteredOnes }">
+		<h:panelGrid styleClass="optionItem less3" cellpadding="0" cellspacing="5">
+			<h:graphicImage library="img" name="option_myregisteredones_75.png" />
+			<h:outputText value="#{i18n.title_myregisteredones }" />
+		</h:panelGrid>
+	</h:link>
+		
+	<h:link outcome="/pages/report/report-index" rendered="#{viewAcessBean.acessibleForReport }" >
+		<h:panelGrid styleClass="optionItem less3" cellpadding="0" cellspacing="5">
+			<h:graphicImage library="img" name="option_informe_75.png" />
+			<h:outputText value="#{i18n.title_reports }"  />
+		</h:panelGrid>
+	</h:link>
+
+	<h:link outcome="/pages/checkIN/checkin-index" rendered="#{viewAcessBean.acessibleForCheckin }" >
+		<h:panelGrid styleClass="optionItem less3" cellpadding="0" cellspacing="5">
+			<h:graphicImage library="img" name="option_checkin_75.png" />
+			<h:outputText value="#{i18n.title_checkin }"  />
+		</h:panelGrid>
+	</h:link>
+
+	<h:link outcome="/pages/checkOUT/checkout" rendered="#{viewAcessBean.acessibleForCheckout }" >
+		<h:panelGrid styleClass="optionItem less3" cellpadding="0" cellspacing="5">
+			<h:graphicImage library="img" name="option_checkout_75.png" />
+			<h:outputText value="#{i18n.title_checkout }"  />
+		</h:panelGrid>
+	</h:link>
+	
+	<h:link outcome="/pages/payment/payment" rendered="#{viewAcessBean.acessibleForPayment }" >
+		<h:panelGrid styleClass="optionItem less3" cellpadding="0" cellspacing="5">
+			<h:graphicImage library="img" name="option_payment_75.png" />
+			<h:outputText value="#{i18n.title_payment }"  />
+		</h:panelGrid>
+	</h:link>
+
+	<h:link outcome="/pages/config/config-contact" rendered="#{viewAcessBean.acessibleForContact }" >
+		<h:panelGrid styleClass="optionItem less3" cellpadding="0" cellspacing="5">
+			<h:graphicImage library="img" name="option_contact_75.png" />
+			<h:outputText value="#{i18n.title_contact }" />
+		</h:panelGrid>
+	</h:link>
+
+	<h:link outcome="/pages/config/config-megaevent" rendered="#{viewAcessBean.acessibleForConfig }" >
+		<h:panelGrid styleClass="optionItem less3" cellpadding="0" cellspacing="5">
+			<h:graphicImage library="img" name="option_config_75.png" />
+			<h:outputText value="#{i18n.title_config }" />
+		</h:panelGrid>
+	</h:link>
+
+	<h:link outcome="/pages/transport/transport" rendered="false"  >
+		<h:panelGrid styleClass="optionItem less3" cellpadding="0" cellspacing="5">
+			<h:graphicImage library="img" name="option_transport_75.png" />
+			<h:outputText value="#{i18n.title_transport }"  />
+		</h:panelGrid>
+	</h:link>
+
+	<h:link outcome="/pages/config/config-user" rendered="#{viewAcessBean.acessibleForUser}" >
+		<h:panelGrid styleClass="optionItem less3" cellpadding="0" cellspacing="5">
+			<h:graphicImage library="img" name="option_user_75.png" />
+			<h:outputText value="#{i18n.label_user }"  />
+		</h:panelGrid>
+	</h:link>
+
+	<h:link outcome="/pages/hosting/hosting" rendered="#{viewAcessBean.acessibleForRoom}" >
+		<h:panelGrid styleClass="optionItem less3" cellpadding="0" cellspacing="5">
+			<h:graphicImage library="img" name="option_room_75.png" />
+			<h:outputText value="#{i18n.title_hosting }"  />
+		</h:panelGrid>
+	</h:link>
+	
+	<h:link outcome="/pages/report_mgmt/mgmt-report-people-and-roles" rendered="#{viewAcessBean.acessibleForReport }" >
+		<h:panelGrid styleClass="optionItem less3" cellpadding="0" cellspacing="5" >
+			<h:graphicImage library="img" name="option_report_mgmt_75.png" />
+			<h:outputText value="Gerenciais" />
+		</h:panelGrid>
+	</h:link>
+	
+
+</h:panelGrid>
+   
+</ui:fragment>

@@ -1,0 +1,359 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:cb="http://java.sun.com/jsf/composite/component"
+	template="/WEB-INF/design/_decorate-contact.xhtml">
+	
+<ui:define name="contentConfig">
+
+<p:panel header="#{i18n.label_merge_contact}">
+	
+	<p:fieldset legend="Pesquisar duplicados pelo Email" toggleable="true">
+		<h:form id="formDupsByEmail">
+			<p:commandButton icon="ui-icon-mail-closed" value="Pesquisar"
+				action="#{mergeContactBean.searchDuplicatecContactsByEmail()}"
+				update="@form" 
+				/>
+	
+			<cb:globalMessages />
+			
+			<p:dataTable value="#{mergeContactBean.duplicatedContactsByEmail}" var="c" 
+				rendered="#{not empty mergeContactBean.duplicatedContactsByEmail}" >
+				
+				<p:column headerText="Email">
+					#{c.email}
+				</p:column>
+				<p:column headerText="Nome Civil">
+					#{c.civilName}
+				</p:column>
+				<p:column headerText="Nome Novo">
+					#{c.name}
+				</p:column>
+				<p:column headerText="Cidade">
+					#{c.city}
+				</p:column>
+				<p:column style="width:1%">
+					<p:commandButton icon="ui-icon-pencil" title="Comparar contatos"
+						action="#{mergeContactBean.detailContactByEmail(c.email)}"
+						oncomplete="DialogCompareContacts.show()"
+						update=":formC1 :formC2"
+						 />
+				</p:column>
+			</p:dataTable>
+		</h:form>
+	</p:fieldset>
+	
+	<p:spacer height="20" />
+	
+	<p:fieldset legend="Pesquisar duplicados pelo Nome Civil" toggleable="true">
+		<h:form id="formDupByCivilName">
+			<p:commandButton icon="ui-icon-clipboard" value="Pesquisar"
+				action="#{mergeContactBean.searchDuplicatedContactsByCivilName()}"
+				update="@form" 
+				/>
+	
+			<cb:globalMessages />
+			
+			<p:dataTable value="#{mergeContactBean.duplicatedContactsByCivilName}" var="c"
+				rendered="#{not empty mergeContactBean.duplicatedContactsByCivilName}" >
+			
+				<p:column headerText="Nome Civil">
+					#{c.civilName}
+				</p:column>
+				<p:column headerText="Email">
+					#{c.email}
+				</p:column>
+				<p:column headerText="Nome Novo">
+					#{c.name}
+				</p:column>
+				<p:column headerText="Cidade">
+					#{c.city}
+				</p:column>
+				<p:column style="width:1%">
+					<p:commandButton icon="ui-icon-pencil" title="Comparar contatos"
+						action="#{mergeContactBean.detailContactByCivilName(c.civilName)}"
+						oncomplete="DialogCompareContacts.show()"
+						update=":formC1 :formC2"
+						 />
+				</p:column>
+			</p:dataTable>
+		</h:form>
+	</p:fieldset>
+		
+	<p:spacer height="20" />
+	
+	<p:fieldset legend="Pesquisar duplicados pelo Nome Novo" toggleable="true">
+		<h:form id="formDupByName">
+			<p:commandButton icon="ui-icon-contact" value="Pesquisar"
+				action="#{mergeContactBean.searchDuplicatedContactsByName()}"
+				update="@form" 
+				/>
+	
+			<cb:globalMessages />
+			
+			<p:dataTable value="#{mergeContactBean.duplicatedContactsByName}" var="c"
+				rendered="#{not empty mergeContactBean.duplicatedContactsByName}" >
+			
+				<p:column headerText="Nome Civil">
+					#{c.civilName}
+				</p:column>
+				<p:column headerText="Email">
+					#{c.email}
+				</p:column>
+				<p:column headerText="Nome Novo">
+					#{c.name}
+				</p:column>
+				<p:column headerText="Cidade">
+					#{c.city}
+				</p:column>
+				<p:column style="width:1%">
+					<p:commandButton icon="ui-icon-pencil" title="Comparar contatos"
+						action="#{mergeContactBean.detailContactByName(c.name)}"
+						oncomplete="DialogCompareContacts.show()"
+						update=":formC1 :formC2"
+						 />
+				</p:column>
+			</p:dataTable>
+		</h:form>
+	</p:fieldset>
+</p:panel>
+
+
+
+
+
+<p:dialog widgetVar="DialogCompareContacts" modal="true" header="Comparar Contatos" dynamic="true" maximizable="true">
+
+	<p:messages globalOnly="true" autoUpdate="true" />
+
+	<p:panel styleClass="scrollable1900">
+	
+		<h:panelGrid columns="3" cellpadding="10">
+			<h:form id="formC1">
+				
+				<p:panel>
+				
+					<p:toolbar>
+						<p:toolbarGroup align="left">
+							<h:outputText value="Contato 1" styleClass="destak1" />
+						</p:toolbarGroup>
+						<p:toolbarGroup align="right">
+							<p:commandButton icon="ui-icon-arrowthickstop-1-e" iconPos="right" title="Copiar conteudo para 2" 
+								action="#{mergeContactBean.copyFrom1To2()}" update="@form :formC2"
+								/>
+						</p:toolbarGroup>
+					</p:toolbar>
+			
+					<h:panelGrid cellpadding="4">
+					
+						<h:panelGrid columns="2" cellpadding="3">
+							<h:outputText value="ID" styleClass="less2" />
+							<h:outputText value="#{mergeContactBean.contact1.id}" styleClass="destak3" />
+						</h:panelGrid>
+				
+						<h:panelGrid columns="2" >
+							<p:outputLabel for="inC1NewName" value="Nome novo" styleClass="less2" />
+							<h:panelGrid columns="2">
+								<p:inputText id="inC1NewName"  value="#{mergeContactBean.contact1.name}" size="30" />
+								<p:message display="icon" for="inC1NewName" />
+							</h:panelGrid>
+						</h:panelGrid>
+						
+						<h:panelGrid columns="2">
+							<p:outputLabel for="inC1CivilName"  value="Nome Civil" styleClass="less2 req" />
+							<h:panelGrid columns="2">
+								<p:inputText id="inC1CivilName"  value="#{mergeContactBean.contact1.civilName}" size="50" required="true" />
+								<p:message display="icon" for="inC1CivilName" />
+							</h:panelGrid>
+						</h:panelGrid>
+						
+						<h:panelGrid columns="2">
+							<p:outputLabel for="inC1Email" value="Email" styleClass="less2 req" />
+							<h:panelGrid columns="2">
+								<p:inputText id="inC1Email" value="#{mergeContactBean.contact1.email}" size="50" required="true" />
+								<p:message display="icon" for="inC1Email" />
+							</h:panelGrid>
+						</h:panelGrid>
+				
+						<h:panelGrid columns="2">
+							<p:outputLabel for="inC1Tel" value="Telefone" styleClass="less2 req" />
+							<h:panelGrid columns="2">
+								<p:inputText id="inC1Tel"  value="#{mergeContactBean.contact1.telephone1}" size="30" required="true" />
+								<p:message display="icon" for="inC1Tel" />
+							</h:panelGrid>
+						</h:panelGrid>
+						
+						<h:panelGrid columns="2">
+							<p:outputLabel for="inC1Doc" value="Documento Identidade" styleClass="less2" />
+							<h:panelGrid columns="3">
+								<p:selectOneMenu id="inC1DocType" value="#{mergeContactBean.contact1.identityDocumentType}" >
+									<f:selectItems value="#{enumHelper.documentTypes}" var="type"
+										itemLabel="#{i18n[type.key]}" />
+								</p:selectOneMenu>
+								<p:inputText id="inC1Doc"  value="#{mergeContactBean.contact1.identityDocument}" size="30"  />
+								<p:message display="icon" for="inC1Doc" />
+							</h:panelGrid>
+						</h:panelGrid>
+							
+						<h:panelGrid columns="2">
+							<p:outputLabel for="inC1Birth" value="Data Nascimento" styleClass="less2" />
+							<h:panelGrid columns="2">
+								<p:calendar id="inC1Birth"  value="#{mergeContactBean.contact1.birthDate}" size="15"
+									pattern="dd/MM/yyyy" navigator="true"      
+									/>
+								<p:message display="icon" for="inC1Birth" />
+							</h:panelGrid>
+						</h:panelGrid>
+							
+						<h:panelGrid columns="2">
+							<p:outputLabel for="inC1Address" value="Endereço" styleClass="less2" />
+							<p:inputText id="inC1Address" value="#{mergeContactBean.contact1.address}" size="50" />
+						</h:panelGrid>
+		
+						<h:panelGrid columns="2">
+							<p:outputLabel for="inC1City" value="Cidade" styleClass="less2" />
+							<p:inputText id="inC1City" value="#{mergeContactBean.contact1.city}" size="40" />
+						</h:panelGrid>
+		
+						<h:panelGrid columns="2">
+							<p:outputLabel for="inC1Country" value="País" styleClass="less2" />
+							<p:inputText id="inC1Country" value="#{mergeContactBean.contact1.country}" size="30" />
+						</h:panelGrid>
+		
+						<h:panelGrid columns="2">
+							<p:outputLabel for="inC1Zip" value="CEP" styleClass="less2" />
+							<p:inputText id="inC1Zip" value="#{mergeContactBean.contact1.zipPostal}" size="20" />
+						</h:panelGrid>
+	
+					</h:panelGrid>
+	
+					<p:commandButton icon="ui-icon-check" value="Considerar Contato 1"
+						action="#{mergeContactBean.considerContact1()}"
+						update="@form :formC2 :formDupsByEmail :formDupByCivilName :formDupByName" 
+						/>
+					
+				</p:panel>
+			</h:form>
+			
+	
+			<p:outputPanel autoUpdate="true">
+				<h:outputText value="#{mergeContactBean.matchingRate} %" styleClass="destak1" />
+			</p:outputPanel>
+			
+	
+			<h:form id="formC2" prependId="false">
+				<p:panel>
+					
+					<p:toolbar>
+						<p:toolbarGroup align="left">
+							<p:commandButton icon="ui-icon-arrowthickstop-1-w" iconPos="left" title="Copiar conteudo para 1" 
+								action="#{mergeContactBean.copyFrom2To1()}" update="@form :formC1" 
+								/>
+						</p:toolbarGroup>
+						<p:toolbarGroup align="right">
+							<h:outputText value="Contato 2" styleClass="destak1" />
+						</p:toolbarGroup>
+					</p:toolbar>
+				
+					<h:panelGrid cellpadding="4">
+					
+						<h:panelGrid columns="2" cellpadding="3">
+							<h:outputText value="ID" styleClass="less2" />
+							<h:outputText value="#{mergeContactBean.contact2.id}" styleClass="destak3" />
+						</h:panelGrid>
+	
+						<h:panelGrid columns="2">
+							<p:outputLabel for="inC2NewName" value="Nome novo" styleClass="less2" />
+							<h:panelGrid columns="2">
+								<p:inputText  id="inC2NewName" value="#{mergeContactBean.contact2.name}" size="30" />
+								<p:message display="icon" for="inC2NewName" />
+							</h:panelGrid>
+						</h:panelGrid>
+		
+						<h:panelGrid columns="2">
+							<p:outputLabel for="inC2CivilName"  value="Nome Civil" styleClass="less2 req" />
+							<h:panelGrid columns="2">
+								<p:inputText id="inC2CivilName"  value="#{mergeContactBean.contact2.civilName}" size="50" required="true" />
+								<p:message display="icon" for="inC2CivilName" />
+							</h:panelGrid>
+						</h:panelGrid>
+		
+						<h:panelGrid columns="2">
+							<p:outputLabel for="inC2Email" value="Email" styleClass="less2 req" />
+							<h:panelGrid columns="2">
+								<p:inputText id="inC2Email"  value="#{mergeContactBean.contact2.email}" size="50" required="true" />
+								<p:message display="icon" for="inC2Email"/>
+							</h:panelGrid>
+						</h:panelGrid>
+		
+						<h:panelGrid columns="2">
+							<p:outputLabel for="inC2Tel" value="Telefone" styleClass="less2 req" />
+							<h:panelGrid columns="2">
+								<p:inputText id="inC2Tel"  value="#{mergeContactBean.contact2.telephone1}" size="30" required="true" />
+								<p:message display="icon" for="inC2Tel" />
+							</h:panelGrid>
+						</h:panelGrid>
+		
+						<h:panelGrid columns="2">
+							<p:outputLabel for="inC2Doc" value="Documento Identidade" styleClass="less2" />
+							<h:panelGrid columns="3">
+								<p:selectOneMenu id="inC2DocType" value="#{mergeContactBean.contact2.identityDocumentType}" >
+									<f:selectItems value="#{enumHelper.documentTypes}" var="type"
+										itemValue="#{type}" itemLabel="#{i18n[type.key]}" />
+								</p:selectOneMenu>
+								<p:inputText  id="inC2Doc" value="#{mergeContactBean.contact2.identityDocument}" size="30" />
+								<p:message display="icon" for="inC2Doc" />
+							</h:panelGrid>
+						</h:panelGrid>
+		
+						<h:panelGrid columns="2">
+							<p:outputLabel for="inC2Birth" value="Data Nascimento" styleClass="less2" />
+							<h:panelGrid columns="2">
+								<p:calendar id="inC2Birth"  value="#{mergeContactBean.contact2.birthDate}" size="15" 
+									pattern="dd/MM/yyyy" navigator="true"      
+									/>
+								<p:message display="icon" for="inC2Birth" />
+							</h:panelGrid>
+						</h:panelGrid>
+		
+						<h:panelGrid columns="2">
+							<p:outputLabel for="inC2Address" value="Endereço" styleClass="less2" />
+							<p:inputText id="inC2Address" value="#{mergeContactBean.contact2.address}" size="50" />
+						</h:panelGrid>
+		
+						<h:panelGrid columns="2">
+							<p:outputLabel for="inC2City" value="Cidade" styleClass="less2" />
+							<p:inputText id="inC2City" value="#{mergeContactBean.contact2.city}" size="40" />
+						</h:panelGrid>
+		
+						<h:panelGrid columns="2">
+							<p:outputLabel for="inC2Country" value="País" styleClass="less2" />
+							<p:inputText id="inC2Country" value="#{mergeContactBean.contact2.country}" size="30" />
+						</h:panelGrid>
+		
+						<h:panelGrid columns="2">
+							<p:outputLabel for="inC2Zip" value="CEP" styleClass="less2" />
+							<p:inputText id="inC2Zip" value="#{mergeContactBean.contact2.zipPostal}" size="20" />
+						</h:panelGrid>
+		
+					</h:panelGrid>
+				
+					<p:commandButton icon="ui-icon-check" value="Considerar Contato 2"
+						action="#{mergeContactBean.considerContact2()}"
+						update="@form :formC1 :formDupsByEmail :formDupByCivilName :formDupByName" 
+						/>
+	
+				</p:panel>
+			</h:form>
+		
+		</h:panelGrid>		
+	</p:panel>
+</p:dialog>
+
+
+</ui:define>
+</ui:composition>

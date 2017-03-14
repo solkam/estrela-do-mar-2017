@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:cb="http://java.sun.com/jsf/composite/component"
+	template="/WEB-INF/design/_decorate-report.xhtml">
+
+<ui:define name="reportContent" >
+
+<p:panel id="panelReportCheckin" header="#{i18n.report_people_for_checkin_by_date }">
+
+	<h:form>
+		<h:panelGrid columns="4" cellpadding="5">
+
+			<h:panelGroup>
+				<fieldset style="height:70px">
+					<legend>#{i18n.label_megaevent }</legend>
+
+					<h:outputText value="#{reportBean.currentMegaEvent.name }" styleClass="destak2" />
+				</fieldset>
+			</h:panelGroup>
+			
+			<h:panelGroup>
+				<fieldset style="height:70px">
+					<legend>#{i18n.label_checkin_date }</legend>
+					<h:panelGrid>
+						<h:panelGrid columns="2" >
+							<p:calendar id="inDate1" value="#{reportPeopleForCheckinByDateBean.date1 }"
+								size="10" showOn="button" pattern="dd/MM/yyyy"    
+								required="true"
+								/>
+							<p:calendar id="inDate2" value="#{reportPeopleForCheckinByDateBean.date2 }"
+								size="10" showOn="button" pattern="dd/MM/yyyy"    
+								required="true" 
+								/>
+						</h:panelGrid>
+						<p:message for="inDate1" />
+						<p:message for="inDate2" />
+					</h:panelGrid>
+				</fieldset>
+			</h:panelGroup>
+			
+			<h:panelGroup>
+				<fieldset style="height:70px">
+					<legend>#{i18n.label_status}</legend>
+					<h:panelGrid>
+						<h:panelGrid columns="2">
+							<p:selectBooleanCheckbox id="inFlagPreview" value="#{reportPeopleForCheckinByDateBean.flagPreviewCheckin}" />
+							<p:outputLabel for="inFlagPreview" value="#{i18n.label_status_people_for_checkin}" />
+						</h:panelGrid>
+						
+						<h:panelGrid columns="2">
+							<p:selectBooleanCheckbox id="inFlagAlready" value="#{reportPeopleForCheckinByDateBean.flagAlreadCheckin}" />
+							<p:outputLabel for="inFlagAlready" value="#{i18n.label_status_people_already_checkin}" />
+						</h:panelGrid>
+					</h:panelGrid>
+				</fieldset>
+			</h:panelGroup>
+			
+			<p:commandButton icon="ui-icon-search" value="#{i18n.label_to_search}"
+				action="#{reportPeopleForCheckinByDateBean.search }"
+				update="@form" 
+				/>
+		</h:panelGrid>
+		
+		<p:separator />
+		
+		<cb:globalMessages />
+		
+		<p:fieldset legend="#{i18n.label_options}" toggleable="true" collapsed="true"
+			rendered="#{not empty reportPeopleForCheckinByDateBean.registers }" >
+			
+			<h:panelGrid columns="2" cellpadding="5">
+				<p:commandButton icon="ui-icon-print" value="#{i18n.label_to_print}" type="button">
+					<p:printer target=":panelReportCheckin" />
+				</p:commandButton>
+				
+				<p:commandButton ajax="false" icon="ui-icon-calendar" value="#{i18n.label_to_export_to_excel }">
+					<p:dataExporter target="dtCheckinPeople" type="xls" fileName="#{reportPeopleForCheckinByDateBean.filename}" />
+				</p:commandButton>
+			</h:panelGrid>
+		</p:fieldset>
+	
+	
+		<h:outputText value="#{i18n.msg_no_result_found }" styleClass="req"
+			rendered="#{empty reportPeopleForCheckinByDateBean.registers }" />
+	
+		<p:dataTable id="dtCheckinPeople" value="#{reportPeopleForCheckinByDateBean.registers }" var="registerRow"
+			rendered="#{not empty reportPeopleForCheckinByDateBean.registers }" >
+		
+			<p:column styleClass="col5p colCenter">
+				<f:facet name="header">
+					<h:outputText value="#{i18n.label_register_number }" />
+				</f:facet>
+				<h:outputText value="#{registerRow.id }" />
+			</p:column>
+			
+			<p:column sortBy="#{registerRow.contact.civilName }" styleClass="col20p">
+				<f:facet name="header">
+					<h:outputText value="#{i18n.label_civil_name }" />
+				</f:facet>
+				<h:outputText value="#{registerRow.contact.civilName }" />
+			</p:column>
+
+			<p:column sortBy="#{registerRow.contact.name }" styleClass="col10p">
+				<f:facet name="header">
+					<h:outputText value="#{i18n.label_new_name }" />
+				</f:facet>
+				<h:outputText value="#{registerRow.contact.name }" />
+			</p:column>
+
+			<p:column sortBy="#{registerRow.contact.city }" styleClass="col10p">
+				<f:facet name="header">
+					<h:outputText value="#{i18n.label_city }" />
+				</f:facet>
+				<h:outputText value="#{registerRow.contact.city }" />
+			</p:column>
+			
+			<p:column sortBy="#{registerRow.contact.country }" styleClass="col10p">
+				<f:facet name="header">
+					<h:outputText value="#{i18n.label_country }" />
+				</f:facet>
+				<h:outputText value="#{registerRow.contact.country }" />
+			</p:column>
+
+			<p:column exportable="false" styleClass="col5p colCenter" >
+				<h:graphicImage library="img" name="#{registerRow.status.image}" 
+					title="#{i18n[registerRow.status.key] }" />
+			</p:column>
+
+			<p:column styleClass="col10p" sortBy="#{i18n.label_status}" >
+				<f:facet name="header">
+					<h:outputText value="#{i18n.label_status}" />
+				</f:facet>
+				<h:outputText value="#{i18n[registerRow.status.key] }" />
+			</p:column>
+			
+			<p:column sortBy="#{registerRow.previewCheckinDate}" styleClass="col5p colCenter" >
+				<f:facet name="header">
+					<h:outputText value="#{i18n.label_preview_checkin_date}" />
+				</f:facet>
+				<h:outputText value="#{registerRow.previewCheckinDate}" >
+					<f:convertDateTime pattern="dd/MM/yyyy"     />
+				</h:outputText>
+			</p:column>
+
+			<p:column sortBy="#{registerRow.checkin.checkinDate}" styleClass="col5p colCenter" >
+				<f:facet name="header">
+					<h:outputText value="#{i18n.label_checkin_date}" />
+				</f:facet>
+				<h:outputText value="#{registerRow.checkin.checkinDate}" >
+					<f:convertDateTime pattern="dd/MM/yyyy"    />
+				</h:outputText>
+			</p:column>
+
+		</p:dataTable>		
+	</h:form>
+</p:panel>
+
+</ui:define>
+</ui:composition>

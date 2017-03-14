@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:decorate xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:cb="http://java.sun.com/jsf/composite/component"
+	template="/WEB-INF/design/_template-main.xhtml">
+
+<ui:define name="content">
+
+	<p:toolbar>
+		<p:toolbarGroup>
+			<h:panelGrid columns="2" cellpadding="5" rules="cols">
+				<h:panelGrid columns="2" cellpadding="5">
+					<h:graphicImage library="img" name="option_config_75.png" />
+					<h:outputText value="#{i18n.title_config}" styleClass="destak1" />
+				</h:panelGrid>
+				
+				<h:panelGrid columns="3" cellpadding="5" >
+
+					<h:panelGroup>
+						<fieldset>
+							<legend>#{i18n.label_events}</legend>
+
+							<h:panelGrid columns="4" cellpadding="5">
+								<p:button id="linkToConfigMegaEvent"  icon="ui-icon-image"    value="#{i18n.label_megaevents}"   href="/pages/config/config-megaevent.xhtml"  />
+								<p:button id="linkToConfigEventWeek"  icon="ui-icon-calendar" value="#{i18n.label_weeks}"        href="/pages/config/config-eventweek.xhtml"  />
+								<p:button id="linkToConfigEvent"      icon="ui-icon-tag"      value="#{i18n.label_events}"       href="/pages/config/config-event.xhtml"      />
+								<p:button id="linkToConfigMedical"    icon="ui-icon-star"     value="#{i18n.label_medical_form}" href="/pages/config/config-medical-form.xhtml"      />
+							</h:panelGrid>
+						</fieldset>
+					</h:panelGroup>
+
+					<h:panelGroup>
+						<fieldset>
+							<legend>Hospedagem</legend>
+
+							<h:panelGrid columns="4" cellpadding="5">
+								<p:button id="linkToRoomType"    icon="ui-icon-gear"     value="Tipos de Quartos" href="/pages/config/config-room-type.xhtml"      />
+							</h:panelGrid>
+						</fieldset>
+					</h:panelGroup>
+
+				</h:panelGrid>
+
+			</h:panelGrid>
+		</p:toolbarGroup>
+	</p:toolbar>
+
+	<ui:insert name="contentConfig" />
+	
+</ui:define>
+</ui:decorate>

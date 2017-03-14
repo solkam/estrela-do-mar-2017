@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:cb="http://java.sun.com/jsf/composite/component"
+	template="/WEB-INF/design/_decorate-report.xhtml">
+
+<ui:define name="reportContent" >
+
+<p:panel header="#{i18n.report_people_in_megaevent_by_date }">
+
+	<h:form id="formFilter">
+		<h:panelGrid columns="3" cellpadding="5">
+			<h:panelGrid>
+				<h:outputText value="MegaEvento: " styleClass="less2" />
+				<h:outputText value="#{reportBean.currentMegaEvent.name }" styleClass="destak2" />
+			</h:panelGrid>
+			
+			<h:panelGrid>
+				<h:outputText value="Data: " styleClass="less2" />
+				<p:calendar id="inDate" value="#{reportPeopleInMegaEventByDateBean.date }"
+					size="10" pattern="dd/MM/yyyy"     showOn="button" 
+					required="true" label="Data" 
+					/>
+				<p:message for="inDate" />
+			</h:panelGrid>
+			
+			<p:commandButton icon="ui-icon-search" value="Pesquisar"
+				action="#{reportPeopleInMegaEventByDateBean.search }"
+				update="@form :formResult" 
+				/>
+			
+		</h:panelGrid>
+	</h:form>
+
+	<p:separator />
+
+	<p:spacer height="10" />
+
+	<h:form id="formResult">
+		<h:outputText value="Data: " styleClass="less2" />
+		<cb:outputDate value="#{reportPeopleInMegaEventByDateBean.date }" styleClass="destak3" />
+	
+		<p:dataTable value="#{reportPeopleInMegaEventByDateBean.registerDetails }" var="detail" 
+			emptyMessage="#{i18n.msg_no_result_found }">
+		
+			<p:column headerText="Nome">
+				#{detail.register.contact.fullDesc }
+			</p:column>
+
+			<p:column headerText="Nro Inscrição">
+				#{detail.register.id }
+			</p:column>
+			
+			<p:column headerText="Cidade">
+				#{detail.register.contact.city }
+			</p:column>
+			
+			<p:column headerText="Presença">
+				<h:outputText value="#{i18n[detail.presence.key]}" />
+			</p:column>
+			
+		</p:dataTable>		
+	</h:form>
+
+</p:panel>
+</ui:define>
+	
+
+</ui:composition>

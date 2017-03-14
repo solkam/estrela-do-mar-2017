@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+	
+<h:head>
+	<title>#{i18n.title_app }</title>
+	
+	<h:outputStylesheet name="style_estrela.css" library="css" />
+	
+	<style>
+		body{ 
+			color:#000; 
+			font-family: Verdana;
+			padding: 0;
+			margin: 0;
+		}
+		
+		#topbar {
+			width:100%;
+			vertical-align:middle;
+		}
+
+		#header{
+			position:relative;
+			top: 0;
+			height: 120px;
+			vertical-align:middle;
+			width: 100%;
+		}
+		
+		#content {
+			text-align: left;
+			width: 100%;
+			overflow: auto;
+		}
+		
+		#footer { 
+			position:fixed;
+			bottom: 0;
+			background-color:#000022;
+			padding:5px;
+			text-align: center;
+			font-size:10; 
+			color:#ffffff;
+			width: 100%;
+
+			margin: auto;
+			font-family: Verdana;
+			font-size: 9pt;
+			padding-top: 5px;
+			padding-bottom: 5px;
+		}
+
+
+		
+		.mega-event-list {
+			padding: 20px;
+			vertical-align: top;
+		}		
+		
+	</style>
+</h:head>
+
+<h:body>
+
+	<div id="topbar">
+		<ui:include src="/WEB-INF/design/topbar.xhtml" />
+	</div>
+
+	<div id="header">
+		<h:graphicImage library="img" name="logo_cb_principal.png" id="logoCompany" rendered="true" />
+		
+		<div style="float:right;">
+			<ui:insert name="options">
+				<ui:include src="/WEB-INF/design/options.xhtml" />
+			</ui:insert>
+		</div>
+	</div>
+	
+	<div id="content">
+		<ui:insert name="content" />
+	</div>
+	
+	<p:spacer height="50" />
+
+	<p:ajaxStatus onstart="StatusDialog.show();"
+		onsuccess="StatusDialog.hide();" />
+
+	<p:dialog widgetVar="StatusDialog" showHeader="false"
+		modal="true" draggable="false" closable="false" resizable="false" >
+			
+			<h:panelGrid columns="2" cellpadding="5">
+				<h:graphicImage library="img" name="ajaxload_B_32.gif" />
+				<h:outputText value="#{i18n.title_processing}" styleClass="less2" /> 
+			</h:panelGrid>
+	</p:dialog>
+	
+
+
+</h:body>
+</html>

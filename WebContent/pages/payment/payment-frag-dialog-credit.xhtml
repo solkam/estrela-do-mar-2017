@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:fragment xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:cb="http://java.sun.com/jsf/composite/component">
+
+<!-- Dialog Credito -->
+<!-- ************** -->
+<p:dialog widgetVar="DialogCredit" header="#{i18n.label_credits }" 
+	modal="true" dynamic="true" closeOnEscape="true" maximizable="true"
+	position="top" >
+	
+	<h:form>
+	
+		<h:panelGrid columns="2" cellpadding="10">
+			<h:panelGrid>
+				<p:outputLabel for="inMethod" value="#{i18n.label_payment_method}" styleClass="less2 req" />
+				<p:selectOneRadio id="inMethod" value="#{paymentBean.credit.method }" layout="pageDirection" required="true">
+					<f:selectItems value="#{enumHelper.megaEventPaymentMethods}" var="methodRow"
+						itemLabel="#{i18n[methodRow.key]}" itemValue="#{methodRow}" />
+				</p:selectOneRadio>
+				<p:message for="inMethod" />
+			</h:panelGrid>
+		
+			<h:panelGrid columns="1" cellpadding="5">
+				<h:panelGrid>
+					<p:outputLabel for="inSaleOrder" value="#{i18n.label_sale_order}" styleClass="less2 " />
+					<p:inputText id="inSaleOrder" value="#{paymentBean.credit.saleOrder}" />
+					<p:message for="inSaleOrder" />
+				</h:panelGrid>
+			
+				<h:panelGrid>
+					<p:outputLabel for="inDate" value="#{i18n.label_date}" styleClass="less2 req" />
+					<p:calendar id="inDate" value="#{paymentBean.credit.date}"
+						size="15" pattern="dd/MM/yyyy"     showOn="button"
+						required="true"  />
+					<p:message for="inDate" />
+				</h:panelGrid>
+			
+				<h:panelGrid>
+					<p:outputLabel for="inValue" value="#{i18n.label_value}" styleClass="less2 req" />
+					<p:inputText id="inValue" value="#{paymentBean.credit.value}"
+						required="true"  />
+					<p:message for="inValue" />
+				</h:panelGrid>
+	
+				<h:panelGrid>
+					<p:outputLabel for="inNote" value="#{i18n.label_note}:" styleClass="less2" />
+					<p:inputTextarea id="inNote" value="#{paymentBean.credit.note}"
+						rows="2" cols="60" />
+					<p:message for="inNote" />
+				</h:panelGrid>
+			</h:panelGrid>
+		
+		</h:panelGrid>
+
+		<cb:globalMessages />
+
+		<p:toolbar>
+			<p:toolbarGroup>
+				<p:commandButton icon="ui-icon-check" value="#{i18n.label_save_credit }"
+					action="#{paymentBean.saveCredit }"
+					update="@form :formRegister:tabDetail:displayPayments"
+					oncomplete="if (args.sucessOnly) DialogCredit.hide()" 
+					/>
+			</p:toolbarGroup>
+		</p:toolbar>
+		
+		
+	</h:form>
+</p:dialog>
+
+
+<!-- ConfirmDialog Remover Credito -->
+<!-- ******************************* -->
+<p:dialog widgetVar="ConfirmDialogRemoveCredit" header="#{i18n.question_sure_to_remove_credit}"
+	modal="true" position="top" closeOnEscape="true" >
+	<h:form>
+		<p:commandButton icon="ui-icon-check" value="#{i18n.label_yes}" 
+			action="#{paymentBean.removeCredit }"
+			update=":formRegister"
+			oncomplete="ConfirmDialogRemoveCredit.hide()" 
+			/>
+
+		<p:commandButton type="button" icon="ui-icon-close" value="#{i18n.label_no}"
+			onclick="ConfirmDialogRemoveCredit.hide()" 
+			/>
+	</h:form>
+</p:dialog>
+
+</ui:fragment>

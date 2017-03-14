@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:cb="http://java.sun.com/jsf/composite/component"	
+	template="/WEB-INF/design/_decorate-register.xhtml">
+
+<ui:define name="stepMedicalForm">
+	<td class="stepNavON">
+		4.#{i18n.label_medical_form }
+	</td>
+</ui:define>
+
+
+<ui:define name="stepContent">
+	<h:form>
+	
+		<p:toolbar>
+			<p:toolbarGroup align="left">
+				<p:commandButton ajax="false" icon="ui-icon-circle-triangle-w" value="#{i18n.label_previous}"
+					action="#{registerStepBean.onPrevFromStepMedical }"
+					immediate="true" />
+			</p:toolbarGroup>
+	
+			<p:toolbarGroup align="right">
+				<p:commandButton ajax="false" icon="ui-icon-circle-triangle-e" value="#{i18n.label_next}" iconPos="right"
+					action="#{registerStepBean.onNextFromStepMedical }" />
+			</p:toolbarGroup>
+		</p:toolbar>
+		
+		<p:message for="selMedicalTerm" />
+	
+		<p:panel header="#{i18n.label_medical_form}">
+			
+			<cb:helpPanel text="#{i18n.text_help_medical_form }" />
+		
+			<p:dataTable var="answerRow" value="#{registerStepBean.medicalAnswers }" >
+			
+				<p:column headerText="#{i18n.label_number}" styleClass="col10p">
+					<h:outputText value="#{answerRow.question.number}:" />
+				</p:column>
+	
+				<p:column headerText="#{i18n.label_question}" styleClass="col60p">
+					<h:outputLabel value="#{answerRow.question.displayTextByLocale(facesContext.viewRoot.locale)}" styleClass="destak4" />
+					<p:message for="booleanAnswer" />
+				</p:column>
+					
+				<p:column headerText="#{i18n.label_answer}" styleClass="col10p">
+					<p:selectOneRadio id="booleanAnswer" value="#{answerRow.booleanAnswer }" 
+						required="true" label="#{i18n.label_answer}"  
+						style="border: 1px solid transparent" >
+						
+						<f:selectItem itemValue="#{true}"  itemLabel="#{i18n.label_yes}" />
+						<f:selectItem itemValue="#{false}" itemLabel="#{i18n.label_no}" />
+						<p:ajax update="inTreatment" global="false" />
+					</p:selectOneRadio>
+				</p:column>
+					
+				<p:column headerText="#{i18n.label_treatment}" styleClass="col20p">
+					<p:inputTextarea id="inTreatment" value="#{answerRow.textAnswer}"
+						rows="2" cols="40" maxlength="500"
+						required="#{answerRow.booleanAnswer}" 
+						requiredMessage="#{i18n.msg_write_note_about_treatment}" 
+						/>
+					<p:message for="inTreatment" />
+				</p:column>
+			
+			</p:dataTable>
+			
+			<p:spacer height="10" />
+			
+			<h:panelGrid>
+				<h:outputText value="#{i18n.label_medical_responsability_term}" styleClass="destak2" />
+				<h:outputText escape="false"  value="#{i18n.text_medical_agreement }" />
+				
+				<h:panelGrid columns="3">
+					<p:selectOneRadio id="selMedicalTerm" styleClass="destak2" 
+						value="#{registerStepBean.register.medicalResponsabilityTermAccepted }"
+						required="true" requiredMessage="#{i18n.msg_medical_term_accept_error}">
+						
+						<f:selectItem itemLabel="#{i18n.msg_medical_term_i_accept}" itemValue="#{true}" />
+					</p:selectOneRadio>
+					
+					<p:message for="selMedicalTerm" />
+				</h:panelGrid>
+			</h:panelGrid>
+	
+		</p:panel>
+		
+		<p:toolbar>
+			<p:toolbarGroup align="left">
+				<p:commandButton ajax="false" icon="ui-icon-circle-triangle-w" value="#{i18n.label_previous}"
+					action="#{registerStepBean.onPrevFromStepMedical }"
+					immediate="true" />
+			</p:toolbarGroup>
+	
+			<p:toolbarGroup align="right">
+				<p:commandButton ajax="false" icon="ui-icon-circle-triangle-e" value="#{i18n.label_next}" iconPos="right"
+					action="#{registerStepBean.onNextFromStepMedical }" />
+			</p:toolbarGroup>
+		</p:toolbar>
+		
+		
+	</h:form>
+
+	<p:spacer height="25px" />
+	
+</ui:define>
+
+
+</ui:composition>

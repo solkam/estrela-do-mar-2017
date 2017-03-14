@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:cb="http://java.sun.com/jsf/composite/component"
+	template="/WEB-INF/design/_decorate-register.xhtml">
+
+<ui:define name="stepTrip">
+	<td class="stepNavON">
+		5.#{i18n.label_trip_and_hosting}
+	</td>
+</ui:define>
+
+
+<ui:define name="stepContent">
+	<h:form>
+
+		<p:toolbar>
+			<p:toolbarGroup align="left">
+				<p:commandButton ajax="false" icon="ui-icon-circle-triangle-w" value="#{i18n.label_previous}"
+					action="#{registerStepBean.onPrevFromStepTrip }"
+					immediate="true" />
+			</p:toolbarGroup>
+
+			<p:toolbarGroup align="right">
+				<p:commandButton ajax="false" icon="ui-icon-circle-triangle-e" value="#{i18n.label_next}" iconPos="right"
+					action="#{registerStepBean.onNextFromStepTrip }" />
+			</p:toolbarGroup>
+		</p:toolbar>
+	
+		<h:panelGrid columns="2" cellpadding="5" width="100%">
+		
+			<p:panel header="#{i18n.label_trip_infos}" style="height:500">
+<!-- TRIP -->			
+				<cb:helpPanel text="#{i18n.text_warn_chechin_out_of_oficial_date}" />
+		
+				<cb:globalMessages />
+			
+				<h:panelGrid columns="2" cellpadding="10" width="100%">
+				
+					<h:panelGrid columns="2" cellpadding="5">
+						<f:facet name="header">
+							<h:outputText value="#{i18n.label_arrival}" styleClass="destak2" />
+							<p:separator />
+						</f:facet>
+						
+						<h:outputText value="#{i18n.label_oficial_checkin_date}" />
+						<cb:outputDate value="#{registerStepBean.register.calculatedCheckinDate}" styleClass="destak4" />
+						
+						<p:outputLabel for="calPreviewCheckinDate" value="#{i18n.label_preview_checkin_date}" styleClass="req" />
+						<h:panelGrid>
+							<p:calendar id="calPreviewCheckinDate" value="#{registerStepBean.register.previewCheckinDate}" 
+								required="true" size="10" pattern="dd/MM/yyyy"     />
+							<p:message for="calPreviewCheckinDate" />
+						</h:panelGrid>
+					</h:panelGrid>
+				
+					<h:panelGrid columns="2" cellpadding="5">
+						<f:facet name="header">
+							<h:outputText value="#{i18n.label_departure}" styleClass="destak2" />
+							<p:separator />
+						</f:facet>
+						
+						<h:outputText value="#{i18n.label_oficial_checkout_date}" />
+						<cb:outputDate value="#{registerStepBean.register.calculatedCheckoutDate}" styleClass="destak4" />
+						
+						<p:outputLabel for="calPreviewCheckoutDate" value="#{i18n.label_preview_checkout_date}" styleClass="req" />
+						<h:panelGrid>
+							<p:calendar id="calPreviewCheckoutDate" value="#{registerStepBean.register.previewCheckoutDate}" 
+								required="true" size="10" pattern="dd/MM/yyyy"       />
+							<p:message for="calPreviewCheckoutDate" />
+						</h:panelGrid>
+					</h:panelGrid>
+				</h:panelGrid>
+				
+				<h:panelGrid>
+					<h:outputText value="#{i18n.label_note}" />
+					<p:inputTextarea value="#{registerStepBean.register.tripInfo.tripNote }" rows="2" cols="50" />
+				</h:panelGrid>
+			</p:panel>
+			
+			
+			<p:panel header="#{i18n.label_hosting_infos}" style="height:500" rendered="false">
+<!-- pedido da Sirnaly para travar hospedagem -->			
+
+<!-- HOSTING -->			
+				<cb:helpPanel text="#{i18n.text_help_hosting_infos}" />
+				
+					<h:panelGrid columns="2" cellpadding="5">
+						<p:outputLabel for="inRoomType" value="#{i18n.label_room_type}" />
+						<p:selectOneMenu id="inRoomType" value="#{registerStepBean.optHosting.roomType}" converter="#{roomTypeConverter}">
+							<f:selectItem itemLabel="(não quero escolher)" noSelectionOption="true" />
+							<f:selectItems value="#{registerStepBean.comboRoomType }" var="typeRow"
+								itemValue="#{typeRow}" itemLabel="#{typeRow.description}" 
+								/>
+							<p:ajax event="change" process="@this" 
+								listener="#{registerStepBean.onRoomTypeChange}" 
+								update="displaySugested" />
+						</p:selectOneMenu>
+					</h:panelGrid>
+					
+					<p:spacer height="20" />
+					
+					<p:outputPanel id="displaySugested">
+						<fieldset>
+							<legend>#{i18n.label_room_mate_sugestions}</legend>
+
+							<h:panelGrid cellpadding="0" rendered="#{registerStepBean.optHosting.flagSugestedsAvailable}">
+								<h:outputText value="#{i18n.label_search_contact_by_new_name_or_civil_name}" styleClass="less2" />
+
+								<p:autoComplete id="inSugestedContact" value="#{registerStepBean.optHostingSugested.contact}"
+									completeMethod="#{autoCompleteContactBean.queryContact }"  
+									var="contactRow" itemValue="#{contactRow}" itemLabel="#{contactRow.fullDesc }"
+									converter="#{contactConverter}" 
+									required="true" requiredMessage="Ainda existem vagas no quarto"
+									queryDelay="500" size="50" minQueryLength="2" scrollHeight="200" >
+								
+									<p:column headerText="#{i18n.label_civil_name}">
+										#{contactRow.civilName}
+									</p:column>
+					
+									<p:column headerText="#{i18n.label_new_name}">
+										#{contactRow.name}
+									</p:column>
+								
+									<p:column headerText="#{i18n.label_city}">
+										#{contactRow.city}
+									</p:column>
+									
+									<p:ajax event="itemSelect" process="@this inRoomType" 
+										listener="#{registerStepBean.addOptHostingSugested}"
+										update="displaySugested" 
+										/>
+								</p:autoComplete>
+
+								<p:message for="inSugestedContact" />
+							</h:panelGrid>
+							
+							
+							<p:spacer height="20" />
+							
+							<cb:globalMessages />
+							
+							<h:outputText value="#{i18n.msg_no_result_found}" styleClass="less2 warning"
+								rendered="#{empty registerStepBean.optHosting.sugesteds}" />
+							
+							<p:dataTable value="#{registerStepBean.optHosting.sugesteds}" var="sugestedRow"
+								rendered="#{not empty registerStepBean.optHosting.sugesteds}">
+								
+								<p:column headerText="#{i18n.label_civil_name}" styleClass="col40p">
+									#{sugestedRow.contact.civilName}
+								</p:column>
+				
+								<p:column headerText="#{i18n.label_new_name}" styleClass="col30p">
+									#{sugestedRow.contact.name}
+								</p:column>
+							
+								<p:column headerText="#{i18n.label_city}" styleClass="col25p">
+									#{sugestedRow.contact.city}
+								</p:column>
+								
+								<p:column styleClass="col5p colCenter">
+									<p:commandButton icon="ui-icon-trash"
+										process="@this"
+										action="#{registerStepBean.removeOptHostingSugested(sugestedRow)}"
+										update="@form"
+										/>
+								</p:column>
+							</p:dataTable>
+							
+						</fieldset>
+					</p:outputPanel>
+			</p:panel>
+
+	
+		</h:panelGrid>
+	</h:form>
+	
+	<p:spacer height="25px" />	
+</ui:define>
+</ui:composition>

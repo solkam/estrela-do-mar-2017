@@ -1,0 +1,363 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:cb="http://java.sun.com/jsf/composite/component"
+	template="/WEB-INF/design/_decorate-report.xhtml">
+<ui:define name="reportContent" >
+
+<h:form id="formFilter">
+
+	<p:panel id="panelPaymentByEventReport" header="#{i18n.report_people_by_event }">
+
+		<h:panelGrid columns="6" cellpadding="5">
+			<h:panelGrid cellpadding="2">
+				<h:outputText value="#{i18n.label_megaevent }" styleClass="less2" />
+				<h:selectOneMenu value="#{reportPeopleByEventBean.selectedMegaEvent.id }" style="width:250px" >
+					<p:ajax event="change" listener="#{reportPeopleByEventBean.onMegaEventChange }" update="inFilterEventWeek inFilterEvent" />
+
+					<f:selectItems value="#{reportPeopleByEventBean.megaEvents }" var="me"
+						itemValue="#{me.id }" itemLabel="#{me.name }" 
+						/>
+				</h:selectOneMenu>
+			</h:panelGrid>
+			
+			<h:panelGrid cellpadding="2">
+				<h:outputText value="#{i18n.label_week_or_phase }" styleClass="less2" />
+				<h:selectOneMenu id="inFilterEventWeek" value="#{reportPeopleByEventBean.selectedEventWeek.id }" style="width:250px" >
+					<p:ajax event="change" listener="#{reportPeopleByEventBean.onEventWeekChange }" update="inFilterEvent" />
+				
+					<f:selectItems value="#{reportPeopleByEventBean.eventWeeks }" var="ew"
+						itemValue="#{ew.id }" itemLabel="#{ew.name }" 
+						/>
+				</h:selectOneMenu>
+			</h:panelGrid>
+			
+			<h:panelGrid cellpadding="2">
+				<p:outputLabel for="inFilterEvent" value="#{i18n.label_event }" styleClass="less2 req" />
+				<p:selectCheckboxMenu id="inFilterEvent" value="#{reportPeopleByEventBean.selectedEvents }" 
+					converter="#{eventConverter}" required="true" label="#{i18n.label_event}" scrollHeight="400" >
+				
+					<f:selectItems value="#{reportPeopleByEventBean.events}" var="eventRow"
+						itemValue="#{eventRow }" itemLabel="#{eventRow.displayNameOrSchool }" 
+						/>
+				</p:selectCheckboxMenu>
+				<p:message for="inFilterEvent" />
+			</h:panelGrid>
+			
+			<h:panelGrid cellpadding="2">
+				<p:outputLabel for="selPresence" value="#{i18n.label_presence }" styleClass="less2 req" />
+				<p:selectManyCheckbox id="selPresence" value="#{reportPeopleByEventBean.selectedPresences }" layout="pageDirection" required="true" >
+					<f:selectItems value="#{enumHelper.eventPresences }" var="presence" 
+						itemValue="#{presence }" itemLabel="#{i18n[presence.key] }" />
+				</p:selectManyCheckbox>
+				<p:message for="selPresence" />
+			</h:panelGrid>
+
+			<h:panelGrid cellpadding="2">
+				<p:outputLabel for="inFilterStatus" value="#{i18n.label_status }" styleClass="less2 req" />
+				<p:selectManyCheckbox id="inFilterStatus" value="#{reportPeopleByEventBean.selectedStatusList }" 
+					layout="pageDirection" required="true" converter="#{registerStatusConverter}" >
+					
+					<f:selectItems value="#{enumHelper.registerStatusList }" var="statusRow" 
+						itemValue="#{statusRow }" itemLabel="#{i18n[statusRow.key] }" />
+				</p:selectManyCheckbox>
+				<p:message for="inFilterStatus" />
+			</h:panelGrid>
+			
+			<p:commandButton icon="ui-icon-search" value="#{i18n.label_to_search }"
+				action="#{reportPeopleByEventBean.search}"
+				update="@form"
+				/>
+		</h:panelGrid>	
+
+		<p:spacer height="5" />		
+		<p:separator />
+		<p:spacer height="5" />		
+
+		<cb:globalMessages />
+
+
+		<h:outputText value="#{i18n.msg_no_result_found}" styleClass="req"
+			rendered="#{empty reportPeopleByEventBean.registerDetails }" />
+
+		<p:outputPanel rendered="#{not empty reportPeopleByEventBean.registerDetails }">
+		
+			<p:fieldset legend="#{i18n.label_export_options}" toggleable="true" collapsed="true" >
+				<h:panelGrid columns="3"  cellpadding="5">
+					<p:commandButton icon="ui-icon-print" value="#{i18n.label_to_print }" type="button">
+						<p:printer target="panelPaymentByEventReport" />
+					</p:commandButton>
+				
+					<p:commandButton icon="ui-icon-calendar" value="#{i18n.label_to_export_to_excel }" ajax="false" >
+						<p:dataExporter target="dtPaymentsByEvent" type="xls" fileName="#{reportPeopleByEventBean.filename }" />
+					</p:commandButton>
+		
+					<p:commandButton icon="ui-icon-document" value="#{i18n.label_to_export_to_pdf }" ajax="false" >
+						<p:dataExporter target="dtPaymentsByEvent" type="pdf" fileName="#{reportPeopleByEventBean.filename }"
+							preProcessor="#{reportPeopleByEventBean.preProcessPDF }"
+							/>
+					</p:commandButton>
+				</h:panelGrid>
+			</p:fieldset>
+			
+			<p:spacer height="5" />
+			
+			<p:fieldset legend="#{i18n.label_resume}" toggleable="true" collapsed="false" >
+				<h:panelGrid columns="5" cellpadding="5" width="100%">
+					
+					<cb:displayReportPeopleResumeAboutGender resume="#{reportPeopleByEventBean.resume}" />
+					<cb:displayReportPeopleResumeAboutPresence resume="#{reportPeopleByEventBean.resume}" />
+					<cb:displayReportPeopleResumeAboutMaturity resume="#{reportPeopleByEventBean.resume}" />
+					<cb:displayReportPeopleResumeAboutRegisterStatus resume="#{reportPeopleByEventBean.resume}" />
+					<cb:displayReportPeopleResumeAboutTShirt resume="#{reportPeopleByEventBean.resume}" />
+					
+				</h:panelGrid>
+			</p:fieldset>
+		
+			<p:dataTable id="dtPaymentsByEvent" value="#{reportPeopleByEventBean.registerDetails }" var="detail" >
+			
+				<p:column>
+					<p:commandButton icon="ui-icon-print" value="Ficha Médica" 
+						process="@this"
+						action="#{reportPeopleByEventBean.printMedicalForm(detail)}"
+						oncomplete="DialogPrintMedicalForm.show()"
+						update=":formMedicalPrint"/>
+				</p:column>
+
+				<p:column sortBy="#{detail.register.contact.civilName }">
+					<f:facet name="header">
+						<h:outputText value="#{i18n.label_civil_name }" />
+					</f:facet>
+					<h:outputText value="#{detail.register.contact.civilName }" />
+				</p:column>
+	
+				<p:column sortBy="#{detail.register.contact.name }">
+					<f:facet name="header">
+						<h:outputText value="#{i18n.label_new_name }" />
+					</f:facet>
+					<h:outputText value="#{detail.register.contact.name }" />
+				</p:column>
+	
+				<p:column sortBy="#{detail.register.contact.birthDate }">
+					<f:facet name="header">
+						<h:outputText value="#{i18n.label_birthdate }" />
+					</f:facet>
+					<h:outputText value="#{detail.register.contact.birthDate }" styleClass="less2">
+						<f:convertDateTime pattern="dd/MM/yyyy" />
+					</h:outputText>
+				</p:column>
+
+				<p:column sortBy="#{detail.register.contact.age }">
+					<f:facet name="header">
+						<h:outputText value="#{i18n.label_age }" />
+					</f:facet>
+					<h:outputText value="#{detail.register.contact.age }" styleClass="less2" />
+				</p:column>
+
+				<p:column sortBy="#{detail.register.contact.maturity }" styleClass="colCenter">
+					<f:facet name="header">
+						<h:outputText value="#{i18n.label_maturity }" />
+					</f:facet>
+					<h:outputText value="#{i18n[detail.register.contact.maturity.key] }" styleClass="less2" />
+				</p:column>
+
+				<p:column sortBy="#{detail.register.contact.gender }" styleClass="colCenter">
+					<f:facet name="header">
+						<h:outputText value="#{i18n.label_sex }" />
+					</f:facet>
+					<h:outputText value="#{detail.register.contact.gender }" styleClass="less2" />
+				</p:column>
+	
+				<p:column sortBy="#{detail.register.contact.rootSchool.description }" styleClass="colCenter">
+					<f:facet name="header">
+						<h:outputText value="#{i18n.label_root_school }" />
+					</f:facet>
+					<h:outputText value="#{detail.register.contact.rootSchool.description }" styleClass="less2" />
+				</p:column>
+
+				<p:column styleClass="colCenter">
+					<f:facet name="header">
+						<h:outputText value="Tipo Ident." />
+					</f:facet>
+					<h:outputText value="#{detail.register.contact.identityDocumentType }" styleClass="less2" />
+				</p:column>
+
+				<p:column styleClass="colCenter">
+					<f:facet name="header">
+						<h:outputText value="Nro Ident." />
+					</f:facet>
+					<h:outputText value="#{detail.register.contact.identityDocument }" styleClass="less2" />
+				</p:column>
+
+				<p:column sortBy="#{detail.register.contact.tshirtSize }" styleClass="colCenter">
+					<f:facet name="header">
+						<h:outputText value="#{i18n.label_tshirt_size }" />
+					</f:facet>
+					<h:outputText value="#{detail.register.contact.tshirtSize }" styleClass="less2" />
+				</p:column>
+
+	
+				<p:column sortBy="#{detail.register.contact.email }">
+					<f:facet name="header">
+						<h:outputText value="#{i18n.label_email }" />
+					</f:facet>
+					<h:outputText value="#{detail.register.contact.email }" styleClass="less2" />
+				</p:column>
+	
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="#{i18n.label_telephone }" />
+					</f:facet>
+					<h:outputText value="#{detail.register.contact.telephone1 }" styleClass="less2" />
+				</p:column>
+
+				<p:column sortBy="#{detail.register.contact.city}">
+					<f:facet name="header">
+						<h:outputText value="#{i18n.label_city}" />
+					</f:facet>
+					<h:outputText value="#{detail.register.contact.city }" styleClass="less2" />
+				</p:column>
+	
+				<p:column sortBy="#{detail.register.contact.country}">
+					<f:facet name="header">
+						<h:outputText value="#{i18n.label_country}" />
+					</f:facet>
+					<h:outputText value="#{detail.register.contact.country}" styleClass="less2" />
+				</p:column>
+				
+				<p:column sortBy="#{detail.register.contact.productorContact.shortDesc}">
+					<f:facet name="header">
+						<h:outputText value="#{i18n.label_productor}" />
+					</f:facet>
+					<h:outputText value="#{detail.register.contact.productorContact.shortDesc}" styleClass="less2" />
+				</p:column>
+
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="#{i18n.label_event }" />
+					</f:facet>
+					<h:outputText value="#{detail.event.displayNameOrSchool}" />
+				</p:column>
+				
+				<p:column sortBy="#{detail.presence}">
+					<f:facet name="header">
+						<h:outputText value="#{i18n.label_presence }" />
+					</f:facet>
+					<h:outputText value="#{i18n[detail.presence.key]}" />
+				</p:column>
+	
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="#{i18n.label_checkin_date }" />
+					</f:facet>
+					<h:outputText value="#{detail.register.checkin.checkinDate}" >
+						<f:convertDateTime pattern="dd/MM/yyyy"     />
+					</h:outputText>
+				</p:column>
+	
+				<p:column exportable="false">
+					<cb:displayRegisterStatus register="#{detail.register}" />
+				</p:column>
+	
+				<p:column sortBy="#{detail.register.status}" >
+					<f:facet name="header">
+						<h:outputText value="#{i18n.label_status }" />
+					</f:facet>
+					<h:outputText value="#{i18n[detail.register.status.key]}" styleClass="less2" />
+				</p:column>
+	
+			</p:dataTable>		
+		</p:outputPanel>
+		
+	</p:panel>
+</h:form>
+
+
+<!-- Dialog Imprimir Ficha Medica -->
+<!-- **************************** -->
+<p:dialog widgetVar="DialogPrintMedicalForm" header="#{i18n.label_medical_form_view_to_print}" 
+	maximizable="true" modal="true" dynamic="true" closeOnEscape="true"
+	position="top" >
+	
+	<h:form id="formMedicalPrint">
+		<ui:param name="civilName"   value="#{reportPeopleByEventBean.selectedRegister.contact.civilName}" />
+		<ui:param name="country"     value="#{reportPeopleByEventBean.selectedRegister.contact.country}" />
+		<ui:param name="fullIdDoc"   value="#{reportPeopleByEventBean.selectedRegister.contact.fullIdentityDocument }" />
+		<ui:param name="fullAddress" value="#{reportPeopleByEventBean.selectedRegister.contact.fullAddress}" />
+	
+			<p:panel id="panelMedicalForm" style="padding:5px;margin:5px">
+			
+				<h:panelGrid cellpadding="5" width="100%">
+					<h:panelGroup layout="block">
+						<p style="line-height:2em;font-size:8pt">
+							Eu, <strong>#{civilName}</strong>, natural de <strong>#{country}</strong>, profissão______________________________________, 
+							portador(a) do <strong>#{fullIdDoc}</strong> residente e domiciliado na <strong>#{fullAddress}</strong>, declaro ser verdade as informações médicas a baixo descritas. 
+							E Mediante este instrumento, me declaro inteiramente responsável por todo e qualquer acontecimento relacionado a minha saúde física, emocional e mental, 
+							liberando de qualquer responsabilidade a Organização Internacional Condor Blanco, a Empresa Estrela do Mar Ltda, inscrita no CNPJ 20.205.455/0001-50 e o Hotel 
+							Blue Tree Park Búzios, cujo espaço é cedido para a realização deste evento. Declaro também que, por livre e espontânea, vontade participo deste evento organizado 
+							pela empresa Estrela do Mar nos dias, de: ______/______ a ______/______ de 2015 e me responsabilizo por isso. 
+						</p>
+					</h:panelGroup>
+				
+				
+					<p:dataTable value="#{reportPeopleByEventBean.medicalAnswers }" var="medicalAnwerRow">
+						<f:facet name="header">
+							<h:outputText value="Ficha Médica" styleClass="destak2" style="font-size:8pt" />
+						</f:facet>
+						
+						<p:column headerText="#{i18n.label_question}" styleClass="col60p" >
+							<h:outputText value="#{medicalAnwerRow.question.displayTextByLocale(facesContext.viewRoot.locale) }" style="white-space:pre-wrap;font-size:8pt;" />
+						</p:column>
+	
+						<p:column headerText="#{i18n.label_answer}" styleClass="col10p colCenter">
+							<h:outputText value="#{i18n.label_yes}"	rendered="#{medicalAnwerRow.booleanAnswer }" styleClass="warning" style="font-size:8pt" />
+								
+							<h:outputText value="#{i18n.label_no}" rendered="#{not medicalAnwerRow.booleanAnswer }" style="font-size:8pt" />
+						</p:column>
+	
+						<p:column headerText="#{i18n.label_treatment}" styleClass="col40p" >
+							<h:outputText value="#{medicalAnwerRow.textAnswer }" styleClass="warning" style="white-space:pre-wrap;font-size:8pt" />
+						</p:column>
+					</p:dataTable>
+
+
+					<h:panelGroup>
+						<p style="font-size:8pt">
+							Por ser expressão da verdade e por estar de acordo com o que me foi exposto, sobre o conteúdo e a dinâmicas deste evento, assino e dou fé. 						
+						</p>
+					</h:panelGroup>
+
+
+					<h:outputText value="#{i18n.label_signature_with_local_and_date }" style="font-size:8pt" />
+
+
+					<h:panelGrid>
+						<p:separator />
+						<h:outputText value="#{civilName}" styleClass="destak5" />
+					</h:panelGrid>
+				
+				</h:panelGrid>
+			</p:panel>
+			
+
+			<p:toolbar>
+				<p:toolbarGroup>
+					<p:commandButton value="Imprimir" style="font-size:1.25em"
+						icon="ui-icon-print" type="button">
+						<p:printer target="panelMedicalForm" />
+					</p:commandButton>
+				</p:toolbarGroup>
+			</p:toolbar>
+
+
+	</h:form>
+</p:dialog>
+
+
+
+</ui:define>
+</ui:composition>

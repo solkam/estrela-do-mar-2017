@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:fragment xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:cb="http://java.sun.com/jsf/composite/component">
+
+<fieldset>
+	<legend>#{i18n.label_megaevents}</legend>
+	
+	<h:panelGrid columns="2" cellpadding="5">
+		<h:outputText value="#{i18n.label_megaevents_already_participated}:" />
+		<h:outputText value="#{paymentBean.pastedRegisters.size() }" styleClass="destak2" />
+	</h:panelGrid>
+	
+	<p:dataTable value="#{paymentBean.pastedRegisters}" var="pastedRegister"
+		emptyMessage="#{i18n.msg_no_megaevent_already_participated}" >
+		
+		<p:column headerText="Mega Evento">
+			#{pastedRegister.megaEvent.name}
+		</p:column>
+	
+		<p:column headerText="#{i18n.label_total}" style="text-align:center;">
+			<cb:outputCurrency value="#{pastedRegister.calculatedTotalValue}" styleClass="destak4" />
+		</p:column>
+	
+				<p:column headerText="#{i18n.label_total_payment}" style="text-align:center;">
+			<cb:outputCurrency value="#{pastedRegister.calculatedPaidValue}" styleClass="paid" />
+		</p:column>
+
+		<p:column headerText="#{i18n.label_pendent_value}" style="text-align:center;">
+			<cb:outputCurrency value="#{pastedRegister.calculatedPendentValue}" styleClass="pendent" />
+		</p:column>
+
+		<p:column headerText="#{i18n.label_status}" style="text-align:center;">
+			<h:graphicImage library="img" name="icon_checked_shield_green_32.png" 
+				rendered="#{pastedRegister.paymentOK}" 
+				/>
+			<h:graphicImage library="img" name="icon_cancel_red_32.png" 
+				rendered="#{not pastedRegister.paymentOK}" 
+				/>
+		</p:column>
+
+	</p:dataTable>
+</fieldset>
+
+<p:spacer height="20" />
+
+<fieldset>
+	<legend>#{i18n.label_produted_ones}</legend>
+	
+	<p:dataTable value="#{paymentBean.selectedContact.produtedOnes}" var="produtedOne"
+		emptyMessage="#{i18n.msg_no_produted_ones}">
+		
+		<p:column headerText="#{i18n.label_civil_name}">
+			#{produtedOne.civilName}
+		</p:column>
+
+		<p:column headerText="#{i18n.label_new_name}">
+			#{produtedOne.name}
+		</p:column>
+
+		<p:column headerText="#{i18n.label_city}">
+			#{produtedOne.city}
+		</p:column>
+
+	</p:dataTable>
+</fieldset>
+
+
+</ui:fragment>

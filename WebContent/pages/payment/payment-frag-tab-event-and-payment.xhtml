@@ -1,0 +1,353 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:fragment xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:cb="http://java.sun.com/jsf/composite/component">
+
+<p:outputPanel id="displayPayments" autoUpdate="true">
+
+	<cb:globalMessages />
+
+	<fieldset style="border:3px solid #008">
+		<legend>#{i18n.label_events_selected}</legend>
+		
+		<!-- eventos dos dependentes -->
+		<ui:repeat value="#{register.dependentRegisters}" var="dependentRegisterRow">
+		
+			<p:dataTable value="#{dependentRegisterRow.details }" var="detailRow"
+				rendered="#{not empty dependentRegisterRow.details}" rowKey="#{detailRow.id}" >
+			
+				<p:column styleClass="col5p colCenter">
+					<p:commandButton icon="ui-icon-trash" title="#{i18n.label_remove_event }" 
+						oncomplete="ConfirmDialogRemoveRegisterDetail.show()">
+						<f:setPropertyActionListener target="#{paymentBean.registerDetail}" value="#{detailRow }" />
+					</p:commandButton>
+				</p:column>
+	
+				<p:column headerText="#{i18n.label_week_or_phase }"  styleClass="col20p">
+					<h:outputText value="#{detailRow.eventWeek.name }" styleClass="destak3" />
+					<br />
+					<h:outputText value="#{detailRow.eventWeek.descDates }" styleClass="less2" />
+				</p:column>
+	
+				<p:column headerText="#{i18n.label_dependents}" styleClass="col20p">
+					<h:outputText value="#{detailRow.register.contact.civilName }" styleClass="destak4" />
+					<br />
+					<h:outputText value="#{detailRow.event.name }" styleClass="less2" />
+				</p:column>
+	
+				<p:column  styleClass="col10p colRight">
+					<f:facet name="header">
+						<h:outputText value="#{i18n.label_value}" />
+						<br />
+						<h:outputText value="#{i18n.label_click_to_edit_value}" styleClass="less3" />
+					</f:facet>
+	
+					<cb:outputCurrency value="#{detailRow.value}" />
+				</p:column>
+	
+				<p:column headerText="#{i18n.label_paid_value}"   styleClass="col10p colRight">
+					<cb:outputCurrency value="#{detailRow.calculatedPaidValue }" styleClass="paid"  />
+				</p:column>
+	
+				<p:column headerText="#{i18n.label_pendent_value}"  styleClass="col10p colRight">
+					<cb:outputCurrency value="#{detailRow.calculatedPendentValue }" styleClass="pendent" />
+				</p:column>
+				
+				<p:column headerText="#{i18n.label_payments}" styleClass="col10p colCenter">
+					<p:commandButton icon="ui-icon-plus" title="Adicionar pagamento a '#{detailRow.register.contact.civilName}'"
+						action="#{paymentBean.addPartialPayment(detailRow)}"
+						oncomplete="DialogPayment.show()"
+						update=":formPartialPayment"
+						/>
+				</p:column>
+				
+			</p:dataTable>
+		</ui:repeat>
+	
+	
+		<!-- meus eventos -->
+		<p:dataTable value="#{register.details }" var="detailRow"
+			rendered="#{not empty register.details}" >
+		
+			<p:column styleClass="col5p colCenter">
+				<p:commandButton icon="ui-icon-trash" title="#{i18n.label_remove_event }" 
+					oncomplete="ConfirmDialogRemoveRegisterDetail.show()">
+					<f:setPropertyActionListener target="#{paymentBean.registerDetail}" value="#{detailRow }" />
+				</p:commandButton>
+			</p:column>
+
+			<p:column headerText="#{i18n.label_week_or_phase }"  styleClass="col20p">
+				<h:outputText value="#{detailRow.eventWeek.name }" styleClass="destak3" />
+				<br />
+				<h:outputText value="#{detailRow.eventWeek.descDates }" styleClass="less3" />
+			</p:column>
+
+			<p:column headerText="#{i18n.label_event}" styleClass="col20p">
+				<h:outputText value="#{detailRow.event.displayNameOrSchool }" styleClass="destak4" />
+				<br />
+				<h:outputText value="#{i18n[detailRow.presence.key] }" styleClass="less3" />
+			</p:column>
+
+			<p:column  styleClass="col10p colRight">
+				<f:facet name="header">
+					<h:outputText value="#{i18n.label_value}" />
+					<br />
+					<h:outputText value="#{i18n.label_click_to_edit_value}" styleClass="less3" />
+				</f:facet>
+
+				<h:outputText value="$ " />
+				<p:inputText value="#{detailRow.value}" size="10" >
+					<f:convertNumber  maxFractionDigits="2" minFractionDigits="2" />
+					
+					<p:ajax event="blur" process="@this" 
+						listener="#{paymentBean.onChangeDetailValue}" update="@form" />
+				</p:inputText>
+
+				<f:facet name="footer">
+					<cb:outputCurrency value="#{register.calculatedTotalValue }" styleClass="destak3"  />
+				</f:facet>
+			</p:column>
+
+			<p:column headerText="#{i18n.label_paid_value}" styleClass="col10p colRight">
+				
+				<cb:outputCurrency value="#{detailRow.calculatedPaidValue }" styleClass="paid" />
+			
+				<f:facet name="footer">
+					<cb:outputCurrency value="#{register.calculatedPaidValue }" styleClass="destak3 paid" />
+				</f:facet>
+			</p:column>
+
+			<p:column headerText="#{i18n.label_pendent_value}"  styleClass="col10p colRight">
+				<cb:outputCurrency value="#{detailRow.calculatedPendentValue }" styleClass="pendent" />
+				<f:facet name="footer">
+					<cb:outputCurrency value="#{register.calculatedPendentValue}" styleClass="destak3 pendent" />
+				</f:facet>
+			</p:column>
+			
+			<p:column headerText="#{i18n.label_payments}" styleClass="col10p colCenter">
+				<p:commandButton icon="ui-icon-plus" title="Adicionar pagamento a '#{detailRow.event.name}'"
+					action="#{paymentBean.addPartialPayment(detailRow)}"
+					oncomplete="DialogPayment.show()"
+					update=":formPartialPayment"
+					/>
+				<f:facet name="footer">
+					<p:commandButton icon="ui-icon-circle-plus" value="#{i18n.label_total_payment}" 
+						action="#{paymentBean.addTotalPayment(paymentBean.selectedRegister) }"
+						update=":formTotalPayment"
+						oncomplete="DialogTotalPayment.show()"
+						rendered="#{not register.paymentOK }"
+						/>
+				</f:facet>
+			</p:column>
+			
+			<p:column styleClass="col10p colCenter">
+				<p:commandButton icon="ui-icon-seek-end" value="#{i18n.label_transfer}" 
+					title="#{i18n.label_transfer_or_future_event_or_other_person}"
+					action="#{paymentBean.manageEventTransfering(detailRow)}"
+					oncomplete="DialogTransferEvent.show()"
+					update=":regionTransferEvent" />
+			</p:column>
+			
+		</p:dataTable>
+		
+
+		<!-- mostra se há detalhes de inscrição e também o botao de imprimir recibo e enviar recibo por email -->
+		<ui:param name="detailNotFound" value="#{empty register.details and empty register.dependentRegisters}" />
+		
+		<h:outputText value="#{i18n.msg_no_events}" styleClass="less2"
+			rendered="#{detailNotFound}" />
+			
+		<h:panelGrid style="width:100%; text-align:center">
+			<h:panelGrid  columns="2" cellpadding="10"	
+				rendered="#{not detailNotFound}" >
+			
+				<p:commandButton icon="ui-icon-print" value="#{i18n.label_print_payment_docket }"
+					action="#{paymentBean.generateDocketForPrint }"
+					oncomplete="DialogPaymentPrint.show()"
+					update=":formPaymentPrint" 
+					/>
+				<p:commandButton icon="ui-icon-mail-closed" value="#{i18n.label_send_payment_docket_by_email }"
+					action="#{paymentBean.sendPaymentDocketByEmail }"
+					update="@form" 
+					/>
+			</h:panelGrid>
+		</h:panelGrid>
+		
+	</fieldset>
+	
+	<p:spacer height="10" />
+	
+	<fieldset style="border:3px solid #400">
+		<legend>#{i18n.label_payments}</legend>
+	
+		<ui:repeat value="#{register.allDetails }" var="detailRow" >
+		
+			<p:dataTable value="#{detailRow.payments}" var="paymentRow"
+			 	rendered="#{not empty detailRow.payments}">
+			
+		 		<p:column headerText="#{i18n.label_event}" styleClass="col20p" rendered="false">
+		 			<h:outputText value="#{detailRow.event.displayNameOrSchool }" styleClass="destak4" />
+		 			<br />
+		 			<h:outputText value="#{i18n[detailRow.event.type.key] }" styleClass="less2" />
+		 			<br />
+		 			<h:outputText value="#{detailRow.dependentContactName }" styleClass="destak4" />
+		 		</p:column>
+
+		 		<p:column headerText="#{i18n.label_payment_method}" styleClass="col20p">
+		 			<h:outputText value="#{i18n[paymentRow.method.key] }" />
+		 		</p:column>
+		 	
+		 		<p:column headerText="#{i18n.label_sale_order}" styleClass="col20p">
+		 			<h:outputText value="#{paymentRow.saleOrder }" />
+		 		</p:column>
+		 	
+		 		<p:column headerText="#{i18n.label_payment_date}" styleClass="col10p colCenter">
+		 			<cb:outputDate value="#{paymentRow.date}" />
+		 		</p:column>
+		 	
+		 		<p:column headerText="#{i18n.label_credit_date}" styleClass="col10p colCenter">
+		 			<cb:outputDate value="#{paymentRow.creditDate}" />
+		 		</p:column>
+
+		 		<p:column headerText="#{i18n.label_value}" styleClass="paid colRight col20p">
+		 			<cb:outputCurrency value="#{paymentRow.value}" />
+		 		</p:column>
+		 		
+		 		<p:column headerText="#{i18n.label_note }" styleClass="col5p colCenter">
+					<cb:displayNote note="#{paymentRow.note }" />
+		 		</p:column>
+		 		
+		 		<p:column headerText="#{i18n.label_check }" styleClass="col5p colCenter">
+		 			<cb:displayCheckInfo payment="#{paymentRow}" />
+		 		</p:column>
+
+			</p:dataTable>
+		</ui:repeat>
+	</fieldset>
+
+	<p:spacer height="10" />
+
+	<fieldset style="border:3px solid #040">
+		<legend>#{i18n.label_credits}</legend>
+		
+		<p:commandButton icon="ui-icon-circle-plus" value="#{i18n.label_add_credit}" 
+			action="#{paymentBean.resetCredit }"
+			oncomplete="DialogCredit.show()"
+			/>
+		
+		<p:separator />
+		
+		<h:outputText value="#{i18n.msg_no_credits_available }"
+			rendered="#{empty credits }"
+			styleClass="less1" />
+	
+		<p:dataTable value="#{credits }" var="creditRow"
+			rendered="#{not empty credits }">
+			
+			<p:column headerText="#">
+				<h:outputText value="#{creditRow.id}" styleClass="less2" />
+			</p:column>
+			
+			<p:column headerText="#{i18n.label_payment_method}">
+				<h:outputText value="#{i18n[creditRow.method.key]}" />
+			</p:column>
+
+			<p:column headerText="#{i18n.label_sale_order}">
+				<h:outputText value="#{creditRow.saleOrder }" />
+			</p:column>
+		
+			<p:column headerText="#{i18n.label_credit_date}" styleClass="colCenter">
+				<cb:outputDate value="#{creditRow.date }" />
+			</p:column>
+			
+			<p:column headerText="#{i18n.label_payment_date}" styleClass="colCenter">
+				<cb:outputDate value="#{creditRow.paymentDate }" />
+			</p:column>
+
+	 		<p:column headerText="#{i18n.label_note}" styleClass="col5p colCenter">
+	 			<cb:displayNote note="#{creditRow.note}" />
+	 		</p:column>
+
+			<p:column headerText="#{i18n.label_value}" style="text-align:right;">
+				<cb:outputCurrency value="#{creditRow.value }" styleClass="credit" />
+				<f:facet name="footer">
+					<cb:outputCurrency value="#{paymentBean.selectedRegister.calculatedCreditValue}" styleClass="destak3 credit" />
+				</f:facet>
+			</p:column>
+			
+			<p:column styleClass="col5p colCenter">
+				<p:commandButton icon="ui-icon-trash" 	
+				 	onclick="ConfirmDialogRemoveCredit.show()"
+				 	process="@this" >
+				 	
+					<f:setPropertyActionListener target="#{paymentBean.credit }" value="#{creditRow}" />
+				</p:commandButton>	
+			</p:column>
+			
+			<p:column styleClass="col5p colCenter">
+				<h:graphicImage library="img" name="icon_green_check32.png" 
+					rendered="#{creditRow.alreadyUsed}"  
+					/>
+					
+				<p:commandButton icon="ui-icon-signal-diag" value="#{i18n.label_to_prorate_credit }"
+					action="#{paymentBean.prorateCredit(creditRow, register) }"
+					process="@this"
+					rendered="#{not creditRow.alreadyUsed}" 
+					/>
+			</p:column>
+		
+		</p:dataTable>
+	
+	</fieldset>
+	
+	<p:messages globalOnly="true" />
+</p:outputPanel>
+
+<p:separator />
+
+<p:fieldset legend="#{i18n.label_events_available}" toggleable="true" collapsed="true">
+
+	<p:dataTable value="#{paymentBean.availableEventWeeks }" var="week" >
+		<p:column>
+			<p:dataTable value="#{week.events }" var="event" emptyMessage="#{i18n.msg_no_events}">
+				<f:facet name="header">
+					<h:outputText value="#{week.name}" styleClass="destak3" />
+					<br />
+					<h:outputText value="#{week.descDates}" styleClass="less3" />
+				</f:facet>
+				
+				<p:column headerText="#{i18n.label_event}">
+					<h:outputText value="#{event.displayNameOrSchool }" styleClass="destak4" />
+				</p:column>
+				
+				<p:column headerText="#{i18n.label_participant}">
+					<cb:outputCurrency value="#{event.valueParticipant }" />
+					<br />
+					<p:commandButton icon="ui-icon-check" value="Participar" 
+						action="#{paymentBean.confirmAsParticipant(event) }" 
+						update="@form" 
+						rendered="#{event.enableForParticipant }"
+						/>
+				</p:column>
+
+				<p:column headerText="#{i18n.label_staff}">
+					<cb:outputCurrency value="#{event.valueStaff }" />
+					<br />
+					<p:commandButton icon="ui-icon-check" value="Staff" 
+						action="#{paymentBean.confirmAsStaff(event) }" 
+						update="@form" 
+						rendered="#{event.enableForStaff }"
+						/>
+				</p:column>
+			
+			</p:dataTable>
+		</p:column>					
+	</p:dataTable>
+		
+</p:fieldset>
+
+</ui:fragment>

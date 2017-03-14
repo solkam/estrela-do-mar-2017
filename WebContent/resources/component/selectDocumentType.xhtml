@@ -1,0 +1,26 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:cc="http://java.sun.com/jsf/composite"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+<cc:interface>
+	<cc:attribute name="id"       required="false" />
+	<cc:attribute name="value"    required="true"  />
+	<cc:attribute name="required" required="false" />
+</cc:interface>
+
+<cc:implementation>
+
+	<p:selectOneMenu id="#{cc.attrs.id}" value="#{cc.attrs.value}" 
+		style="width:125px"
+		required="#{cc.attrs.required}" label="#{i18n.label_document_type}" >
+		<f:selectItems value="#{enumHelper.documentTypes}" var="type"
+			itemLabel="#{i18n[type.key]}" itemValue="#{type}" />
+	</p:selectOneMenu>
+
+</cc:implementation>
+
+</html>

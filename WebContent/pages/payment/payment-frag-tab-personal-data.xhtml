@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:fragment xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:cb="http://java.sun.com/jsf/composite/component">
+
+<p:outputPanel id="displayPersonalData">
+
+	<cb:globalMessages />
+
+	<p:panel>
+
+		<h:panelGrid columns="2" cellpadding="5">
+			<h:outputText value="#{i18n.label_root_school}" styleClass="less2" />
+			<h:outputText value="#{i18n[paymentBean.selectedContact.rootSchool.key]}" styleClass="destak1" />
+		</h:panelGrid>
+
+		<h:panelGrid columns="2" width="80%" cellpadding="5">
+			<h:panelGrid columns="1">
+				<h:outputLabel value="#{i18n.label_new_name}:" styleClass="less2" />
+				<h:outputText value="#{paymentBean.selectedContact.name }" styleClass="destak3" />
+			</h:panelGrid>
+	
+			<h:panelGrid columns="1">
+				<h:outputLabel value="#{i18n.label_civil_name}:"  styleClass="less2" />
+				<h:outputText value="#{paymentBean.selectedContact.civilName }"  styleClass="destak3" />
+			</h:panelGrid>
+	
+			<h:panelGrid columns="1">
+				<h:outputLabel value="#{i18n.label_email}:"  styleClass="less2" />
+				<h:outputText value="#{paymentBean.selectedContact.email }" styleClass="destak3" />
+			</h:panelGrid>
+	
+			<h:panelGrid columns="1">
+				<h:outputLabel value="#{i18n.label_telephone}:"  styleClass="less2" />
+				<h:outputText value="#{paymentBean.selectedContact.telephone1 }"  styleClass="destak3" />
+			</h:panelGrid>
+	
+			<h:panelGrid columns="1">
+				<h:outputLabel value="#{i18n.label_address}:" styleClass="less2"  />
+				<h:outputText value="#{paymentBean.selectedContact.address }"  styleClass="destak3" />
+			</h:panelGrid>
+	
+			<h:panelGrid columns="1">
+				<h:outputLabel value="#{i18n.label_zip_code}:" styleClass="less2"  />
+				<h:outputText value="#{paymentBean.selectedContact.zipPostal }" styleClass="destak3" />
+			</h:panelGrid>
+	
+			<h:panelGrid columns="1">
+				<h:outputLabel value="#{i18n.label_city}:" styleClass="less2"  />
+				<h:outputText value="#{paymentBean.selectedContact.city }" styleClass="destak3" />
+			</h:panelGrid>
+	
+			<h:panelGrid columns="1">
+				<h:outputLabel value="#{i18n.label_country}:" styleClass="less2"  />
+				<h:outputText value="#{paymentBean.selectedContact.country }"  styleClass="destak3" />
+			</h:panelGrid>
+	
+			<h:panelGrid columns="1">
+				<h:outputLabel value="#{i18n.label_document_type}:" styleClass="less2"  />
+				<h:outputText value="#{paymentBean.selectedContact.identityDocumentType }" styleClass="destak3" />
+			</h:panelGrid>
+	
+			<h:panelGrid columns="1">
+				<h:outputLabel value="#{i18n.label_document_identity}:" styleClass="less2"  />
+				<h:outputText value="#{paymentBean.selectedContact.identityDocument }"  styleClass="destak3" />
+			</h:panelGrid>
+	
+			<h:panelGrid columns="1">
+				<h:outputLabel value="#{i18n.label_birthdate}:" styleClass="less2"  />
+				<cb:outputDate value="#{paymentBean.selectedContact.birthDate }"  styleClass="destak3" />
+			</h:panelGrid>
+	
+			<h:panelGrid columns="1">
+				<h:outputLabel value="#{i18n.label_sex}:" styleClass="less2"  />
+				<h:outputText value="#{i18n[paymentBean.selectedContact.gender.key] }" styleClass="destak3" />
+			</h:panelGrid>
+		</h:panelGrid>
+		
+		<h:panelGrid columns="3" cellpadding="5" width="50%">
+			<h:panelGrid columns="2">
+					<h:outputText value="#{i18n.label_is_productor}:" styleClass="less2" />
+					<h:panelGroup>
+					<h:graphicImage library="img" name="icon_productor_green_24.png" rendered="#{register.contact.flagProductor}"  />
+					<h:graphicImage library="img" name="icon_productor_red_24.png"   rendered="#{not register.contact.flagProductor}"  />
+					</h:panelGroup>
+			</h:panelGrid>
+	
+			<h:panelGrid columns="2">
+					<h:outputText value="#{i18n.label_is_trainner}:" styleClass="less2" />
+					<h:panelGrid columns="3" cellpadding="2">
+					<h:graphicImage library="img" name="icon_trainner_green_24.png" rendered="#{register.contact.flagTrainner}" />
+					<h:graphicImage library="img" name="icon_trainner_red_24.png"   rendered="#{not register.contact.flagTrainner}" />
+					<h:outputText value="#{i18n[register.contact.trainnerType.key]}" styleClass="destak4" />
+					</h:panelGrid>
+			</h:panelGrid>
+	
+			<h:panelGrid columns="2">
+					<h:outputText value="#{i18n.label_is_consultant}:" styleClass="less2" />
+					<h:panelGroup>
+					<h:graphicImage library="img" name="icon_consultant_green_24.png" rendered="#{register.contact.flagConsultant}" />
+					<h:graphicImage library="img" name="icon_consultant_red_24.png"   rendered="#{not register.contact.flagConsultant}" />
+					</h:panelGroup>
+			</h:panelGrid>
+	
+		</h:panelGrid>
+	</p:panel>
+
+	<p:commandButton icon="ui-icon-pencil" value="#{i18n.label_edit_personal_data}"
+		action="#{paymentBean.manageContact}"	
+		oncomplete="DialogPersonalData.show()" 
+		update=":formEditPersonalData" 
+		/>
+
+</p:outputPanel>
+
+
+</ui:fragment>

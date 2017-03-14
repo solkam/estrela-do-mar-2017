@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:cb="http://java.sun.com/jsf/composite/component"
+	template="/WEB-INF/design/_decorate-report.xhtml">
+
+<ui:define name="reportContent" >
+
+<p:panel header="#{i18n.report_people_moviment_by_date }">
+
+	<h:form id="formFilter">
+		<h:panelGrid columns="4" cellpadding="5">
+			<h:panelGrid>
+				<h:outputText value="MegaEvento: " styleClass="less2" />
+				<h:outputText value="#{reportBean.currentMegaEvent.name }" styleClass="destak2" />
+			</h:panelGrid>
+			
+			<h:panelGrid>
+				<p:outputLabel for="inInitialDate" value="#{i18n.label_initial_date}" styleClass="less2" />
+				<p:calendar id="inInitialDate" value="#{reportMovimentByDateBean.initDate }" 
+					size="10" pattern="dd/MM/yyyy"     showOn="button" 
+					required="true"  />
+				<p:message for="inInitialDate" />
+			</h:panelGrid>
+			
+			<h:panelGrid>
+				<p:outputLabel for="inFinalDate" value="#{i18n.label_end_date}" styleClass="less2" />
+				<p:calendar id="inFinalDate" value="#{reportMovimentByDateBean.finalDate }"
+					size="10" pattern="dd/MM/yyyy"     showOn="button" 
+					required="true" label="Data Final" />
+				<p:message for="inFinalDate" />
+			</h:panelGrid>
+			
+			<p:commandButton icon="ui-icon-search" value="Pesquisar"
+				action="#{reportMovimentByDateBean.search }"
+				update=":formResult" />
+			
+		</h:panelGrid>
+	</h:form>
+
+	<p:spacer height="10" />
+
+	<h:form id="formResult">
+		<p:dataTable var="summary" value="#{reportMovimentByDateBean.summaries }" 
+			emptyMessage="#{i18n.msg_no_result_found }">
+		
+			<p:column headerText="Data">
+				#{summary.dateDesc }
+			</p:column>
+			
+			<p:column headerText="Semana">
+				#{summary.eventWeek.name }
+			</p:column>
+			
+			<p:column headerText="Pessoas no MegaEvento" style="text-align:center">
+				#{summary.insideQuantity }
+			</p:column>
+			
+			<p:column headerText="Chegando" style="text-align:center">
+				#{summary.arrivingQuantity }
+			</p:column>
+			
+			<p:column headerText="Saindo" style="text-align:center">
+				#{summary.leavingQuantity }
+			</p:column>
+			
+			<p:column headerText="Total" style="text-align:center">	
+				#{summary.totalQuantity }
+			</p:column>
+
+		</p:dataTable>		
+	</h:form>
+
+</p:panel>
+</ui:define>
+	
+
+</ui:composition>

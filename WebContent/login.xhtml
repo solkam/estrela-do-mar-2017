@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:cb="http://java.sun.com/jsf/composite/component"
+	template="/WEB-INF/design/_template-login.xhtml">
+	
+<ui:define name="content">
+
+	<h:form id="formLogin" >
+		<p:panel>
+
+			<cb:globalMessages />
+		
+			<h:panelGrid columns="2" cellpadding="10">
+			
+				<p:graphicImage library="img" name="logo_cb_principal.png" cache="true" />
+				
+				<h:panelGrid columns="5" cellpadding="5">
+					<h:panelGrid>
+						<h:outputLabel value="#{i18n.label_email }:" styleClass="less2" />
+						<h:panelGrid>
+							<p:inputText id="inUsername" value="#{loginBean.username}" required="false" label="Email" size="40" />
+							<p:message for="inUsername" />
+						</h:panelGrid>
+					</h:panelGrid>
+					
+					<h:panelGrid>
+						<h:outputLabel value="#{i18n.label_pass }:" styleClass="less2" />
+						<h:panelGrid>
+							<p:password id="inPassword" value="#{loginBean.password}" required="false" label="Senha" feedback="false" />
+							<p:message for="inPassword" />
+						</h:panelGrid>
+					</h:panelGrid>
+					
+					<p:commandButton id="btnDoLogin" icon="ui-icon-key" value="Entrar" style="font-size:1.5em" 
+						action="#{loginBean.doLogin}" 
+						ajax="false" 
+						/>
+							
+				</h:panelGrid>
+			</h:panelGrid>
+			
+			<f:facet name="footer">
+				<h:panelGrid columns="2" cellpadding="10" styleClass="less2" >
+					
+					<h:panelGroup>
+						<p:commandLink value="#{i18n.label_create_my_user}"
+							action="#{loginBean.gotoSignupForm()}"
+							ajax="false" 
+							/>
+					</h:panelGroup>
+						
+					<h:panelGroup>
+						<p:commandLink value="#{i18n.label_forgot_my_pass }"  
+							type="button" title="#{i18n.text_help_forgot_password }"
+							onclick="DialogForgotPassword.show()" 
+							/>
+					</h:panelGroup>
+						
+				</h:panelGrid>
+			</f:facet>
+	
+		</p:panel>
+	</h:form>
+	
+		
+	
+
+<!-- Dialogo Reset Senha -->
+<p:dialog widgetVar="DialogForgotPassword" header="#{i18n.label_forgot_my_pass}"  
+	modal="true" resizable="false" closeOnEscape="true" >
+	
+	<h:form id="formForgotPassword">
+
+		<cb:globalMessages />
+
+		<h:panelGrid columns="3" cellpadding="10">
+			<h:panelGrid cellpadding="0">	
+				<p:outputLabel for="inEmail" value="#{i18n.text_enter_your_email_to_reset_pass }" styleClass="less2 req" />
+				<p:inputText id="inEmail" value="#{loginBean.emailToReset}" size="40"  style="font-size:1.25em"
+					required="true" requiredMessage="#{i18n.msg_email_not_provided }" />
+				<p:message for="inEmail" />
+			</h:panelGrid>
+
+			<p:commandButton widgetVar="BtnReset" value="#{i18n.label_send }" icon="ui-icon-check" 
+				action="#{loginBean.resetPassword}" 
+				update="@form" 
+				onclick="BtnReset.disable()"
+				/>
+				
+			<p:ajaxStatus>  
+			    <f:facet name="start">  
+			    	<h:panelGrid columns="2" cellpadding="2">
+				        <p:graphicImage library="img" name="ajaxload_globe_32.gif" cache="true" />  
+			    	</h:panelGrid>
+			    </f:facet>  
+			      
+			    <f:facet name="complete">  
+			        <h:outputText value="" />  
+			    </f:facet>  
+			</p:ajaxStatus>  
+				
+		</h:panelGrid>
+		
+	</h:form>
+</p:dialog>
+
+
+</ui:define>
+</ui:composition>

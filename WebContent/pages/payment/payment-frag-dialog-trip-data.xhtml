@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:fragment xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:cb="http://java.sun.com/jsf/composite/component">
+
+<!-- Dialog Viagem -->
+<!-- ************* -->
+<p:dialog widgetVar="DialogEditTripInfo" header="#{i18n.label_edit_trip_info}"
+	modal="true" dynamic="true" closeOnEscape="true" maximizable="true" 
+	position="top" width="70%" height="70%" >
+	
+	<h:form id="formEditTripInfo">
+	
+		<cb:globalMessages />
+	
+		<p:panel>
+	
+			<h:panelGrid columns="2" cellpadding="20" >
+			
+				<h:panelGrid columns="2" cellpadding="5">
+					<f:facet name="header">
+						<h:outputText value="#{i18n.label_checkin}" styleClass="destak1" />
+						<p:separator />
+					</f:facet>
+					
+					<p:outputLabel for="inPreviewCheckinDate" value="#{i18n.label_preview_checkin_date}" styleClass="req" />
+					<h:panelGrid>
+						<p:calendar id="inPreviewCheckinDate" value="#{paymentBean.selectedRegister.previewCheckinDate }" 
+							pattern="dd/MM/yyyy"    showOn="button" size="12"
+							required="true" 
+							/>
+						<p:message for="inPreviewCheckinDate" />
+					</h:panelGrid>
+		
+					<p:outputLabel for="inCheckinDate" value="#{i18n.label_checkin_date}" styleClass="req" />
+					<h:panelGrid>
+						<p:calendar id="inCheckinDate" value="#{paymentBean.selectedRegister.checkin.checkinDate }" 
+							pattern="dd/MM/yyyy"    showOn="button" size="12"
+							required="true" 
+							/>
+						<p:message for="inCheckinDate" />
+					</h:panelGrid>
+				</h:panelGrid>
+				
+				<h:panelGrid columns="2" cellpadding="5">
+					<f:facet name="header">
+						<h:outputText value="#{i18n.label_checkout}" styleClass="destak1" />
+						<p:separator />
+					</f:facet>
+					
+					<p:outputLabel for="inPreviewCheckoutDate" value="#{i18n.label_preview_checkout_date}" styleClass="req" />
+					<h:panelGrid>
+						<p:calendar id="inPreviewCheckoutDate" value="#{paymentBean.selectedRegister.previewCheckoutDate }" 
+							pattern="dd/MM/yyyy"    showOn="button" size="12"
+							required="true" 
+							/>
+						<p:message for="inPreviewCheckoutDate" />
+					</h:panelGrid>
+		
+					<p:outputLabel for="inCheckoutDate" value="#{i18n.label_checkout_date}" styleClass="req" />
+					<h:panelGrid>
+						<p:calendar id="inCheckoutDate" value="#{paymentBean.selectedRegister.checkout.checkoutDate }" 
+							pattern="dd/MM/yyyy"    showOn="button" size="12"
+							required="true" 
+							/>
+						<p:message for="inCheckoutDate" />
+					</h:panelGrid>
+				</h:panelGrid>
+
+			
+				<h:panelGrid columns="2" cellpadding="5">
+					<f:facet name="header">
+						<h:outputText value="#{i18n.label_arrival}" styleClass="destak1" />
+						<p:separator />
+					</f:facet>
+					
+					<p:outputLabel for="arrivalDate" value="#{i18n.label_day_with_format}" />
+					<h:panelGrid>
+						<p:calendar id="arrivalDate" value="#{paymentBean.selectedRegister.tripInfo.tripArrivalDate }" 
+							pattern="dd/MM/yyyy"    showOn="button" size="12"
+							/>
+						<p:message for="arrivalDate" />
+					</h:panelGrid>
+		
+					<p:outputLabel for="arrivalTime" value="#{i18n.label_hour_with_format}" />
+					<h:panelGrid>
+						<p:inputMask mask="99:99" id="arrivalTime" value="#{paymentBean.selectedRegister.tripInfo.tripArrivalTime }" size="5">
+							<f:convertDateTime pattern="HH:mm"    />
+						</p:inputMask>
+						<p:message for="arrivalTime" /> 
+					</h:panelGrid>
+		
+					<h:outputText value="#{i18n.label_flight_company}:" />
+					<p:inputText value="#{paymentBean.selectedRegister.tripInfo.tripArrivalFlightCompany }"
+						size="20" />
+		
+					<h:outputText value="#{i18n.label_flight_number}:" />
+					<p:inputText value="#{paymentBean.selectedRegister.tripInfo.tripArrivalFlightNumber }"
+						size="20" />
+		
+				</h:panelGrid>
+				
+				<h:panelGrid columns="2" cellpadding="5">
+					<f:facet name="header">
+						<h:outputText value="#{i18n.label_departure}" styleClass="destak1" />
+						<p:separator />
+					</f:facet>
+					
+					<p:outputLabel for="departureDate" value="#{i18n.label_day_with_format}" />
+					<h:panelGrid>
+						<p:calendar id="departureDate" value="#{paymentBean.selectedRegister.tripInfo.tripDepartureDate }" 
+							pattern="dd/MM/yyyy"    showOn="button" size="12"
+							/>
+						<p:message for="departureDate" />
+					</h:panelGrid>
+		
+					<p:outputLabel for="departureTime" value="#{i18n.label_hour_with_format}" />
+					<h:panelGrid>
+						<p:inputMask mask="99:99" id="departureTime" value="#{paymentBean.selectedRegister.tripInfo.tripDepartureTime }" size="5"> 
+							<f:convertDateTime pattern="HH:mm"    />
+						</p:inputMask>
+						<p:message for="departureTime" />
+					</h:panelGrid>
+		
+					<h:outputText value="#{i18n.label_flight_company}:" />
+					<p:inputText value="#{paymentBean.selectedRegister.tripInfo.tripDepartureFlightCompany }"
+						size="20" />
+		
+					<h:outputText value="#{i18n.label_flight_number}:" />
+					<p:inputText value="#{paymentBean.selectedRegister.tripInfo.tripDepartureFlightNumber }"
+						size="20" />
+		
+				</h:panelGrid>
+				
+				<f:facet name="footer">
+					<h:panelGrid columns="2">
+						<p:outputLabel for="inNote" value="#{i18n.label_note}:" />
+						<p:inputTextarea id="inNote" value="#{paymentBean.selectedRegister.tripInfo.tripNote }" rows="3" cols="80" />
+					</h:panelGrid>
+				</f:facet>
+			</h:panelGrid>
+	
+		</p:panel>
+		
+		<p:commandButton icon="ui-icon-check" value="#{i18n.label_save_trip_infos}"
+			action="#{paymentBean.saveTripInfo }"
+			update="@form :formRegister:tabDetail:displayTripInfo" 
+			oncomplete="if (args.sucessOnly) DialogEditTripInfo.hide()"
+			/>
+		
+	</h:form>
+</p:dialog>
+
+</ui:fragment>

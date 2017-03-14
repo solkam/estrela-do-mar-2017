@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:fragment xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:cb="http://java.sun.com/jsf/composite/component"
+	template="/WEB-INF/design/_decorate-config.xhtml">
+
+<h:form id="formContactPrincipal">
+
+	<p:panel>
+	
+		<cb:globalMessages />
+	
+		<h:panelGrid columns="2" cellpadding="10">
+			<h:panelGrid columns="2" >
+				<p:outputLabel for="inRootSchool" value="#{i18n.label_root_school}" styleClass="destak4 req" />
+				<h:panelGrid>
+					<p:selectOneMenu id="inRootSchool" value="#{configContactBean.contact.rootSchool}" required="true" >
+						<f:selectItem itemLabel="--" noSelectionOption="true" />
+						<f:selectItems value="#{enumHelper.schools}" var="schoolRow"
+							itemValue="#{schoolRow}" itemLabel="#{schoolRow.description}" />
+					</p:selectOneMenu>
+					<p:message for="inRootSchool" />
+				</h:panelGrid>
+			</h:panelGrid>
+	
+			<h:panelGrid columns="2" rendered="#{loginBean.authenticatedUser.superUser}">
+				<p:outputLabel for="inCBRole" value="Papel ou Rol" styleClass="destak4" />
+				<p:selectOneMenu id="inCBRole" value="#{configContactBean.contact.cbRole}" >
+					<f:selectItem itemLabel="" noSelectionOption="true" />
+					<f:selectItems value="#{enumHelper.CBRoles }" var="roleVar"
+						itemValue="#{roleVar}" itemLabel="#{roleVar.description}" />
+				</p:selectOneMenu>
+				<p:message for="inCBRole" />
+			</h:panelGrid>
+		</h:panelGrid>	
+		
+		<h:panelGrid columns="2" cellpadding="5" cellspacing="0">
+		
+			<h:panelGrid cellpadding="0" cellspacing="0">
+				<p:outputLabel value="#{i18n.label_new_name_if_have }" styleClass="less2" />
+				<h:panelGrid columns="2">
+					<p:inputText id="inName" value="#{configContactBean.contact.name }"	size="30" maxlength="30" />
+						
+					<p:commandButton icon="ui-icon-arrow-1-n" title="#{i18n.label_initial_capitalize }"
+						rendered="#{not empty configContactBean.contact.name}" 
+						process="inName"
+						action="#{configContactBean.applyInitCapOnName}" 
+						update="@form" />
+						
+				</h:panelGrid>
+				<p:message for="inName" />
+			</h:panelGrid>
+			
+			<h:panelGrid cellpadding="0" cellspacing="0">
+				<p:outputLabel for="inCivilName" value="#{i18n.label_civil_name_complete }" styleClass="less2 req" />
+				<h:panelGrid columns="2">
+					<p:inputText id="inCivilName" value="#{configContactBean.contact.civilName }" size="60" maxlength="60"
+						required="true" />
+	
+					<p:commandButton icon="ui-icon-arrow-1-n" title="#{i18n.label_initial_capitalize }"
+						rendered="#{not empty configContactBean.contact.civilName}" 
+						process="@this"
+						action="#{configContactBean.applyInitCapOnCivilName}" 
+						update="@form" />
+	
+				</h:panelGrid>
+				<p:message for="inCivilName" />
+			</h:panelGrid>
+			
+			<h:panelGrid cellpadding="0" cellspacing="0">
+				<p:outputLabel for="inEmail" value="#{i18n.label_email }" styleClass="less2 req" />
+				<h:panelGrid columns="2">
+					<p:inputText id="inEmail" value="#{configContactBean.contact.email }"
+						required="true" label="#{i18n.label_email }" 
+						size="60" maxlength="60" />
+	
+					<p:commandButton icon="ui-icon-arrow-1-s" title="#{i18n.label_lower_capitalize }"
+						rendered="#{not empty configContactBean.contact.email}" 
+						process="@this"
+						action="#{configContactBean.applyLowerCapOnEmail}" 
+						update="@form" />
+	
+					<p:message for="inEmail" />
+				</h:panelGrid>
+			</h:panelGrid>
+			
+			<h:panelGrid cellpadding="0" cellspacing="0">
+				<p:outputLabel for="inTel" value="#{i18n.label_telephone}" styleClass="less2 req" />
+				<p:inputText id="inTel" value="#{configContactBean.contact.telephone1 }"
+					required="true" size="20" maxlength="20" />
+				<p:message for="inTel" />
+			</h:panelGrid>
+			
+			<h:panelGrid cellpadding="0" cellspacing="0" >
+				<p:outputLabel for="inTel2" value="#{i18n.label_telephone} 2" styleClass="less2" />
+				<p:inputText id="inTel2" value="#{configContactBean.contact.telephone2 }"
+					required="false" size="20" maxlength="20" />
+				<p:message for="inTel2" />
+			</h:panelGrid>
+	
+			<h:panelGrid cellpadding="0" cellspacing="0">
+				<p:outputLabel for="inTel3" value="#{i18n.label_telephone} 3" styleClass="less2" />
+				<p:inputText id="inTel3" value="#{configContactBean.contact.telephone3 }"
+					required="false" size="20" maxlength="20" />
+				<p:message for="inTel3" />
+			</h:panelGrid>
+			
+			<h:panelGrid cellpadding="0" cellspacing="0"> 
+				<p:outputLabel for="inAddress" value="#{i18n.label_address}" styleClass="less2 req" />
+				<p:inputText id="inAddress" value="#{configContactBean.contact.address }"
+					required="true" size="60" maxlength="60" />
+				<p:message for="inAddress" />
+			</h:panelGrid>
+	
+			<h:panelGrid cellpadding="0" cellspacing="0">
+				<p:outputLabel for="inZipcode" value="#{i18n.label_zip_code}" styleClass="less2" />
+				<p:inputText id="inZipcode" value="#{configContactBean.contact.zipPostal }"
+					required="false" size="10" maxlength="10" />
+				<p:message for="inZipcode" />
+			</h:panelGrid>
+	
+			<h:panelGrid cellpadding="0" cellspacing="0">
+				<p:outputLabel for="inCity" value="#{i18n.label_city}" styleClass="less2 req" />
+				<p:inputText id="inCity" value="#{configContactBean.contact.city }"
+					required="true" size="50" maxlength="50" />
+				<p:message for="inCity" />
+			</h:panelGrid>
+	
+			<h:panelGrid cellpadding="0" cellspacing="0">
+				<p:outputLabel for="inCountry" value="#{i18n.label_country}" styleClass="less2 req" />
+				<p:inputText id="inCountry" value="#{configContactBean.contact.country }"
+					required="true" size="40" maxlength="40" />
+				<p:message for="inCountry" />
+			</h:panelGrid>
+	
+			<h:panelGrid cellpadding="0" cellspacing="0">
+				<h:outputText value="#{i18n.label_document_type}" styleClass="less2" />
+				<p:selectOneMenu value="#{configContactBean.contact.identityDocumentType}"
+					style="width:150px">
+				
+					<f:selectItems value="#{enumHelper.documentTypes}" var="type"
+						itemValue="#{type}" itemLabel="#{i18n[type.key]}" 
+						/>
+				</p:selectOneMenu>
+			</h:panelGrid>
+			
+			<h:panelGrid cellpadding="0" cellspacing="0">
+				<p:outputLabel for="inDocIdentity" value="#{i18n.label_document_identity }" styleClass="less2 req" />
+				<p:inputText id="inDocIdentity" value="#{configContactBean.contact.identityDocument }"
+					required="true" size="20" maxlength="30" />
+				<p:message for="inDocIdentity" />
+			</h:panelGrid>
+		
+			<h:panelGrid cellpadding="0" cellspacing="0">
+				<p:outputLabel for="inBirthDate" value="#{i18n.label_birthdate}" styleClass="less2 req" />
+				<h:panelGrid columns="2" cellpadding="0">
+					<p:calendar id="inBirthDate" value="#{configContactBean.contact.birthDate }"
+						required="true" size="15"  pattern="dd/MM/yyyy" navigator="true"    
+						/>	
+				</h:panelGrid>
+				<p:message for="inBirthDate" />
+			</h:panelGrid>
+	
+			<h:panelGrid cellpadding="0" cellspacing="0">
+				<p:outputLabel for="inGender" value="#{i18n.label_sex}" styleClass="less2 req" />
+				<p:selectOneRadio id="inGender" value="#{configContactBean.contact.gender }"
+					required="true" layout="lineDirection" >
+					
+					<f:selectItem itemValue="M" itemLabel="#{i18n.GENDER_MALE}"   />
+					<f:selectItem itemValue="F" itemLabel="#{i18n.GENDER_FEMALE}" />
+				</p:selectOneRadio>
+				<p:message for="inGender" />
+			</h:panelGrid>
+			
+			<h:panelGrid cellpadding="0" cellspacing="0">
+				<p:outputLabel for="inSkype" value="Skype" styleClass="less2" />
+				<p:inputText id="inSkype" value="#{configContactBean.contact.skype }"
+					required="false" size="20" maxlength="20" />
+				<p:message for="inSkype" />
+			</h:panelGrid>
+	
+		</h:panelGrid>
+	
+		<p:separator />
+	
+		<h:panelGrid columns="3" cellpadding="10">
+			<h:panelGrid>
+				<p:outputLabel for="selIsProductor" value="#{i18n.label_is_productor}" styleClass="less2" />
+				<p:selectOneRadio id="selIsProductor" value="#{configContactBean.contact.flagProductor}" >
+					<f:selectItem itemValue="true" itemLabel="#{i18n.label_yes}" />
+					<f:selectItem itemValue="false" itemLabel="#{i18n.label_no}" />
+				</p:selectOneRadio>
+				<p:message for="selIsProductor" />
+			</h:panelGrid>
+		
+			<h:panelGrid>
+				<p:outputLabel for="selIsConsultor" value="#{i18n.label_is_consultant}" styleClass="less2" />
+				<p:selectOneRadio id="selIsConsultor" value="#{configContactBean.contact.flagConsultant}" >
+					<f:selectItem itemValue="true" itemLabel="#{i18n.label_yes}" />
+					<f:selectItem itemValue="false" itemLabel="#{i18n.label_no}" />
+				</p:selectOneRadio>
+				<p:message for="selIsConsultor" />
+			</h:panelGrid>
+	
+			<h:panelGrid>
+				<p:outputLabel for="selIsTrainner" value="#{i18n.label_is_trainner}" styleClass="less2" />
+				<p:selectOneMenu id="selIsTrainner" value="#{configContactBean.contact.trainnerType}" >
+					<f:selectItem itemValue="#{null}" itemLabel="#{i18n.label_no}" />
+					<f:selectItems value="#{enumHelper.trainnerTypes}" var="type"
+						itemValue="#{type}" itemLabel="#{i18n[type.key]}" />
+				</p:selectOneMenu>
+				<p:message for="selIsTrainner" />
+			</h:panelGrid>
+		</h:panelGrid>
+		
+	</p:panel>
+	
+
+
+	<p:toolbar>
+		<p:toolbarGroup>
+			<p:commandButton icon="ui-icon-check" value="#{i18n.label_save_contact }"
+				action="#{configContactBean.saveContact}"
+				update=":regionConfigContact" 
+				/>
+		</p:toolbarGroup>
+		
+		<p:toolbarGroup align="right" rendered="#{not configContactBean.contact.transient}">
+			<p:menuButton value="#{i18n.label_contact_remove }" style="font-size:0.6em" >
+				<p:menuitem icon="ui-icon-trash" value="#{i18n.label_yes_remove}"
+					action="#{configContactBean.removeContact}"
+					process="@this"
+					update="@form :formConfigContacts"
+					oncomplete="if (args.sucessOnly) DialogConfigContact.hide()"
+					/>
+				<p:menuitem icon="ui-icon-close" value="#{i18n.label_no}"
+					process="@none"	update="@none" global="false" 
+					/>
+			</p:menuButton>
+		</p:toolbarGroup>
+	</p:toolbar>
+	
+</h:form>
+
+</ui:fragment>

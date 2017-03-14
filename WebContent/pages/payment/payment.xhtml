@@ -1,0 +1,311 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:cb="http://java.sun.com/jsf/composite/component"
+	template="/WEB-INF/design/_template-main.xhtml">
+<ui:define name="content" >
+
+<cb:barPanel imageName="option_payment_75.png" 
+	moduleName="#{i18n.title_payment }" 
+	megaEvent="#{sessionHolder.currentMegaEvent }" 
+	/>
+
+<h:form id="formSearch">
+
+	<p:panel header="#{i18n.label_search_for_payment}" toggleable="true" widgetVar="PanelSearchRegister">
+
+		<h:panelGrid columns="2" cellpadding="5">
+			<h:panelGrid>
+				<p:inputText value="#{paymentBean.keyword }" size="50" style="font-size:1.5em;" />
+				<h:outputText value="#{i18n.label_search_for_payment_by }" styleClass="less2" />
+			</h:panelGrid>
+
+			<p:commandButton icon="ui-icon-search" value="#{i18n.label_to_search}" 
+				action="#{paymentBean.search }"
+				update="@form" 
+				/>
+		</h:panelGrid>
+		
+		<cb:globalMessages />
+		<p:growl globalOnly="true"  />
+		
+		<p:separator />
+		
+ 		<p:dataTable var="registerRow" value="#{paymentBean.registers}" 
+			emptyMessage="#{i18n.msg_no_result_found }" >
+		
+			<p:column headerText="#{i18n.label_number}" sortBy="#{registerRow.id}" styleClass="col5p colCenter">
+				<h:outputText value="#{registerRow.id }" styleClass="less2" />
+			</p:column>
+
+			<p:column headerText="#{i18n.label_civil_name}" sortBy="#{registerRow.contact.civilName}" styleClass="col30p" >
+				<h:outputText value="#{registerRow.contact.civilName }" styleClass="destak4" />
+			</p:column>
+			
+			<p:column headerText="#{i18n.label_name}" sortBy="#{registerRow.contact.name}" styleClass="col10p" >
+				<h:outputText value="#{registerRow.contact.name }" styleClass="destak4" />
+			</p:column>
+
+			<p:column headerText="#{i18n.label_city }" sortBy="#{registerRow.contact.city}" styleClass="col20p">
+				<h:outputText value="#{registerRow.contact.city}" styleClass="less2" />
+			</p:column>
+
+			<p:column headerText="#{i18n.label_country }"  sortBy="#{registerRow.contact.country}" styleClass="col10p">
+				<h:outputText value="#{registerRow.contact.country}" styleClass="less2" />
+			</p:column>
+			
+			<p:column headerText="#{i18n.label_register_date}" sortBy="#{registerRow.createDate }" styleClass="col10p colCenter" >
+				<cb:outputDate value="#{registerRow.createDate}" styleClass="less2" />
+			</p:column>
+
+			<p:column headerText="#{i18n.label_status}" sortBy="#{registerRow.status}" styleClass="col5p colCenter" >
+				<h:graphicImage library="img" name="#{registerRow.status.image}" title="#{i18n[registerRow.status.key]}" />
+			</p:column>
+			
+			<p:column headerText="#{i18n.label_note}" styleClass="col5p colCenter">
+				<h:graphicImage id="imgNote" library="img" name="icon_note_36.png"
+					rendered="#{not empty registerRow.note}" />
+				<p:tooltip for="imgNote" value="#{registerRow.note}" />
+			</p:column>
+			
+			<p:column styleClass="col5p colCenter">
+				<p:commandButton icon="ui-icon-star" value="#{i18n.label_view}"
+					action="#{paymentBean.manageRegister(registerRow) }"
+					update=":formRegister"
+					onclick="PanelSearchRegister.toggle()"
+					/>
+			</p:column>
+
+		</p:dataTable>	
+		
+		<p:spacer height="50" />	
+		
+	</p:panel>
+</h:form>
+
+
+<h:form id="formRegister">
+	
+	<p:panel header="#{i18n.label_register_details}" rendered="#{not empty paymentBean.selectedRegister }">
+	
+		<p:outputPanel id="displayDetails" >
+			<ui:param name="register" value="#{paymentBean.selectedRegister}" />
+			<ui:param name="contactParam" value="#{paymentBean.selectedContact}" />
+			<ui:param name="credits"  value="#{paymentBean.selectedRegister.credits}" />
+			
+			<ui:param name="fieldsetStyle" value="height: 170px" />
+			
+			<h:panelGrid columns="4" cellpadding="0" cellspacing="2" >
+	
+				<h:panelGroup>
+					<fieldset style="#{fieldsetStyle}" >
+						<legend>#{i18n.label_personal_data}</legend>
+						
+						<h:panelGrid columns="2" cellpadding="4">
+							<h:outputText value="#{i18n.label_civil_name}:" styleClass="less2" />
+							<h:outputText value="#{contactParam.civilName }" styleClass="destak3" />
+				
+							<h:outputText value="#{i18n.label_new_name}:" styleClass="less2" />
+							<h:outputText value="#{contactParam.name }" styleClass="destak3" />
+			
+							<h:outputText value="#{i18n.label_city} / #{i18n.label_country}:" styleClass="less2" />
+							<h:outputText value="#{contactParam.city} / #{contactParam.country}" styleClass="destak4" />
+			 
+							<h:outputText value="#{i18n.label_email}:" styleClass="less2" />
+							<h:outputText value="#{contactParam.email}" styleClass="destak4" />
+
+							<h:outputText value="#{i18n.label_age}:" styleClass="less2" />
+							<h:outputText value="#{contactParam.age} (#{i18n[contactParam.maturity.key]})" styleClass="destak4" />
+						</h:panelGrid>
+					</fieldset>
+				</h:panelGroup>
+				
+				<h:panelGroup>
+					<fieldset style="#{fieldsetStyle}" >
+						<legend>#{i18n.label_productor_trainner }</legend>
+		
+						<h:panelGrid columns="2" cellpadding="2">
+			 				<h:outputText value="#{i18n.label_productor_responsable}:" styleClass="less2" />
+			 				<h:panelGroup>
+								<h:outputText value="#{contactParam.productorContact.fullDesc }" styleClass="destak4"
+									rendered="#{not empty contactParam.productorContact}" 
+									/>
+								<h:outputText value="?" styleClass="destak4"
+									rendered="#{empty contactParam.productorContact}" 
+									/>
+			 				</h:panelGroup>
+		
+			 				<h:outputText value="#{i18n.label_trainner}:" styleClass="less2" />
+			 				<h:panelGroup>
+								<h:outputText value="#{contactParam.trainnerContact.fullDesc }" styleClass="destak4"
+									rendered="#{not empty contactParam.trainnerContact}" 
+									/>
+								<h:outputText value="?" styleClass="destak4"
+									rendered="#{empty contactParam.trainnerContact}" 
+									/>
+			 				</h:panelGroup>
+
+			 				<h:outputText value="#{i18n.label_is_productor}:" styleClass="less2" />
+			 				<h:panelGroup>
+								<h:graphicImage library="img" name="icon_productor_green_24.png" rendered="#{contactParam.flagProductor}"  />
+								<h:graphicImage library="img" name="icon_productor_red_24.png"   rendered="#{not contactParam.flagProductor}"  />
+			 				</h:panelGroup>
+
+			 				<h:outputText value="#{i18n.label_is_trainner}:" styleClass="less2" />
+			 				<h:panelGrid columns="2" cellpadding="0">
+			 					<h:panelGroup>
+									<h:graphicImage library="img" name="icon_trainner_green_24.png" rendered="#{contactParam.flagTrainner}" />
+									<h:graphicImage library="img" name="icon_trainner_red_24.png"   rendered="#{not contactParam.flagTrainner}" />
+			 					</h:panelGroup>
+								<h:outputText value="#{i18n[contactParam.trainnerType.key]}" styleClass="destak4" />
+			 				</h:panelGrid>
+
+			 				<h:outputText value="#{i18n.label_is_consultant}:" styleClass="less2" />
+			 				<h:panelGroup>
+								<h:graphicImage library="img" name="icon_consultant_green_24.png" rendered="#{contactParam.flagConsultant}" />
+								<h:graphicImage library="img" name="icon_consultant_red_24.png"   rendered="#{not contactParam.flagConsultant}" />
+			 				</h:panelGroup>
+						</h:panelGrid>
+					</fieldset>
+				</h:panelGroup>
+				
+				<h:panelGroup>
+					<fieldset style="#{fieldsetStyle}" >
+						<legend>#{i18n.label_registers}</legend>
+						
+						<h:panelGrid columns="2" cellpadding="2">
+							<h:outputText value="#{i18n.label_register_number}:" styleClass="less2" />
+							<h:outputText value="#{register.id }" styleClass="destak4" />
+				
+							<h:outputText  value="#{i18n.label_register_date}:" styleClass="less2" />
+							<cb:outputDate value="#{register.createDate }" styleClass="destak4" />
+				
+							<h:outputText  value="#{i18n.label_status}:" styleClass="less2" />
+							<h:panelGrid columns="3" cellpadding="3">
+								<h:graphicImage library="img" name="#{register.status.image}" />
+								<h:outputText value="#{i18n[register.status.key] }" styleClass="less3" />
+								
+								<p:commandButton icon="ui-icon-arrowreturnthick-1-s" title="#{i18n.label_alter_status_to_checkedin }"
+									action="#{paymentBean.createCheckin }"
+									oncomplete="DialogChangeStatusToCheckedIN.show()"
+									update=":formAlterStatusToCheckedin"
+									rendered="#{register.statusIncomplete or register.statusRegistered }" />
+							</h:panelGrid>
+						</h:panelGrid>
+						
+						<p:commandButton icon="ui-icon-trash" value="#{i18n.label_remove_register}"
+							onclick="ConfirmDialogRemoveRegister.show()" />
+
+						<p:dialog widgetVar="ConfirmDialogRemoveRegister" header="#{i18n.question_sure_to_remove_register }" 
+							closeOnEscape="true" modal="true" position="top" >
+							<h:form>
+								<h:panelGrid columns="2" cellpadding="20">
+									<p:commandButton icon="ui-icon-check" value="#{i18n.label_yes }" 
+										action="#{paymentBean.removeRegister() }"
+										update=":formSearch :formRegister" 
+										oncomplete="ConfirmDialogRemoveRegister.hide(); PanelSearchRegister.toggle()"
+										/>
+									<p:commandButton icon="ui-icon-close" value="#{i18n.label_no }"	type="button" 
+										onclick="ConfirmDialogRemoveRegister.hide()" 
+										/>
+								</h:panelGrid>
+							</h:form>
+						</p:dialog>
+						
+					</fieldset>
+				</h:panelGroup>
+				
+			</h:panelGrid>
+		</p:outputPanel>
+		
+		<p:spacer height="5" />
+		
+		<p:tabView id="tabDetail">
+		
+			<!-- Eventos e Pagamentos -->		
+			<p:tab title="#{i18n.label_events_and_payments}">
+				<ui:include src="/pages/payment/payment-frag-tab-event-and-payment.xhtml" />
+			</p:tab>
+			
+			<!-- Historico -->		
+			<p:tab title="#{i18n.label_history_and_production}">
+				<ui:include src="/pages/payment/payment-frag-tab-history.xhtml" />	
+			</p:tab>
+			
+			<!-- Dados Pessoais -->		
+			<p:tab title="#{i18n.label_personal_data}">
+				<ui:include src="/pages/payment/payment-frag-tab-personal-data.xhtml" />
+			</p:tab>
+			
+			<!-- Produtor e Treinador -->		
+			<p:tab title="#{i18n.label_productor_trainner }">
+				<ui:include src="/pages/payment/payment-frag-tab-productor-and-trainner.xhtml" />
+			</p:tab>
+			
+			<!-- Ficha Medica -->		
+			<p:tab title="#{i18n.label_medical_form}" >
+				<ui:include src="/pages/payment/payment-frag-tab-medical-form.xhtml" />
+			</p:tab>
+			
+			<!-- Dados de Viagem -->
+			<p:tab title="#{i18n.label_trip_infos}">
+				<ui:include src="/pages/payment/payment-frag-tab-trip-data.xhtml" />
+			</p:tab>
+		
+		</p:tabView>
+		
+		<cb:globalMessages />
+	
+	</p:panel>
+</h:form>
+
+
+<ui:include src="/pages/payment/payment-frag-dialog-change-status-to-checkedin.xhtml" />
+
+<ui:include src="/pages/payment/payment-frag-dialog-credit.xhtml" />
+
+<ui:include src="/pages/payment/payment-frag-dialog-hosting-data.xhtml" />
+
+<ui:include src="/pages/payment/payment-frag-dialog-payment-partial.xhtml" />
+
+<ui:include src="/pages/payment/payment-frag-dialog-payment-total.xhtml" />
+
+<ui:include src="/pages/payment/payment-frag-dialog-transfer-event.xhtml" />
+
+<ui:include src="/pages/payment/payment-frag-dialog-personal-data.xhtml" />
+
+<ui:include src="/pages/payment/payment-frag-dialog-print-payment.xhtml" />
+
+<ui:include src="/pages/payment/payment-frag-dialog-trip-data.xhtml" />
+
+
+
+
+
+<!-- ConfirmDialog Remover de Evento -->
+<!-- ******************************* -->
+<p:dialog widgetVar="ConfirmDialogRemoveRegisterDetail" header="#{i18n.question_sure_to_remove_event}"
+	modal="true" position="top" closeOnEscape="true">
+	<h:form>
+		<h:panelGrid columns="2" cellpadding="20">
+			<p:commandButton icon="ui-icon-check" value="#{i18n.label_yes}" 
+				action="#{paymentBean.removeRegisterDetail }"
+				update=":formRegister"
+				oncomplete="ConfirmDialogRemoveRegisterDetail.hide()" 
+				/>
+	
+			<p:commandButton type="button" icon="ui-icon-close" value="#{i18n.label_no}"
+				onclick="ConfirmDialogRemoveRegisterDetail.hide()" 
+				/>
+		</h:panelGrid>
+	</h:form>
+</p:dialog>
+
+
+
+</ui:define>
+</ui:composition>

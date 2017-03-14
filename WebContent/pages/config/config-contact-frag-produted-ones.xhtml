@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:fragment xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:cb="http://java.sun.com/jsf/composite/component">
+
+<h:panelGrid columns="2" cellpadding="5">
+	<h:outputText value="#{i18n.label_produted_ones}:" styleClass="less1" />
+	<h:outputText value="#{configContactBean.contact.produtedOnes.size() }" styleClass="destak2" />
+</h:panelGrid>
+
+<p:scrollPanel styleClass="scrollable2" rendered="#{not empty configContactBean.contact.produtedOnes}">
+
+	<p:dataTable value="#{configContactBean.contact.produtedOnes}" var="produtedOneRow">
+		<p:column headerText="#{i18n.label_civil_name}">
+			<h:outputText value="#{produtedOneRow.civilName}" />
+		</p:column>
+		
+		<p:column headerText="#{i18n.label_name}">
+			<h:outputText value="#{produtedOneRow.name}" />
+		</p:column>
+
+		<p:column headerText="#{i18n.label_city}">
+			<h:outputText value="#{produtedOneRow.city}" />
+		</p:column>
+		
+		<p:column headerText="#{i18n.label_country}">
+			<h:outputText value="#{produtedOneRow.country}" />
+		</p:column>
+	</p:dataTable>
+
+</p:scrollPanel>
+
+</ui:fragment>

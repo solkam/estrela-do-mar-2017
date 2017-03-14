@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:cb="http://java.sun.com/jsf/composite/component"
+	template="/WEB-INF/design/_template-main.xhtml">
+<ui:define name="controls" />
+<ui:define name="options" />
+	
+<ui:define name="content">
+
+	<p:panel header="Slide de Contatos">
+
+		<h:form>
+		
+			<cb:globalMessages />
+			
+			<h:panelGrid columns="4" cellspacing="5">
+				<h:panelGrid>
+					<p:outputLabel for="inIDInitial" value="ID Inicial" styleClass="req" />
+					<p:inputText id="inIDInitial" value="#{slideContactBean.idInitial}" />
+					<p:message for="inIDInitial" />
+				</h:panelGrid>
+
+				<h:panelGrid>
+					<p:outputLabel for="inIDFinal" value="ID Final" styleClass="req" />
+					<p:inputText id="inIDFinal" value="#{slideContactBean.idFinal}" />
+					<p:message for="inIDFinal" />
+				</h:panelGrid>
+
+				<p:commandButton value="Previsualizar" action="#{slideContactBean.preview()}"
+					update="@form" />
+			</h:panelGrid>
+			
+				
+			<p:scrollPanel style="height:500px" mode="native" rendered="#{not empty slideContactBean.seletedContacts}">
+
+				<p:commandButton value="Slide Contact agora"
+					action="#{slideContactBean.slideNow()}"
+					update="@form" />
+					
+				<p:separator />
+
+				<p:dataTable value="#{slideContactBean.seletedContacts }" var="contactRow"  >
+					<p:column headerText="ID">
+						<h:outputText value="#{contactRow.id}" styleClass="less3" />						
+					</p:column>
+				
+					<p:column headerText="#{i18n.label_new_name}" >
+						#{contactRow.name}
+					</p:column>
+				
+					<p:column headerText="#{i18n.label_civil_name}" >
+						#{contactRow.civilName}
+					</p:column>
+	
+					<p:column headerText="#{i18n.label_email}" >
+						#{contactRow.email}
+					</p:column>
+
+					<p:column headerText="#{i18n.label_city}" sortBy="#{contactRow.city}" >
+						#{contactRow.city}
+					</p:column>
+				</p:dataTable>		
+
+			</p:scrollPanel>
+		
+		</h:form>
+
+	</p:panel>
+</ui:define>
+</ui:composition>

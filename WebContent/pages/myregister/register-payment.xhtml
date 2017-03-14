@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:cb="http://java.sun.com/jsf/composite/component">
+
+<h:head>
+	<h:outputStylesheet name="style_estrela.css" library="css" />
+	<style>
+		#content {
+			width: 60%;
+		}
+	</style>
+</h:head>
+
+<h:body>
+	<center>
+		<div id="content">
+
+			<p:panel>
+				<f:facet name="header">
+					<h:panelGrid columns="2" cellpadding="10" width="100%">
+						<h:graphicImage library="img" name="logo_cb_principal_100.png" />
+						
+						<h:panelGrid style="text-align:center">
+							<h:outputText value="#{i18n.title_cb_vision}" styleClass="destak1" />
+							<h:outputText value="#{i18n.label_cb_site}" styleClass="destak3" />
+						</h:panelGrid>
+					</h:panelGrid>
+				</f:facet>
+				
+				<form name="form1" method="post" action="http://bookshop.condorblanco.com/cgi-bin/tbk_bp_pago.cgi">
+				
+					<ui:param name="sessionID" value="#{registerStepBean.transbankSessionId}" />
+					<ui:param name="saleOrder" value="#{registerStepBean.register.id}" />
+				
+					<input type="hidden" name="TBK_TIPO_TRANSACCION" value="TR_NORMAL" />
+					<input type="hidden" name="TBK_ORDEN_COMPRA" value="#{saleOrder}" />
+					<input type="hidden" name="TBK_ID_SESION" value="#{sessionID}" />
+					<input type="hidden" name="TBK_URL_FRACASO" value="http://paymentfail.condorblanco.com" />
+					<input type="hidden" name="TBK_URL_EXITO" value="http://paymentsucess.condorblanco.com" />
+				
+					<fieldset>
+						<legend>#{i18n.label_payment_value}</legend>
+						
+						<table cellspacing="10" cellpadding="10" width="100%" border="0">
+							<tr>
+								<td>
+									<h:outputText value="#{i18n.label_description}" styleClass="less2" />
+								</td>
+								<td class="colCenter">
+									<h:outputText value="#{i18n.label_price}" styleClass="less2" />
+								</td>
+								<td class="colCenter">
+									<h:outputText value="#{i18n.label_select}" styleClass="less2" />
+								</td>
+							</tr>
+							
+							<tr>
+								<td bgcolor="#EEE">
+									<h:outputText value="#{i18n.label_payment_value_total}" styleClass="destak2" />
+								</td>
+								<td bgcolor="#EEE" class="colCenter">
+									<cb:outputCurrency value="#{registerStepBean.register.calculatedPendentValue}" />
+								</td>
+								<td bgcolor="#EEE"  class="colCenter">
+									<input type="radio" name="TBK_MONTO" value="#{registerStepBean.register.calculatedPendentValue }" checked="checked" />
+								</td>
+							</tr>
+						</table>
+					</fieldset>
+					
+					<p:spacer height="10" />
+
+					<fieldset>
+						<legend>#{i18n.label_personal_data}</legend>
+						
+						<h:panelGrid columns="2" cellpadding="5" width="90%">
+							<h:panelGrid cellpadding="0" cellspacing="0">
+								<h:outputText value="#{i18n.label_civil_name}" styleClass="less2" />
+								<h:outputText  value="#{registerStepBean.register.contact.civilName}" styleClass="destak2" />
+							</h:panelGrid>
+							
+							<h:panelGrid cellpadding="0" cellspacing="0">
+								<h:outputText value="#{i18n.label_name}" styleClass="less2" />
+								<h:outputText  value="#{registerStepBean.register.contact.name}" styleClass="destak2" />  
+							</h:panelGrid>
+						
+							<h:panelGrid cellpadding="0" cellspacing="0">
+								<h:outputText value="#{i18n.label_document_identity}" styleClass="less2" />
+								<h:outputText  value="#{registerStepBean.register.contact.identityDocumentType} #{registerStepBean.register.contact.identityDocument}"  styleClass="destak2" /> 
+							</h:panelGrid>
+
+							<h:panelGrid cellpadding="0" cellspacing="0">
+								<h:outputText value="#{i18n.label_email}" styleClass="less2" />
+								<h:outputText  value="#{registerStepBean.register.contact.email}" styleClass="destak2" />  
+							</h:panelGrid>
+
+							<h:panelGrid cellpadding="0" cellspacing="0">
+								<h:outputText value="#{i18n.label_address}" styleClass="less2" />
+								<h:outputText  value="#{registerStepBean.register.contact.address}" styleClass="destak2" />  
+							</h:panelGrid> 
+
+							<h:panelGrid cellpadding="0" cellspacing="0">
+								<h:outputText value="#{i18n.label_city}" styleClass="less2" />
+								<h:outputText  value="#{registerStepBean.register.contact.city}" styleClass="destak2" /> 
+							</h:panelGrid>
+
+							<h:panelGrid cellpadding="0" cellspacing="0">
+								<h:outputText value="#{i18n.label_country}" styleClass="less2" />
+								<h:outputText  value="#{registerStepBean.register.contact.country}" styleClass="destak2" /> 
+							</h:panelGrid>
+
+							<h:panelGrid cellpadding="0" cellspacing="0">
+								<h:outputText value="#{i18n.label_telephone}" styleClass="less2" />
+								<h:outputText  value="#{registerStepBean.register.contact.telephone1}" styleClass="destak2" /> 
+							</h:panelGrid>
+
+							<h:panelGrid cellpadding="0" cellspacing="0">
+								<h:outputText value="Session ID" styleClass="less2" />
+								<h:outputText  value="#{sessionID}" styleClass="destak2" /> 
+							</h:panelGrid>
+
+							<h:panelGrid cellpadding="0" cellspacing="0">
+								<h:outputText value="Sales Order" styleClass="less2" />
+								<h:outputText  value="#{saleOrder}" styleClass="destak2" /> 
+							</h:panelGrid>
+
+						</h:panelGrid>
+					</fieldset>
+					
+					<p:spacer height="10" />
+					
+					<fieldset>
+						<legend>#{i18n.label_payment_notes}</legend>
+						
+						<h:panelGrid columns="2" cellpadding="5" width="100%">
+							<h:panelGroup>
+								<ul>
+									<li>
+										<h:outputText value="#{i18n.label_payment_about_currency}" styleClass="destak4" />
+									</li>
+									<li>
+										<h:outputText value="#{i18n.label_payment_about_devolution}" styleClass="destak4" />
+									</li>
+								</ul>
+							</h:panelGroup>
+							
+							<h:graphicImage library="img" name="logo_webpay.gif" />
+						</h:panelGrid>
+						
+						<h:panelGrid cellpadding="10" width="100%" styleClass="colCenter">
+							<h:panelGroup>
+								<input type="submit" value="#{i18n.label_payment_proceed_to_pay}" class="destak1" />
+							</h:panelGroup>
+	
+							<h:graphicImage library="img" name="logo_tarjetascredit.gif" />
+						</h:panelGrid>
+					</fieldset>
+				
+				</form>
+			</p:panel>
+
+		</div>
+	</center>
+</h:body>
+</html>

@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:cb="http://java.sun.com/jsf/composite/component"
+	template="/WEB-INF/design/_decorate-report.xhtml">
+
+<ui:define name="reportContent" >
+
+	<p:panel header="#{i18n.report_produtors_commision }">
+	
+		<h:form>
+			<h:panelGrid columns="4" cellpadding="10">
+				<h:panelGrid>
+					<p:outputLabel value="Mega Evento" styleClass="less2" />
+					<h:outputText value="#{sessionHolder.currentMegaEvent.name}" styleClass="destak2" />
+				</h:panelGrid>
+				
+				<h:panelGrid>
+					<p:outputLabel for="inPercentual" value="Percentual" styleClass="less2 req" />
+					<p:inputText id="inPercentual" value="#{rComissionBean.percentualInteger }" size="10" required="true" />
+					<p:message for="inPercentual" />
+				</h:panelGrid>
+	
+				<h:panelGrid>
+					<p:outputLabel for="inSub" value="Valor a ser subtraído do valor do participante" styleClass="less2 req" />
+					<p:inputText id="inSub" value="#{rComissionBean.subtractValue }" size="10" required="true" >
+						<f:validateDoubleRange minimum="0.00" />
+					</p:inputText>
+					<h:outputText value="(ex: valor da hospedagem)" styleClass="less2" />
+					<p:message for="inSub" />
+				</h:panelGrid>
+
+				<p:commandButton icon="ui-icon-search" value="Pesquisar" 
+					action="#{rComissionBean.search()}"
+					update="@form :formResult"
+					/>
+			</h:panelGrid>
+		</h:form>
+		<p:separator />
+		
+		
+	
+		<h:form id="formResult">
+		
+			<cb:globalMessages />
+	
+			<p:tabView rendered="#{not empty rComissionBean.detailDtos}" >
+				
+				<p:tab title="Visão por Produtor">
+				
+					<h:outputText value="Visão por Produtor" styleClass="destak2" />
+					<p:separator />
+	
+					<fieldset>
+						<legend>Opções</legend>
+						<h:panelGrid columns="2" cellpadding="5">
+							<h:commandLink target="_blank" action="#{rComissionBean.exportToExcel()}" >
+								<h:panelGrid columns="2">
+									<p:graphicImage library="img" name="icon_export_excel2013_40.png" />
+									<h:outputText value="Exportar para Excel" />
+								</h:panelGrid>
+							</h:commandLink>
+						</h:panelGrid>
+					</fieldset>
+	
+					<p:spacer height="15" />
+					
+					<p:dataTable id="dtProductorComission" value="#{rComissionBean.comissionDtos }" var="dtoVar">
+						<p:column sortBy="#{dtoVar.productorContact.civilName }" styleClass="col20p">
+							<f:facet name="header">
+								<h:outputText value="Nome Civil do Produtor" />
+							</f:facet>
+							<h:outputText value="#{dtoVar.productorContact.civilName }" />
+						</p:column>
+	
+						<p:column sortBy="#{dtoVar.productorContact.name }" styleClass="col20p">
+							<f:facet name="header">
+								<h:outputText value="Nome Novo do Produtor" />
+							</f:facet>
+							<h:outputText value="#{dtoVar.productorContact.name }" />
+						</p:column>
+						
+						<p:column sortBy="#{dtoVar.productorContact.rootSchool.description }" styleClass="col20p">
+							<f:facet name="header">
+								<h:outputText value="Escola Raiz" />
+							</f:facet>
+							<h:outputText value="#{dtoVar.productorContact.rootSchool.description }" />
+						</p:column>
+
+						<p:column styleClass="colRight col10p" sortBy="#{dtoVar.calculatedTotalComission }">
+							<f:facet name="header">
+								<h:outputText value="Total comissão" />
+							</f:facet>
+							<h:outputText value="#{dtoVar.calculatedTotalComission }" styleClass="destak3" />
+						</p:column>
+						
+						<p:column styleClass="col50p">
+							<f:facet name="header">
+								<h:outputText value="Detalhes das comissões" />
+							</f:facet>
+							
+							<p:dataTable id="dtComissionDetail" value="#{dtoVar.detailDtos }" var="detailDtoVar">
+								<p:column styleClass="col40p">
+									<f:facet name="header">
+										<h:outputText value="Participante" />
+									</f:facet>
+									<h:outputText value="#{detailDtoVar.participantContact.fullDesc }" />
+								</p:column>
+					
+								<p:column styleClass="col40p">
+									<f:facet name="header">
+										<h:outputText value="Evento" />
+									</f:facet>
+									<h:outputText value="#{detailDtoVar.event.displayNameOrSchool }" styleClass="less2" />
+								</p:column>
+				
+								<p:column styleClass="colRight col10p"  >
+									<f:facet name="header">
+										<h:outputText value="Valor do Evento" />
+									</f:facet>
+									<h:outputText value="#{detailDtoVar.valueParticipant }" />
+								</p:column>
+					
+								<p:column styleClass="colRight col10p">
+									<f:facet name="header">
+										<h:outputText value="Comissão gerada" />
+									</f:facet>
+									<h:outputText value="#{detailDtoVar.calculatedComissionValue }" styleClass="destak4" />
+								</p:column>
+	
+								<p:column styleClass="colCenter col5p">
+									<f:facet name="header">
+										<h:outputText value="Compartilhada?" />
+									</f:facet>
+									<cb:displayFlagYes flag="#{detailDtoVar.flagShared}" />
+								</p:column>
+							</p:dataTable>
+	
+						</p:column>
+	
+					</p:dataTable>
+				</p:tab>
+	
+	
+	
+				<p:tab title="Visão por Participante" >
+				
+					<h:outputText value="Visão por Participante" styleClass="destak2" />
+					<p:separator />
+				
+					<fieldset>
+						<legend>Opções</legend>
+						<h:panelGrid columns="2" cellpadding="5">
+							<h:commandLink >
+								<h:panelGrid columns="2">
+									<p:graphicImage library="img" name="icon_export_excel2013_40.png" />
+									<h:outputText value="Exportar para Excel" />
+								</h:panelGrid>
+								<p:dataExporter target="dtComissionDetail" type="xls" 
+									fileName="#{rComissionBean.filenameViewOfParticipants}" 
+									/>					
+							</h:commandLink>
+						</h:panelGrid>
+					</fieldset>
+	
+					<p:spacer height="15" />
+					
+					<p:dataTable id="dtComissionDetail" value="#{rComissionBean.detailDtos }" var="detailDtoVar">
+						<p:column sortBy="#{detailDtoVar.participantContact.fullDesc }">
+							<f:facet name="header">
+								<h:outputText value="Participante" />
+							</f:facet>
+							<h:outputText value="#{detailDtoVar.participantContact.fullDesc }" />
+						</p:column>
+			
+						<p:column styleClass="colCenter" exportable="false">
+							<cb:displayFlagYes flag="#{detailDtoVar.participantContact.flagProductor}" />
+						</p:column>
+	
+						<p:column styleClass="colCenter">
+							<f:facet name="header">
+								<h:outputText value="É produtor?" />
+							</f:facet>
+							<h:outputText value="Sim" rendered="#{detailDtoVar.participantContact.flagProductor}" />
+							<h:outputText value="Não" rendered="#{not detailDtoVar.participantContact.flagProductor}" />
+						</p:column>
+	
+						<p:column sortBy="#{detailDtoVar.event.displayNameOrSchool }">
+							<f:facet name="header">
+								<h:outputText value="Evento" />
+							</f:facet>
+							<h:outputText value="#{detailDtoVar.event.displayNameOrSchool }" />
+						</p:column>
+		
+						<p:column styleClass="colRight">
+							<f:facet name="header">
+								<h:outputText value="Valor do Evento" />
+							</f:facet>
+							<h:outputText value="#{detailDtoVar.event.valueParticipant }" />
+						</p:column>
+			
+						<p:column styleClass="colRight">
+							<f:facet name="header">
+								<h:outputText value="Comissão gerada" />
+							</f:facet>
+							<h:outputText value="#{detailDtoVar.calculatedComissionValue }" />
+						</p:column>
+						
+						<p:column sortBy="#{detailDtoVar.participantContact.productorContact.shortDesc }">
+							<f:facet name="header">
+								<h:outputText value="Produtor 1" />
+							</f:facet>
+							<h:outputText value="#{detailDtoVar.participantContact.productorContact.shortDesc }" />
+						</p:column>
+				
+						<p:column sortBy="#{detailDtoVar.participantContact.productorContact2.shortDesc }">
+							<f:facet name="header">
+								<h:outputText value="Produtor 2" />
+							</f:facet>
+							<h:outputText value="#{detailDtoVar.participantContact.productorContact2.shortDesc }" />
+						</p:column>
+					</p:dataTable>
+				</p:tab>
+				
+			</p:tabView>
+	
+		</h:form>
+	</p:panel>
+
+</ui:define>
+	
+
+</ui:composition>

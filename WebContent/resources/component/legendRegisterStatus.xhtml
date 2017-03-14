@@ -1,0 +1,53 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:cc="http://java.sun.com/jsf/composite"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+<cc:interface>
+	<cc:attribute name="rendered" />
+</cc:interface>
+
+<cc:implementation>
+
+	<h:panelGroup rendered="#{cc.attrs.rendered}">
+
+		<p:spacer height="10" />
+		
+		<p:fieldset legend="#{i18n.label_legend_about_register_status}" toggleable="true" collapsed="true">
+			
+			<h:panelGrid columns="5" cellpadding="5">
+				<h:panelGrid columns="2" cellpadding="0">
+					<h:graphicImage library="img" name="icon_register_status_incomplete_36.png" />
+					<h:outputText value="#{i18n.REGISTER_STATUS_INCOMPLETE}" styleClass="less2" />
+				</h:panelGrid>
+					
+				<h:panelGrid columns="2" cellpadding="0">
+					<h:graphicImage library="img" name="icon_register_status_registered_36.png" />
+					<h:outputText value="#{i18n.REGISTER_STATUS_REGISTERED}" styleClass="less2"  />
+				</h:panelGrid>
+				
+				<h:panelGrid columns="2" cellpadding="0">
+					<h:graphicImage library="img" name="icon_register_status_checkedin_36.png" />
+					<h:outputText value="#{i18n.REGISTER_STATUS_CHECKEDIN}" styleClass="less2" />
+				</h:panelGrid>
+				
+				<h:panelGrid columns="2" cellpadding="0">
+					<h:graphicImage library="img" name="icon_register_status_checkedout_36.png" />
+					<h:outputText value="#{i18n.REGISTER_STATUS_CHECKEDOUT}" styleClass="less2" />
+				</h:panelGrid>
+				
+				<h:panelGrid columns="2" cellpadding="0">
+					<h:graphicImage library="img" name="icon_register_status_megaeventout_36.png" />
+					<h:outputText value="#{i18n.REGISTER_STATUS_MEGAEVENTOUT}" styleClass="less2" />
+				</h:panelGrid>
+			</h:panelGrid>
+		</p:fieldset>
+
+	</h:panelGroup>
+
+</cc:implementation>
+
+</html>

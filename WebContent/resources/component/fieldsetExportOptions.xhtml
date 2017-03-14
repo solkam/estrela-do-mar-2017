@@ -1,0 +1,42 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:cc="http://java.sun.com/jsf/composite"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:h="http://java.sun.com/jsf/html">
+
+<cc:interface>
+	<cc:attribute name="tableId"   required="true" type="java.lang.String" shortDescription="usar forma global" />
+	<cc:attribute name="fileName"  required="true" type="java.lang.String"  />
+	<cc:attribute name="flagExcel" required="true" type="java.lang.Boolean" default="true" />
+	<cc:attribute name="flagPDF"   required="true" type="java.lang.Boolean" default="false" />
+</cc:interface>
+
+<cc:implementation>
+
+	<p:fieldset legend="#{i18n.label_export_options}" toggleable="true" collapsed="true">
+	
+		<h:panelGrid columns="2" cellpadding="10">
+			<h:commandLink rendered="#{cc.attrs.flagExcel}" styleClass="optionItem">
+				<h:panelGrid columns="2" cellpadding="2">
+					<p:graphicImage library="img" name="icon_export_excel2013_40.png" />
+					<h:outputText value="Exportar para Excel" />
+				</h:panelGrid>
+				<p:dataExporter target="#{cc.attrs.tableId}" type="xls" fileName="#{cc.attrs.fileName}" encoding="UTF-8" />
+			</h:commandLink>
+			
+			<h:commandLink rendered="#{cc.attrs.flagPDF}" styleClass="optionItem">
+				<h:panelGrid columns="2" cellpadding="2">
+					<p:graphicImage library="img" name="icon_export_pdf2013_40.png" />
+					<h:outputText value="Exportar para PDF" />
+				</h:panelGrid>
+				<p:dataExporter target="#{cc.attrs.tableId}" type="pdf" fileName="#{cc.attrs.fileName}" encoding="UTF-8" />
+			</h:commandLink>
+		</h:panelGrid>
+		
+	</p:fieldset>
+
+</cc:implementation>
+
+</html>

@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:fragment xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:cb="http://java.sun.com/jsf/composite/component">
+
+<p:dialog widgetVar="DialogTransferEvent" header="#{i18n.label_transfer_event}" 
+	modal="true" dynamic="true" closeOnEscape="true" maximizable="true"
+	width="75%" height="75%" position="top" >
+	
+	<p:outputPanel id="regionTransferEvent">
+	
+		<p:tabView>
+			<p:tab title="#{i18n.label_transfer_to_future_event}"
+				rendered="#{paymentBean.detailToTransfer.event.flagFormation}" >
+				
+				<h:form id="formTransferEvent">
+				
+					<p:messages globalOnly="true" />
+			
+					<h:outputText value="#{i18n.msg_no_event_found}" styleClass="less2"
+						rendered="#{empty paymentBean.futureEventsWithSameFormation}" />
+				
+					<p:dataTable value="#{paymentBean.futureEventsWithSameFormation}" var="eventRow" rowKey="#{eventRow.id}"
+						rendered="#{not empty paymentBean.futureEventsWithSameFormation}" >
+					
+						<p:column headerText="#{i18n.label_megaevent}" styleClass="col20p">
+							<h:outputText value="#{eventRow.eventWeek.megaEvent.name}" />
+						</p:column>
+					
+						<p:column headerText="#{i18n.label_week}" styleClass="col20p">
+							<h:outputText value="#{eventRow.eventWeek.name}" />
+						</p:column>
+			
+						<p:column headerText="#{i18n.label_event}" styleClass="col20p">
+							<h:outputText value="#{eventRow.displayNameOrSchool}" styleClass="destak4" />
+						</p:column>
+			
+						<p:column headerText="#{i18n.label_event_begin_date}" styleClass="col10p colCenter">
+							<cb:outputDate value="#{eventRow.beginDate}" styleClass="less2" />
+						</p:column>
+			
+						<p:column headerText="#{i18n.label_event_end_date}" styleClass="col10p colCenter">
+							<cb:outputDate value="#{eventRow.endDate}" styleClass="less2" />
+						</p:column>
+						
+						<p:column styleClass="col5p colCenter">
+							<p:commandButton icon="ui-icon-check" value="#{i18n.label_select}"
+								action="#{paymentBean.transferToFutureEvent(eventRow) }"
+								process="@this"
+								update="@form :formRegister:tabDetail:displayPayments" 
+								oncomplete="if (args.sucessOnly) DialogTransferEvent.hide()"
+								/>
+						</p:column>
+						
+					</p:dataTable>
+				
+					<p:messages globalOnly="true" />
+					
+				</h:form>
+			</p:tab>
+			
+			<p:tab title="#{i18n.label_transfer_to_other_person}">
+				<h:form>
+					<h:panelGrid columns="2" cellpadding="5" >
+					
+						<h:panelGrid>
+							<p:autoComplete value="#{paymentBean.futureRegister}"
+								queryDelay="500" minQueryLength="3" maxResults="10" size="70"
+								completeMethod="#{paymentBean.completeRegisterByContactName}"
+								var="registerRow" itemValue="#{registerRow}" itemLabel="#{registerRow.contact.fullDesc}"
+								converter="#{registerConverter}" >
+
+								<p:column headerText="#{i18n.label_civil_name}">
+									<h:outputText value="#{registerRow.contact.civilName}" />
+								</p:column>
+							
+								<p:column headerText="#{i18n.label_name}">
+									<h:outputText value="#{registerRow.contact.name}" styleClass="destak4" />
+								</p:column>
+			
+								<p:column headerText="#{i18n.label_city}">
+									<h:outputText value="#{registerRow.contact.city}"  />
+								</p:column>
+			
+								<p:column headerText="#{i18n.label_country}">
+									<h:outputText value="#{registerRow.contact.country}"  />
+								</p:column>
+								
+							</p:autoComplete>
+								
+							<h:outputText value="#{i18n.label_search_by_name_new_or_civil}" styleClass="less3" />
+						</h:panelGrid>
+							
+						<p:commandButton icon="ui-icon-check" value="#{i18n.label_transfer_event_confirm}"
+							action="#{paymentBean.transferToOtherRegister()}"
+							update="@form"
+							oncomplete="if (args.sucessOnly) DialogTransferEvent.hide()" />
+				
+					</h:panelGrid>
+
+					<p:messages globalOnly="true" />
+				</h:form>
+			</p:tab>
+
+		</p:tabView>
+
+	</p:outputPanel>
+
+
+</p:dialog>
+
+</ui:fragment>

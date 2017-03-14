@@ -1,0 +1,265 @@
+@CHARSET "UTF-8";
+
+.ui-dialog {
+	position: absolute !important;
+	overflow: hidden !important;
+}
+
+.colorBlue {
+	color:#008; 
+}
+
+
+.warning {
+	color: #800;
+}
+
+.destak1 {
+	font-size: 1.5em;
+	font-weight: bold;
+}
+
+.destak2 {
+	font-size: 1.2em;
+	font-weight: bold;
+}
+
+.destak3 {
+	font-size: 1.1em;
+	font-weight: bold;
+}
+
+.destak4 {
+	font-weight: bold;
+}
+
+.less1 {
+	font-weight: normal;
+	font-size: 0.9em;
+	color: #222222;
+}
+
+.less2 {
+	font-weight: normal;
+	font-size: 0.75em;
+	color: #222222;
+}
+
+.less3 {
+	font-weight: normal;
+	font-size: 0.6em;
+	color: #222222;
+}
+
+.bg75p {
+	background-color: #dddddd;
+}
+
+.center {
+	text-align: center;
+}
+
+.small {
+	font-weight: normal;
+	font-size: 0.8em;
+}
+
+.wiz {
+	height: 500px;
+	overflow: auto;
+
+}
+
+.no-border {
+	border-color: #FFFFFF; 
+}
+
+.readonly {
+	border-width: 1px;
+	border-style: dotted;
+	background-color: #ffd;
+}
+
+.wrappable {
+	white-space: normal;	
+}
+
+.ui-datatable-odd {
+    background: none repeat scroll 0 0 #F0F0F0;
+}
+
+.menubarTransparent {
+	border:0;
+	background-color: transparent;
+}
+
+.invisible {
+	border:0;
+	background-color: transparent;
+}
+
+.combo {
+	width: 250px;	
+}
+
+.ui-button {
+	white-space: nowrap;
+}
+
+.ui-menuitem {
+	white-space: nowrap;
+}
+
+.panelTopBar {
+	background-color: transparent; 
+	border:0; 
+	padding:0;
+	margin: 0;
+}
+
+.ui-toolbar {
+	margin-bottom: 10px;
+}
+
+.helpPanel {
+	background-color: #eef;
+}
+
+.scrollable1 {
+	height: 600px;
+}
+
+.scrollable2 {
+	height: 500px;
+}
+
+.scrollable3 {
+	height: 300px;
+}
+
+.paid {
+	color: #00A;
+}
+
+.pendent {
+	color: #A00;
+}
+
+.credit {
+	color: #040;	
+}
+
+.postit {
+	background-color: #ff8;
+}
+
+.req {
+	color: #A00;
+	font-weight: bold;;
+}
+
+.warning {
+	color: #B00;
+}
+
+legend {
+	font-size: 0.85em;
+	font-weight: bold;
+}
+
+.col5p colCenter {
+	width: 1%;
+}
+
+.colCenter {
+	text-align: center;
+}
+
+.colRight {
+	text-align: right;
+}
+
+.col5p {
+	width: 5%;
+}
+.col10p {
+	width: 10%;
+}
+.col20p {
+	width: 20%;
+}
+.col25p {
+	width: 25%;
+}
+.col30p {
+	width: 30%;
+}
+.col40p {
+	width: 40%;
+}
+.col50p {
+	width: 50%;
+}
+.col60p {
+	width: 60%;
+}
+.col70p {
+	width: 70%;
+}
+.col75p {
+	width: 75%;
+}
+.col80p {
+	width: 80%;
+}
+.col90p {
+	width: 90%;
+}
+
+
+.paymentLink:link,.paymentLink:visited {
+	display: block;
+	font-weight: bold;
+	font-size: 1.5em;
+	color: #FFFFFF;
+	background-color: #98bf21;
+	text-align: center;
+	padding: 20px;
+	text-decoration: none;
+}
+
+.paymentLink:hover,.paymentLink:active {
+	background-color:#7A991A;
+	color:yellow;
+	text-decoration: underline;
+}
+
+.optionItem {
+	-moz-border-radius: 8px;
+	-webkit-border-radius: 8px;
+	border-radius: 8px;
+	
+	border: 2px solid #fff;
+	box-shadow: 0px 0px 20px #fff;
+	color: #bbb;
+	font-weight: normal;
+	text-decoration: none;
+}
+
+.optionItem:hover {
+	-moz-border-radius: 8px;
+	-webkit-border-radius: 8px;
+	border-radius: 8px;
+	
+	border: 2px solid #fff;
+	box-shadow: 0px 0px 20px #444;
+	color: #000;
+	font-weight: normal;
+	text-decoration: none;
+}
+
+.mycheck {
+	background-image: url('resources/img/icon_mycheck_32.png') !important;
+	background-position: center;	
+	background-repeat: no-repeat;
+}

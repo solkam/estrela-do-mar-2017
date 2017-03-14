@@ -1,0 +1,135 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:fragment xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:cb="http://java.sun.com/jsf/composite/component">
+
+<p:dialog widgetVar="DialogFamily" header="#{i18n.label_add_familiar_or_baby_sitter}" 
+	modal="true" dynamic="true" maximizable="true" closeOnEscape="true"
+	position="top" >
+	
+	<h:form>
+		<fieldset>
+			<legend>#{i18n.label_search_for_existing_contact}</legend>
+			
+			<p:autoComplete value="#{checkInBean.familiarRegister.contact}"
+				completeMethod="#{autoCompleteContactBean.queryContact }"  
+				var="c"	itemValue="#{c}" itemLabel="#{c.fullDesc }"
+				converter="#{contactConverter}"
+				queryDelay="500" size="60" panelStyle="widht:200px" >
+			
+				<p:ajax event="itemSelect" process="@this" update=":formFamily" />	
+			</p:autoComplete>
+		</fieldset>
+	</h:form>
+		
+	<h:outputText value="#{i18n.label_or}" />	
+
+	<h:form id="formFamily">
+		
+		<h:panelGroup>
+			<fieldset>
+				<legend>#{i18n.label_contact_new}</legend>
+				
+				<h:panelGrid columns="2" cellpadding="1">
+					<p:outputLabel for="inCivilName" value="#{i18n.label_civil_name_complete}" styleClass="less2 req" />
+					<h:panelGrid cellpadding="0">
+						<p:inputText id="inCivilName" value="#{checkInBean.familiarRegister.contact.civilName}"
+							required="true" size="60" maxlength="90" />
+						<p:message for="inCivilName" />
+					</h:panelGrid>
+					
+					<p:outputLabel for="inEmail" value="#{i18n.label_email}" styleClass="less2 req" />
+					<h:panelGrid columns="2" cellpadding="0">
+						<p:inputText id="inEmail" value="#{checkInBean.familiarRegister.contact.email}"
+							required="true" size="60" maxlength="90" />
+						<h:outputText value="(#{i18n.label_email_must_be_unique})" styleClass="less3" />
+						<p:message for="inEmail" />
+					</h:panelGrid>
+
+					<p:outputLabel for="inBirth" value="#{i18n.label_birthdate}" styleClass="less2 req" />
+					<h:panelGrid cellpadding="0">
+						<h:panelGrid columns="2">
+							<p:calendar id="inBirth" value="#{checkInBean.familiarRegister.contact.birthDate}"
+								required="true" size="10" pattern="dd/MM/yyyy" navigator="true"  >
+									<p:ajax event="blur" process="@this" update="displayMaturity" global="false" 
+									/>
+							</p:calendar>
+							<p:outputPanel id="displayMaturity">
+								<cb:displayMaturityAndAge contact="#{checkInBean.familiarRegister.contact}" styleClass="less2" />
+							</p:outputPanel>
+						</h:panelGrid>
+						<h:outputText value="(dd/mm/aaaa)" styleClass="less3" />
+						<p:message for="inBirth" />
+					</h:panelGrid>
+
+					<p:outputLabel for="inDoc" value="#{i18n.label_document_identity}" styleClass="less2 req" />
+					<h:panelGrid cellpadding="0">
+						<h:panelGrid columns="2" cellpadding="0" >
+							<p:selectOneMenu value="#{checkInBean.familiarRegister.contact.identityDocumentType}">
+								<f:selectItems value="#{enumHelper.documentTypes}" var="typeRow"
+									itemLabel="#{i18n[typeRow.key]}" />
+							</p:selectOneMenu>
+							
+							<p:inputText id="inDoc" value="#{checkInBean.familiarRegister.contact.identityDocument}"
+								required="true" />
+						</h:panelGrid>
+						<p:message for="inDoc" />
+					</h:panelGrid>
+
+				</h:panelGrid>
+			</fieldset>
+		</h:panelGroup>
+				
+		<p:spacer height="10" />		
+				
+		<h:panelGroup>
+			<fieldset>
+				<legend>#{i18n.label_events_for_dependents}</legend>
+			
+				<p:dataTable value="#{checkInBean.dependentEvents}" var="eventRow" 
+					selection="#{checkInBean.seletedDependentEvents}" rowKey="#{eventRow.id}">
+					
+					<p:column selectionMode="multiple" />
+					
+					<p:column headerText="#{i18n.label_week}">
+						#{eventRow.eventWeek.name}
+					</p:column>
+					
+					<p:column headerText="#{i18n.label_event}">
+						#{eventRow.name}
+					</p:column>
+					
+					<p:column headerText="#{i18n.label_event_begin_date }">
+						<cb:outputDate value="#{eventRow.beginDate }" />
+					</p:column>
+		
+					<p:column headerText="#{i18n.label_event_end_date }">
+						<cb:outputDate value="#{eventRow.endDate }" />
+					</p:column>
+
+					<p:column headerText="#{i18n.label_value }">
+						<cb:outputCurrency value="#{eventRow.valueParticipant }" />
+					</p:column>
+
+				</p:dataTable>
+
+			</fieldset>
+		</h:panelGroup>
+		
+		<p:separator />
+		
+		<cb:globalMessages />>
+
+		<p:commandButton icon="ui-icon-check" value="#{i18n.label_save}"
+			action="#{checkInBean.saveFamiliarRegister()}"
+			update="@form :formCheckin"
+			oncomplete="if (args.sucessOnly) DialogFamily.hide()"  />
+		
+	</h:form>
+	
+</p:dialog>
+
+</ui:fragment>

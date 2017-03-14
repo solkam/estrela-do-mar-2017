@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ui:fragment xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+    xmlns:cb="http://java.sun.com/jsf/composite/component">
+        
+    <style type="text/css">
+        .columnDataTable {
+            width: 400px;
+            max-width: 450px;
+        }
+
+        .columnDataTable > div {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            -o-text-overflow: ellipsis;
+            -ms-text-overflow: ellipsis;
+            display: block;
+        }
+        
+    </style>
+    
+	
+	<p:commandButton icon="ui-icon-plus" value="#{i18n.label_observation_new}" 
+		process="@this" 
+		action="#{paymentBean.resetContactObservation()}"
+		update=":formNewObservation"
+		oncomplete="DialogObservation.show()"
+		/>
+
+	<p:separator /> 
+ 
+	<p:outputPanel id="regionObservations">
+	
+		<cb:globalMessages />
+		
+		<h:outputText value="#{i18n.msg_no_result_found}" styleClass="warning" 
+			rendered="#{empty paymentBean.selectedContact.observations}" 
+			/>
+	
+		<p:dataTable value="#{paymentBean.selectedContact.observations}" var="obsVar"
+			rendered="#{not empty paymentBean.selectedContact.observations}">
+			
+			<p:column headerText="Data" styleClass="col10p colCenter">
+				<cb:outputDate value="#{obsVar.entryDate}" />
+			</p:column>
+			
+			<p:column headerText="Texto" styleClass="col60p">
+				<h:outputText value="#{obsVar.text}"  />
+			</p:column>
+			
+			<p:column headerText="Criado Por" styleClass="col25p">
+				<h:outputText value="#{obsVar.createdBy}" />
+			</p:column>
+
+			<p:column styleClass="col5p colCenter">
+				<p:commandButton icon="ui-icon-trash" 
+					action="#{paymentBean.removeContactObservation(obsVar) }"
+					process="@this"
+					update=":formRegister:tabDetail:regionObservations" />
+			</p:column>
+		</p:dataTable>
+		
+	</p:outputPanel>
+    
+    
+</ui:fragment>

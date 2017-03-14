@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:decorate xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	template="/WEB-INF/design/_template-main.xhtml">
+	
+<ui:define name="content">
+
+	<h:form>
+		<p:toolbar>
+			<p:toolbarGroup>
+				<h:panelGrid columns="2" cellpadding="5" width="100%" rules="cols">
+	
+					<h:panelGrid columns="2" cellpadding="5">
+						<h:graphicImage library="img" name="option_informe_75.png" />
+						<h:outputText value="Informes" styleClass="destak1" />
+					</h:panelGrid>
+					
+					<h:panelGrid columns="2" cellpadding="5">
+					
+						<h:panelGroup>
+							<fieldset>
+								<legend>#{i18n.label_reports_people}</legend>
+								
+								<h:panelGrid columns="3" cellpadding="5">
+									<p:button icon="ui-icon-person"               value="#{i18n.report_people_moviment_by_date}"         outcome="/pages/report/report-moviment-by-date"                rendered="#{viewAcessBean.acessibleForReportMovimentByDate}" />
+									<p:button icon="ui-icon-person"               value="#{i18n.report_people_in_megaevent_by_date}"     outcome="/pages/report/report-people-in-megaevent-by-date"     rendered="#{viewAcessBean.acessibleForReportPeopleInMegaEventByDate}" />
+									<p:button icon="ui-icon-arrowreturnthick-1-n" value="#{i18n.report_people_for_checkout_by_date}"     outcome="/pages/report/report-people-for-checkout-by-date"     rendered="#{viewAcessBean.acessibleForReportCheckOUTByDate}" />
+									<p:button icon="ui-icon-arrowreturnthick-1-s" value="#{i18n.report_people_for_checkin_by_date}"      outcome="/pages/report/report-people-for-checkin-by-date"      rendered="#{viewAcessBean.acessibleForReportCheckINByDate}" />
+									<p:button icon="ui-icon-person"               value="#{i18n.report_people_by_event}"                 outcome="/pages/report/report-people-by-event"                 rendered="#{viewAcessBean.acessibleForReportPeopleByEvent}" />
+									<p:button icon="ui-icon-suitcase"             value="Fichas Médicas"                                 outcome="/pages/report/report-medical-form"                    />
+									<p:button icon="ui-icon-home"                 value="Quartos"                                        outcome="/pages/report/report-hosting"                         />
+								</h:panelGrid>
+
+							</fieldset>
+						</h:panelGroup>
+
+						<h:panelGroup rendered="#{viewAcessBean.acessibelForPaymentGroup}">
+							<fieldset>
+								<legend>#{i18n.label_reports_payment}</legend>
+									
+									<h:panelGrid columns="2" cellpadding="5">
+										<p:button icon="ui-icon-tag"                  value="#{i18n.report_balance_by_week}"                 outcome="/pages/report/report-balance-by-week"                 rendered="#{viewAcessBean.acessibleForReportBalanceByWeek}" />
+										<p:button icon="ui-icon-tag"                  value="#{i18n.report_payments_by_event}"               outcome="/pages/report/report-payments-by-event"               rendered="#{viewAcessBean.acessibleForReportPaymentByEvent}" />
+										<p:button icon="ui-icon-person"               value="#{i18n.report_balance_by_register}"             outcome="/pages/report/report-balance-by-register"             rendered="#{viewAcessBean.acessibleForReportBalanceByRegister}" />
+										<p:button icon="ui-icon-calendar"             value="#{i18n.report_payment_method_by_dates}"         outcome="/pages/report/report-payment-method-by-date"          rendered="#{viewAcessBean.acessibleForReportPaymentMethodByDate}" />
+										<p:button icon="ui-icon-tag"                  value="#{i18n.report_produtors_commision}"             outcome="/pages/report/report-productor-comission.xhtml"       rendered="#{viewAcessBean.acessibleForReportProductorsComissions}" />
+									</h:panelGrid>
+							</fieldset>
+						</h:panelGroup>
+
+					</h:panelGrid>
+				 
+				</h:panelGrid>
+			</p:toolbarGroup>	
+		</p:toolbar>
+	</h:form>
+
+	<ui:insert name="reportContent">
+		codigo a ser definido... 	
+		
+	</ui:insert>
+	
+	<p:spacer height="20" />
+
+</ui:define>	
+</ui:decorate>

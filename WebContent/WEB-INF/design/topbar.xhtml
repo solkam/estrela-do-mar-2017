@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:fragment xmlns="http://www.w3.org/1999/xhtml" 
+      xmlns:ui="http://java.sun.com/jsf/facelets" 
+      xmlns:h="http://java.sun.com/jsf/html" 
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+      
+<style>
+.ui-menu .ui-menu-parent .ui-menu-child {
+	width: 300px;
+}
+</style> 
+
+<h:form>
+	<p:toolbar >
+		<p:toolbarGroup>
+				<h:panelGrid columns="2" cellspacing="5">
+					<h:outputText value="#{i18n.title_app}" styleClass="destak1" />
+				
+					<h:panelGrid rendered="#{loginBean.logged}" columns="7" cellpadding="0">
+
+						<span class="ui-icon ui-icon-person" />
+						<h:outputText value="#{loginBean.authenticatedUser.desc}" styleClass="less1" />
+
+						<p:spacer width="5" />
+
+						<span class="ui-icon ui-icon-key" />
+						<h:outputText value="#{i18n[loginBean.authenticatedUser.profile.key]}" styleClass="less1"  />
+
+						<p:spacer width="10" />
+
+						<p:menuButton value="#{sessionHolder.currentMegaEvent.name}"  
+							model="#{inscricaoMenuButtonAdapter.megaEventModel}"
+							rendered="#{viewAcessBean.acessibleForChangeMegaEvent}" />
+
+					</h:panelGrid>
+				</h:panelGrid>
+		</p:toolbarGroup>
+		
+		<p:toolbarGroup align="right" >
+			<h:panelGrid columns="4" cellpadding="5">
+			
+				<p:graphicImage library="img" name="#{idiomBean.idiom.image}" cache="true" />
+				
+				<p:menuButton value="#{i18n.title_idiom}" style="width:200px">
+					<p:menuitem icon="ui-icon-comment" value="Español"   action="#{idiomBean.changeTo('es') }" ajax="false" async="false" />
+					<p:menuitem icon="ui-icon-comment" value="Português" action="#{idiomBean.changeTo('pt') }" ajax="false" async="false" />
+				</p:menuButton>
+				
+				<p:commandButton icon="ui-icon-shuffle" value="#{i18n.title_change_password}" rendered="#{loginBean.logged}" 
+					onclick="DialogChangePass.show()" process="@none" 
+					update=":formChangePass" />
+
+				<p:commandButton icon="ui-icon-power" value="#{i18n.title_logout}" rendered="#{loginBean.logged}" 
+					action="#{loginBean.logout }" ajax="false" />
+				
+			</h:panelGrid>
+		</p:toolbarGroup>
+		
+	</p:toolbar>
+</h:form>
+
+<ui:include src="password-changer.xhtml" />
+
+   
+</ui:fragment>

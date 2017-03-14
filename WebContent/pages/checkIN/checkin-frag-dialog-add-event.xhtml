@@ -1,0 +1,61 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:fragment xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:cb="http://java.sun.com/jsf/composite/component">
+
+<!-- Dialog Adicionar Eventos -->
+<!-- ************************ -->
+<p:dialog widgetVar="DialogAddEvent" header="#{i18n.label_add_event}" 
+	modal="true" dynamic="true" maximizable="true" closeOnEscape="true"
+	position="top" >
+	
+	<h:form id="formAddEvent">
+
+		<cb:globalMessages />
+
+		<p:panel styleClass="scrollable1">
+			<p:dataTable value="#{checkInEventBean.eventWeeks }" var="weekRow">
+			
+				<p:column>
+					<p:dataTable value="#{weekRow.events }" var="eventRow"
+						emptyMessage="#{i18n.msg_no_events}">
+						
+						<f:facet name="header">
+							<h:outputText value="#{weekRow.name}" styleClass="destak3" />
+							<br />
+							<h:outputText value="#{weekRow.descDates}" styleClass="less3" />
+						</f:facet>
+
+						<p:column headerText="#{i18n.label_name}">
+							<h:outputText value="#{eventRow.displayNameOrSchool }" styleClass="destak4" />
+						</p:column>
+
+						<p:column headerText="#{i18n.label_participant_value}">
+							<cb:outputCurrency value="#{eventRow.valueParticipant }" />
+							<br />
+							<p:commandButton icon="ui-icon-check" value="Participar"
+								action="#{checkInEventBean.confirmAsParticipant(eventRow) }"
+								update="@form :formCheckin"
+								rendered="#{eventRow.enableForParticipant }" />
+						</p:column>
+
+						<p:column headerText="#{i18n.label_staff_value}">
+							<cb:outputCurrency value="#{eventRow.valueStaff }" />
+							<br />
+							<p:commandButton icon="ui-icon-check" value="Staff"
+								action="#{checkInEventBean.confirmAsStaff(eventRow) }"
+								update="@form :formCheckin" rendered="#{eventRow.enableForStaff }" />
+						</p:column>
+
+					</p:dataTable>
+				</p:column>
+			</p:dataTable>
+		</p:panel>
+
+	</h:form>
+</p:dialog>
+
+</ui:fragment>

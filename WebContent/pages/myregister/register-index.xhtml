@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:cb="http://java.sun.com/jsf/composite/component"
+	template="/WEB-INF/design/_template-main.xhtml">
+<ui:define name="content">
+
+<h:form>
+
+	<cb:globalMessages />
+
+	<p:dataTable value="#{registerIndexBean.doneRegisters}" var="registerRow" 
+		emptyMessage="#{i18n.msg_no_registers}"  >
+		
+		<f:facet name="header">
+			<h:outputText value="#{i18n.label_your_register_already_done}" styleClass="destak2" />
+		</f:facet>
+
+		<p:column styleClass="col5p colCenter">
+			<h:outputText value="#{registerRow.id}" styleClass="less1" />
+		</p:column>
+
+		<p:column styleClass="col10p colCenter">
+			<h:graphicImage library="img" name="#{registerRow.megaEvent.type.image}" />
+		</p:column>
+
+		<p:column headerText="#{i18n.label_megaevent}" styleClass="col60p">
+			<h:outputText value="#{registerRow.megaEvent.name}" styleClass="destak2" />
+			<br />
+			<h:outputText value="#{registerRow.megaEvent.descDates}" styleClass="less2" />
+		</p:column>
+		
+		<p:column headerText="#{i18n.label_status}" styleClass="col10p colCenter">
+			<h:graphicImage library="img" name="#{registerRow.status.image}" 
+				title="#{i18n[registerRow.status.key] }" />
+		</p:column>
+
+		<p:column styleClass="col10p colCenter" >
+			<p:commandButton icon="ui-icon-pencil" value="#{i18n.label_review}"
+				action="#{registerStepBean.prepareToUpdateRegister(registerRow) }"
+				rendered="#{registerRow.statusRegistered or registerRow.statusIncomplete}" 
+				ajax="false"
+				/>
+		</p:column>
+
+		<p:column styleClass="col10p colCenter" >
+			<p:commandButton icon="ui-icon-zoomin" value="#{i18n.label_payments}" 
+				title="#{i18n.label_view_payments_alread_done}"
+				action="#{registerStepBean.prepareToViewPayments(registerRow) }"
+				rendered="#{registerRow.statusRegistered or registerRow.statusIncomplete}"
+				oncomplete="DialogViewPayment.show()" 
+				update=":regionPayments"
+				/>
+		</p:column>
+	</p:dataTable>
+
+	<p:spacer height="30" />		
+
+	<p:dataTable value="#{registerIndexBean.pendentMegaEvents}" var="megaEventRow" 
+		emptyMessage="#{i18n.msg_no_megaevents_available}">
+
+		<f:facet name="header">
+			<h:outputText value="#{i18n.label_registers_available}" styleClass="destak2" />
+		</f:facet>		
+
+		<p:column styleClass="col10p colCenter">
+			<h:graphicImage library="img" name="#{megaEventRow.type.image}" />
+		</p:column>
+
+		<p:column headerText="#{i18n.label_megaevent}" styleClass="col30p">
+			<h:outputText value="#{megaEventRow.name}" styleClass="destak2" />
+		</p:column>
+		
+		<p:column headerText="#{i18n.label_dates}" styleClass="col50p">
+			<h:outputText value="#{megaEventRow.descDates}" styleClass="less1" />
+		</p:column>
+		
+		<p:column styleClass="col10p colCenter">
+			<p:commandButton icon="ui-icon-check" value="#{i18n.label_register_yourself}"
+				action="#{registerStepBean.prepareToNewRegister(megaEventRow)}" 
+				ajax="false"
+				/>
+		</p:column>
+		
+	</p:dataTable>
+
+</h:form>
+
+<cb:legendRegisterStatus />
+
+
+<!-- Dialog Visualizar Pagamentos -->
+<p:dialog widgetVar="DialogViewPayment" header="#{i18n.label_payments}"
+	modal="true" dynamic="true" maximizable="true" closeOnEscape="true"
+	position="top" width="80%" height="80%">
+	
+	<p:outputPanel id="regionPayments">
+	
+		<h:outputText value="#{registerStepBean.register.megaEvent.name}" styleClass="destak2" />
+		<p:separator></p:separator>
+	
+		<p:dataTable value="#{registerStepBean.register.details}" var="detailRow">
+			<p:column headerText="#{i18n.label_week}" styleClass="col10p">
+				#{detailRow.eventWeek.name}
+			</p:column>
+
+			<p:column headerText="#{i18n.label_event}" styleClass="col10p">
+				<h:outputText value="#{detailRow.event.displayNameOrSchool}" styleClass="destak3" />
+			</p:column>
+			
+			<p:column headerText="#{i18n.label_value}" styleClass="col10p colCenter">
+				<cb:outputCurrency value="#{detailRow.value}" />
+			</p:column>
+
+			<p:column headerText="#{i18n.label_paid_value}" styleClass="col10p colCenter">
+				<cb:outputCurrency value="#{detailRow.calculatedPaidValue}" styleClass="paid" />
+				<f:facet name="footer">
+					<cb:outputCurrency value="#{registerStepBean.register.calculatedPaidValue}" styleClass="destak2 paid" />
+				</f:facet>
+			</p:column>
+
+			<p:column headerText="#{i18n.label_pendent_value}" styleClass="col10p colCenter">
+				<cb:outputCurrency value="#{detailRow.calculatedPendentValue}" styleClass="pendent" />
+				<f:facet name="footer">
+					<cb:outputCurrency value="#{registerStepBean.register.calculatedPendentValue}" styleClass="destak2 pendent" />
+				</f:facet>
+			</p:column>
+
+			<p:column styleClass="col80p">
+				<h:outputText value="#{i18n.msg_no_payment_done}" styleClass="less1"
+					rendered="#{empty detailRow.payments}" />
+				
+				<p:dataTable value="#{detailRow.payments}" var="paymentRow"
+					rendered="#{not empty detailRow.payments}" >
+					
+					<p:column headerText="#{i18n.label_payment_method}">
+						#{i18n[paymentRow.method.key]}
+					</p:column>
+					
+					<p:column headerText="#{i18n.label_date}" styleClass="colCenter">
+						<cb:outputTimestamp value="#{paymentRow.date}" />
+					</p:column>
+					
+					<p:column headerText="#{i18n.label_value}" styleClass="colCenter">
+						<cb:outputCurrency value="#{paymentRow.value}" />
+					</p:column>
+				</p:dataTable>
+			</p:column>
+		</p:dataTable>
+		
+	</p:outputPanel>
+</p:dialog>	
+
+
+	
+</ui:define>
+</ui:composition>

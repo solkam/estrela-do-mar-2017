@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:fragment xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:cb="http://java.sun.com/jsf/composite/component">
+
+<h:form id="formPrincipal">
+
+	<cb:globalMessages />
+
+	<p:panel rendered="#{configUserBean.user.transient}">
+
+		<small><i>#{i18n.text_help_user_assign_contact_ways}</i></small>
+		<p:separator />
+
+		<h:panelGrid columns="3" cellpadding="5">
+			<h:outputText value="#{i18n.label_search_by_name_new_or_civil}"	styleClass="less2" />
+			<p:autoComplete value="#{configUserBean.contact}"
+				completeMethod="#{configUserBean.queryContact }" var="contactRow"
+				itemValue="#{contactRow}" itemLabel="#{contactRow.fullDesc }"
+				converter="#{contactConverter}" size="60" 
+				queryDelay="500"  minQueryLength="2" forceSelection="true" scrollHeight="200">
+
+				<p:ajax event="itemSelect" update="@form" process="@this" />
+			</p:autoComplete>
+		</h:panelGrid>
+	</p:panel>
+
+	<p:spacer height="5" />
+
+	<p:panel>
+		<h:panelGrid columns="2" cellpadding="5">
+			<p:outputLabel for="inName" value="#{i18n.label_new_name_if_have}"	styleClass="less2" />
+			<h:panelGrid>
+				<p:inputText id="inName" value="#{configUserBean.contact.name }"
+					size="30" maxlength="30" />
+				<p:message for="inName" />
+			</h:panelGrid>
+
+			<p:outputLabel for="inCivilName" value="#{i18n.label_civil_name_complete}" styleClass="less2 req" />
+			<h:panelGrid>
+				<p:inputText id="inCivilName"
+					value="#{configUserBean.contact.civilName }" required="true"
+					size="60" maxlength="60" />
+				<p:message for="inCivilName" />
+			</h:panelGrid>
+
+			<p:outputLabel for="inEmail" value="#{i18n.label_email}" styleClass="less2 req" />
+			<h:panelGrid>
+				<p:inputText id="inEmail"
+					value="#{configUserBean.contact.email }" required="true"
+					size="60" maxlength="60" />
+				<p:message for="inEmail" />
+			</h:panelGrid>
+
+			<p:outputLabel for="inTel" value="#{i18n.label_telephone}" styleClass="less2 req" />
+			<h:panelGrid>
+				<p:inputText id="inTel"
+					value="#{configUserBean.contact.telephone1 }" required="true"
+					size="30" maxlength="30" />
+				<p:message for="inTel" />
+			</h:panelGrid>
+
+			<h:panelGrid>
+				<p:outputLabel for="inCity" value="#{i18n.label_city}" styleClass="less2 req" />
+				<h:outputText value="(ou a mais próxima de onde mora)" styleClass="less3" />
+			</h:panelGrid>
+			<h:panelGrid>
+				<p:selectOneMenu id="inCity"
+					value="#{configUserBean.user.defaultCity }" required="true"
+					converter="#{cityConverter}"
+					styleClass="combo">
+
+					<f:selectItem itemLabel="" noSelectionOption="true" />
+					<f:selectItems value="#{configUserBean.cities }" var="cityRow"
+						itemValue="#{cityRow}" itemLabel="#{cityRow.fullDesc}" />
+				</p:selectOneMenu>
+				<p:message for="inCity" />
+			</h:panelGrid>
+
+			<p:outputLabel for="inSchool" value="#{i18n.label_school}" styleClass="less2 req" />
+			<h:panelGrid>
+				<p:selectOneMenu id="inSchool"
+					value="#{configUserBean.user.defaultSchool }" required="true"
+					styleClass="combo">
+
+					<f:selectItem itemLabel="" noSelectionOption="true" />
+					<f:selectItems value="#{enumHelper.schools }" var="s"
+						itemValue="#{s}" itemLabel="#{i18n[s.key]}" />
+				</p:selectOneMenu>
+				<p:message for="inSchool" />
+			</h:panelGrid>
+
+			<p:outputLabel for="inProfile" value="#{i18n.label_user_profile}"
+				styleClass="less2 req" />
+			<h:panelGrid>
+				<p:selectOneMenu id="inProfile"	value="#{configUserBean.user.profile }" 
+					required="true"	styleClass="combo">
+
+					<f:selectItem itemLabel="" noSelectionOption="true" />
+					<f:selectItems value="#{configUserBean.comboProfiles }" var="profileVar"
+						itemValue="#{profileVar}" itemLabel="#{i18n[profileVar.key]}" />
+				</p:selectOneMenu>
+				<p:message for="inProfile" />
+			</h:panelGrid>
+
+			<p:outputLabel for="inIdiom" value="#{i18n.label_idiom}" styleClass="less2 req" />
+			<h:panelGrid>
+				<p:selectOneMenu id="inIdiom"
+					value="#{configUserBean.user.defaultIdiom }" required="true"
+					styleClass="combo">
+
+					<f:selectItem itemLabel="" noSelectionOption="true" />
+					<f:selectItems value="#{enumHelper.idioms }" var="idiomVar"
+						itemValue="#{idiomVar}" itemLabel="#{idiomVar.description}" />
+				</p:selectOneMenu>
+				<p:message for="inIdiom" />
+			</h:panelGrid>
+
+		</h:panelGrid>
+	</p:panel>
+
+	<p:spacer height="5" />
+
+	<p:toolbar>
+		<p:toolbarGroup>
+			<p:commandButton icon="ui-icon-check" value="#{i18n.label_user_save}"
+				action="#{configUserBean.saveUser}" 
+				update=":regionConfigUser :formConfigUsers"
+				/>
+		</p:toolbarGroup>
+		
+		<p:toolbarGroup align="right" rendered="#{not configUserBean.user.transient}">
+			<p:menuButton value="#{i18n.label_to_remove}?" >
+				<p:menuitem icon="ui-icon-trash" value="#{i18n.label_yes_remove}"
+					action="#{configUserBean.removeUser()}"
+					process="@this"
+					update="@form :formConfigUsers"
+					oncomplete="if (args.sucessOnly) DialogConfigUser.hide()" 
+					/>
+				<p:menuitem icon="ui-icon-close" value="#{i18n.label_no}"
+					process="@none" update="@none" global="false" 
+					/>
+			</p:menuButton>
+		</p:toolbarGroup>
+
+
+	</p:toolbar>
+</h:form>
+
+</ui:fragment>

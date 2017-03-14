@@ -1,0 +1,70 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:fragment xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:cb="http://java.sun.com/jsf/composite/component">
+
+<p:panel>
+
+	<cb:globalMessages />
+
+	<p:outputPanel id="displayMedicalForm">
+
+		<p:dataTable value="#{checkInBean.medicalAnswers }" var="medicalAnswerRow">
+			
+			<p:column headerText="#{i18n.label_number}" styleClass="col10p">
+				<h:outputText value="#{medicalAnswerRow.question.number}:" />
+			</p:column>
+
+			<p:column headerText="#{i18n.label_question}" styleClass="col70p">
+				<h:outputText value="#{medicalAnswerRow.question.displayTextByLocale(facesContext.viewRoot.locale) }" />
+			</p:column>
+
+			<p:column styleClass="col10p">
+				<f:facet name="header">
+					<p:commandButton icon="ui-icon-check"
+						title="#{i18n.label_answer_yes_for_all }"
+						action="#{checkInBean.answerAllMedicalQuestions(true)}"
+						process="@this" update="@form" 
+						/>
+					<h:outputText value=" #{i18n.label_answer} " />
+					<p:commandButton icon="ui-icon-close"
+						title="#{i18n.label_answer_no_for_all }"
+						action="#{checkInBean.answerAllMedicalQuestions(false)}"
+						process="@this" update="@form" 
+						/>
+				</f:facet>
+				<p:selectOneRadio id="selAnswer" value="#{medicalAnswerRow.booleanAnswer }" 
+					style="border:1px solid transparent"
+					required="true" label="#{i18n.label_answer}" >
+					
+						<f:selectItem itemLabel="#{i18n.label_yes}"	itemValue="#{true}"  />
+						<f:selectItem itemLabel="#{i18n.label_no}"  itemValue="#{false}" />
+					
+						<p:ajax update="inTxtAnswer" global="false" />
+				</p:selectOneRadio>
+				<p:message for="selAnswer" />
+			</p:column>
+
+			<p:column headerText="#{i18n.label_treatment}" styleClass="col20p" >
+				<p:inputTextarea id="inTxtAnswer" value="#{medicalAnswerRow.textAnswer }"
+					required="#{medicalAnswerRow.booleanAnswer}" 
+					requiredMessage="#{i18n.msg_write_note_about_treatment}"
+					rows="1" cols="40" />
+				<p:message for="inTxtAnswer" />
+			</p:column>
+
+		</p:dataTable>
+	</p:outputPanel>
+
+	<div style="width:300px;margin:auto;">
+		<p:commandButton icon="ui-icon-print" value="#{i18n.label_medical_form_view_to_print}" style="font-size:1.25em"
+			update=":formMedicalPrint"
+			oncomplete="DialogPrintMedicalForm.show()" />
+	</div>
+
+</p:panel>
+
+</ui:fragment>

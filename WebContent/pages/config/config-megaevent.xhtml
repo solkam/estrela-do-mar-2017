@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:cb="http://java.sun.com/jsf/composite/component"
+	template="/WEB-INF/design/_decorate-config.xhtml" >
+
+<ui:define name="contentConfig">
+
+<h:form id="formMegaEvents">
+	<p:panel header="#{i18n.label_megaevent_config}">
+
+		<h:panelGrid columns="3" cellpadding="10">
+			<h:panelGrid columns="1">
+				<h:outputText value="#{i18n.label_megaevent_type}:" styleClass="less1" />
+				
+				<p:selectOneRadio value="#{configMegaEventBean.megaEventType }" layout="pageDirection" >
+					<f:selectItem itemLabel="TODOS" noSelectionOption="true" />
+					<f:selectItems value="#{enumHelper.megaEventTypes }" var="typeRow"
+						itemValue="#{typeRow }" itemLabel="#{i18n[typeRow.key]}" />
+				</p:selectOneRadio>
+			</h:panelGrid>
+			
+			<h:panelGrid columns="1">
+				<h:outputText value="#{i18n.label_megaevent_active}?" styleClass="less1" />
+				<p:selectOneRadio value="#{configMegaEventBean.megaEventActive }" layout="pageDirection" >
+					<f:selectItem itemValue="#{true}"  itemLabel="#{i18n.label_yes}" />
+					<f:selectItem itemValue="#{false}" itemLabel="#{i18n.label_no}"  />
+				</p:selectOneRadio>
+			</h:panelGrid>
+		
+			<p:commandButton icon="ui-icon-search" value="#{i18n.label_megaevent_search}"
+				action="#{configMegaEventBean.searchMegaEvent }"
+				update="displayMegaEvents" />
+		
+		</h:panelGrid>
+	
+
+		<p:separator />
+
+		<p:commandButton id="btnNewMegaEvent"
+			icon="ui-icon-plus" value="#{i18n.label_megaevent_new}"
+			action="#{configMegaEventBean.resetMegaEvent }"
+			oncomplete="DialogMegaEvent.show()"
+			update=":formMegaEvent" />
+			
+
+		<p:outputPanel id="displayMegaEvents" >
+
+			<cb:globalMessages />
+		
+			<p:dataTable value="#{configMegaEventBean.megaEvents }" var="megaEventRow"
+				rendered="#{not empty configMegaEventBean.megaEvents}" >
+			
+				<p:column styleClass="col5p colCenter">
+					<p:graphicImage value="/resources/img/icon_red_check2.gif" title="'#{megaEventRow.name}' #{i18n.label_megaevent_active}" 
+						rendered="#{megaEventRow.flagCurrent }" cache="false"  />
+		
+					<p:commandButton icon="ui-icon-check" title="#{i18n.label_megaevent_define_as_corrent}" 
+						action="#{configMegaEventBean.defineAsCurrentMegaEvent }"
+						update="@form"
+						rendered="#{not megaEventRow.flagCurrent}">
+					
+						<f:setPropertyActionListener target="#{configMegaEventBean.megaEvent }" value="#{megaEventRow }" />
+					</p:commandButton>
+				</p:column>
+		
+				<p:column headerText="ID" styleClass="col5p colCenter">
+					<h:outputText value="#{megaEventRow.id}" styleClass="less3" />
+				</p:column>
+
+				<p:column headerText="#{i18n.label_megaevent_type}" styleClass="col10p colCenter">
+					<h:graphicImage library="img" name="#{megaEventRow.type.image }" title="#{i18n[megaEventRow.type.key] }" />
+				</p:column>
+		
+				<p:column headerText="#{i18n.label_megaevent_name}" styleClass="col50p">
+					<h:outputText value="#{megaEventRow.name }" styleClass="destak2" />
+				</p:column>
+
+				<p:column headerText="#{i18n.label_megaevent_begin_date}" styleClass="col10p colCenter">
+					<cb:outputDate value="#{megaEventRow.beginDate }" />
+				</p:column>
+				
+				<p:column headerText="#{i18n.label_megaevent_end_date}" styleClass="col10p colCenter">
+					<cb:outputDate value="#{megaEventRow.endDate }" />
+				</p:column>
+		
+				<p:column headerText="#{i18n.label_megaevent_active}?" styleClass="col5p colCenter">
+					<h:graphicImage library="img" name="icon_active.jpg" rendered="#{megaEventRow.flagActive }" />
+					<h:graphicImage library="img" name="icon_inactive.jpg" rendered="#{not megaEventRow.flagActive }" />
+				</p:column>
+		
+				<p:column headerText="Hospedagem aberta?" styleClass="col5p colCenter">
+					<cb:displayFlagActive flag="#{megaEventRow.flagHostingOpen}" />
+				</p:column>
+
+				<p:column styleClass="col5p colCenter">
+					<p:commandButton icon="ui-icon-pencil" title="#{i18n.label_megaevent_edit} #{megaEventRow.name }"
+						action="#{configMegaEventBean.manageMegaEvent( megaEventRow )}"
+						oncomplete="DialogMegaEvent.show()"
+						update=":formMegaEvent" 
+						/>
+				</p:column>
+		
+			</p:dataTable>
+		</p:outputPanel>
+		
+	</p:panel>
+</h:form>
+
+
+
+<!-- Dialog MegaEvent -->
+<!-- **************** -->
+<p:dialog header="#{i18n.label_megaevent}" widgetVar="DialogMegaEvent" 
+	modal="true" dynamic="true" closeOnEscape="true" maximizable="true"
+	position="top" >
+	
+	<h:form id="formMegaEvent">
+		<h:panelGrid cellpadding="5">
+	
+			<h:panelGroup>
+				<fieldset>
+					<legend>#{i18n.label_megaevent}</legend>
+			
+					<h:panelGrid columns="2" cellpadding="10" >
+						<h:panelGrid>
+							<p:outputLabel value="#{i18n.label_megaevent_type}" for="selType" styleClass="req less2" />
+							<h:panelGrid columns="2" cellpadding="5">
+								<h:graphicImage id="imgType" library="img" name="#{configMegaEventBean.megaEvent.type.image}" />
+								
+								<p:selectOneRadio id="selType" value="#{configMegaEventBean.megaEvent.type }" 
+									layout="pageDirection" required="true" >
+			
+										<f:selectItems value="#{enumHelper.megaEventTypes }" var="type"
+											itemValue="#{type}" itemLabel="#{i18n[type.key] }" />
+											
+										<p:ajax process="@this" update="imgType" global="false" />
+								</p:selectOneRadio>
+							</h:panelGrid>
+						</h:panelGrid>
+	
+						<h:panelGrid cellpadding="0">
+							<p:outputLabel value="#{i18n.label_megaevent_name}" for="inName" styleClass="less2 req" />
+							<p:inputText id="inName" value="#{configMegaEventBean.megaEvent.name }" size="30" required="true"  />
+							<p:message for="inName" />
+						</h:panelGrid>
+					</h:panelGrid>
+					
+					
+					<h:panelGrid columns="4" cellpadding="10" >
+						<h:panelGrid>
+							<p:outputLabel value="#{i18n.label_megaevent_begin_date}" for="inBeginDate" styleClass="req less2" />
+	
+							<p:calendar id="inBeginDate" mask="99/99/9999" value="#{configMegaEventBean.megaEvent.beginDate }"
+								required="true" size="15" pattern="dd/MM/yyyy"
+								navigator="true"     
+								/>
+							<h:outputText value="(dd/mm/aaaa)" styleClass="less3" />
+	
+							<p:message for="inBeginDate" />
+						</h:panelGrid>
+	
+						<h:panelGrid>
+							<p:outputLabel value="#{i18n.label_megaevent_end_date}" for="inEndDate" styleClass="req less2" />
+	
+							<p:calendar id="inEndDate" mask="99/99/9999" value="#{configMegaEventBean.megaEvent.endDate }"
+								required="true" size="15" pattern="dd/MM/yyyy"     
+								navigator="true"
+								/>
+							<h:outputText value="(dd/mm/aaaa)" styleClass="less3" />
+	
+							<p:message for="inEndDate" />
+						</h:panelGrid>
+					
+						<h:panelGrid>
+							<p:outputLabel for="inFlagActive"  value="#{i18n.label_megaevent_active}?" styleClass="less2 req" />
+							<p:selectBooleanButton id="inFlagActive" value="#{configMegaEventBean.megaEvent.flagActive }" 
+								onLabel="#{i18n.label_yes}" onIcon="ui-icon-check" 
+								offLabel="#{i18n.label_no}" offIcon="ui-icon-close" >
+							</p:selectBooleanButton>
+							<p:message for="inFlagActive" />
+						</h:panelGrid>
+						
+						<h:panelGrid>
+							<p:outputLabel for="inFlagHosting"  value="Hospedagem aberta?" styleClass="less2 req" />
+							<p:selectBooleanButton id="inFlagHosting" value="#{configMegaEventBean.megaEvent.flagHostingOpen }" 
+								onLabel="#{i18n.label_yes}" onIcon="ui-icon-check" 
+								offLabel="#{i18n.label_no}" offIcon="ui-icon-close" >
+							</p:selectBooleanButton>
+							<p:message for="inFlagHosting" />
+						</h:panelGrid>
+						
+					</h:panelGrid>
+					
+					<h:panelGrid cellpadding="0">
+						<p:outputLabel for="inAdminEmail" value="#{i18n.label_megaevent_admin_email}"  styleClass="less2 req" />
+						<p:inputText id="inAdminEmail" value="#{configMegaEventBean.megaEvent.adminEmail }"	size="60" required="true"  />
+						<p:message for="inAdminEmail" />
+					</h:panelGrid>
+					
+					
+				</fieldset>
+			</h:panelGroup>
+		
+			<h:panelGroup>
+				<fieldset>
+					<legend>#{i18n.label_dependents_family_and_babysitter}</legend>
+					
+					<h:panelGrid columns="4" cellpadding="5">
+						<h:panelGrid>
+							<p:outputLabel value="#{i18n.label_dependent_babysitter_week_value}" for="inBabysitterWeekValue" styleClass="less2 req" />
+							<p:inputText id="inBabysitterWeekValue" value="#{configMegaEventBean.megaEvent.babysitterWeekValue }"  
+								size="10" required="true"  />
+							<p:message for="inBabysitterWeekValue" />
+						</h:panelGrid>
+
+						<h:panelGrid>
+							<p:outputLabel value="#{i18n.label_dependent_child_week_value}" for="inChildWeekValue" styleClass="less2 req" />
+							<p:inputText id="inChildWeekValue" value="#{configMegaEventBean.megaEvent.childWeekValue }"  
+								size="10" required="true"  />
+							<p:message for="inChildWeekValue" />
+						</h:panelGrid>
+			
+						<h:panelGrid>
+							<p:outputLabel value="#{i18n.label_dependent_teenager_week_value}" for="inTeenagerWeekValue" styleClass="less2 req" />
+							<p:inputText id="inTeenagerWeekValue" value="#{configMegaEventBean.megaEvent.teenagerWeekValue }"  
+								size="10" required="true"  />
+							<p:message for="inTeenagerWeekValue" />
+						</h:panelGrid>
+			
+						<h:panelGrid>
+							<p:outputLabel value="#{i18n.label_dependent_young_week_value}" for="inYoungWeekValue" styleClass="less2 req" />
+							<p:inputText id="inYoungWeekValue" value="#{configMegaEventBean.megaEvent.youngWeekValue }"  
+								size="10" required="true"  />
+							<p:message for="inYoungWeekValue" />
+						</h:panelGrid>
+			
+					</h:panelGrid>
+
+				</fieldset>
+			</h:panelGroup>
+		
+			<h:panelGroup>
+				<fieldset>
+					<legend>#{i18n.label_megaevent_sale_condition_term}</legend>
+	
+					<h:panelGrid width="100%">
+		
+						<p:editor id="editorSaleCondition" value="#{configMegaEventBean.megaEvent.saleConditionTerm }" 
+							controls="bold italic underline font size color bullets numbering undo redo"
+							width="700" height="200" >
+								<f:validateLength maximum="12000" />
+						</p:editor>
+						<h:outputText value="(Max 12.000)" styleClass="less3" />
+		
+						<p:message for="editorSaleCondition" />
+					</h:panelGrid>
+				</fieldset>
+			</h:panelGroup>
+		</h:panelGrid>
+
+		<p:separator />
+
+		<cb:globalMessages />
+		
+		
+		<p:toolbar>
+			<p:toolbarGroup>
+				<p:commandButton id="btnSaveMegaEvent" 
+					icon="ui-icon-check" value="#{i18n.label_megaevent_save}"
+					action="#{configMegaEventBean.saveMegaEvent }"
+					oncomplete="if (args.sucessOnly) DialogMegaEvent.hide()"
+					update="@form :formMegaEvents" 
+					/>
+			</p:toolbarGroup>
+			
+			<p:toolbarGroup align="right" rendered="#{not configMegaEventBean.megaEvent.transient}">
+				<p:menuButton value="#{i18n.label_to_remove}">
+					<p:menuitem icon="ui-icon-trash" value="#{i18n.label_yes}"
+						action="#{configMegaEventBean.removeMegaEvent }"
+						oncomplete="if (args.sucessOnly) DialogMegaEvent.hide()"
+						update=":formMegaEvents" 
+						/>
+					<p:menuitem icon="ui-icon-close" value="#{i18n.label_no}"  
+						process="@none" update="@none" global="false"
+						/>
+				</p:menuButton>
+			
+			</p:toolbarGroup>
+	
+		</p:toolbar>
+	</h:form>
+</p:dialog>
+
+
+</ui:define>	
+</ui:composition>

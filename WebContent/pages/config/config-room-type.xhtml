@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:cb="http://java.sun.com/jsf/composite/component"
+	template="/WEB-INF/design/_decorate-config.xhtml" >
+
+<ui:define name="contentConfig">
+
+<p:panel header="Tipos de Quarto">
+	
+	<h:form id="formNewRoomType">
+	
+		<p:fieldset legend="Novo Tipo de Quarto" toggleable="true" collapsed="true">
+			<h:panelGrid columns="4" cellpadding="10">
+				<h:panelGrid>
+					<p:outputLabel for="inCode" value="Codigo" styleClass="req" />
+					<p:inputText id="inCode" value="#{configRoomTypeBean.newRoomType.code}" size="20" required="true" />
+					<p:message for="inCode" />
+				</h:panelGrid>
+				
+				<h:panelGrid>
+					<p:outputLabel for="inDesc" value="Descrição" styleClass="req" />
+					<p:inputText id="inDesc" value="#{configRoomTypeBean.newRoomType.description}" size="30" required="true" />
+					<p:message for="inDesc" />
+				</h:panelGrid>
+
+				<h:panelGrid>
+					<p:outputLabel for="inMax" value="Capacidade Maxima" styleClass="req" />
+					<p:inputText id="inMax" value="#{configRoomTypeBean.newRoomType.maxSupported}" size="5" required="true" />
+					<p:message for="inMax" />
+				</h:panelGrid>
+
+				<p:commandButton icon="ui-icon-check" value="Salvar" 
+					action="#{configRoomTypeBean.save()}"
+					update="@form :formRoomTypes"
+					/>
+			
+			</h:panelGrid>
+		</p:fieldset>
+	</h:form>
+
+	<p:separator />
+
+	<h:form id="formRoomTypes">
+
+		<cb:globalMessages />
+
+		<p:outputPanel id="displayRoomTypes" rendered="#{not empty configRoomTypeBean.roomTypes}" >
+
+			<p:dataTable value="#{configRoomTypeBean.roomTypes }" var="typeVar" rowKey="#{typeVar.code}"
+				rendered="#{not empty configRoomTypeBean.roomTypes}" >
+			
+				<p:column headerText="Código" >
+					<h:outputText value="#{typeVar.code}" styleClass="destak3" />
+				</p:column>
+		
+				<p:column headerText="Descrição *" styleClass="req colCenter">
+					<p:inputText id="inDesc" value="#{typeVar.description }" size="30" required="true" />
+					<p:message for="inDesc" />
+				</p:column>
+
+				<p:column headerText="Capacidade Max *" styleClass="req colCenter">
+					<p:inputText id="inMax" value="#{typeVar.maxSupported }" size="5" required="true" />
+					<p:message for="inMax" />
+				</p:column>
+				
+				<p:column headerText="Ativo *" styleClass="colCenter">
+					<p:selectBooleanCheckbox value="#{typeVar.flagActive }"  />
+				</p:column>
+				
+				<p:column headerText="" styleClass="colCenter">
+					<p:commandButton icon="ui-icon-trash" 
+						process="@this" 
+						action="#{configRoomTypeBean.remove(typeVar)}"
+						update="@form"
+						/>
+				</p:column>
+
+				
+				<f:facet name="footer">
+					<p:separator />
+					<p:commandButton icon="ui-icon-check" value="Salvar todos" 
+						action="#{configRoomTypeBean.saveAll()}" 
+						update="@form"
+						/>
+				</f:facet>
+			</p:dataTable>
+
+		</p:outputPanel>
+	</h:form>
+
+</p:panel>
+
+</ui:define>	
+</ui:composition>

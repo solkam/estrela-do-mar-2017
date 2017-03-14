@@ -1,0 +1,318 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:cb="http://java.sun.com/jsf/composite/component"
+	template="/WEB-INF/design/_decorate-config.xhtml" >
+
+<ui:define name="contentConfig">
+
+<p:panel header="#{i18n.label_event_config}">
+
+	<h:form id="formEvents">
+				
+		<h:panelGrid columns="3" cellpadding="5">
+		
+			<h:panelGrid>
+				<h:outputText value="#{i18n.label_megaevent}" styleClass="less1"  />
+				<p:selectOneMenu id="comboMegaEvent" value="#{configEventBean.selectedMegaEvent.id }" styleClass="combo" >
+					<f:selectItems value="#{configEventBean.selectableMegaEvents }" var="me"
+						itemValue="#{me.id }" itemLabel="#{me.name }"  />
+						
+					<p:ajax listener="#{configEventBean.onChangeMegaEvent}" update="comboWeek"  />
+				</p:selectOneMenu>
+				<p:message for="comboMegaEvent" />
+			</h:panelGrid>
+			
+			<h:panelGrid>
+				<h:outputText value="#{i18n.label_week}" styleClass="less1" />
+				<p:selectOneMenu id="comboWeek" value="#{configEventBean.selectedEventWeek.id }" styleClass="combo">
+					
+					<f:selectItems value="#{configEventBean.selectableEventWeeks}" var="ew"
+						itemValue="#{ew.id }" itemLabel="#{ew.name }" />
+				</p:selectOneMenu>
+				<p:message for="comboWeek" />
+			</h:panelGrid>
+			
+			<p:commandButton id="btnSearchEvents" icon="ui-icon-search" value="#{i18n.label_event_search}"
+				rendered="#{not empty configEventBean.selectableEventWeeks}"
+				action="#{configEventBean.searchEvent}"
+				update="@form" />
+		</h:panelGrid>
+	
+		<p:separator />
+
+
+
+		<p:commandButton icon="ui-icon-plus" value="#{i18n.label_event_new}" style="font-size:1.25em"
+			action="#{configEventBean.resetEvent }"
+			update=":formEvent"
+			oncomplete="DialogEvent.show()" />
+
+
+		<cb:globalMessages />
+		<cb:globalGrowl />
+
+		
+		<p:outputPanel rendered="#{not empty configEventBean.events}">
+			
+			<p:dataTable value="#{configEventBean.events}" var="eventVar">
+				<p:column headerText="ID" styleClass="col5p">
+					<h:outputText value="#{eventVar.id }" styleClass="less3" />
+				</p:column>
+	
+				<p:column headerText="#{i18n.label_week}" styleClass="col10p">
+					<h:outputText value="#{eventVar.eventWeek.name }" styleClass="less2" />
+				</p:column>
+				
+				<p:column headerText="#{i18n.label_event_name}" styleClass="col20p">
+					<h:outputText value="#{eventVar.displayNameOrSchool }" styleClass="destak3" />
+				</p:column>
+				
+				<p:column headerText="Comissionável?" styleClass="col5p colCenter">
+					<p:selectBooleanCheckbox value="#{eventVar.flagCommissionable}" />
+				</p:column>
+				
+				
+				<p:column headerText="#{i18n.label_event_description}" styleClass="col5p colCenter">
+					<cb:displayNote note="#{eventVar.description}" />
+				</p:column>
+	
+				<p:column headerText="#{i18n.label_event_type}" styleClass="col10p colCenter">
+					<h:outputText value="#{i18n[eventVar.type.key]}" />
+				</p:column>
+				
+				<p:column headerText="#{i18n.label_event_begin_date}" styleClass="col10p colCenter">
+					<cb:outputDate value="#{eventVar.beginDate }" styleClass="less2" />
+				</p:column>
+	
+				<p:column headerText="#{i18n.label_event_end_date}" styleClass="col10p colCenter">
+					<cb:outputDate value="#{eventVar.endDate }" styleClass="less2" />
+				</p:column>
+	
+				<p:column headerText="#{i18n.label_event_participant_value}" styleClass="col5p colCenter">
+					<cb:outputCurrency value="#{eventVar.valueParticipant}" />
+				</p:column>
+				
+				<p:column headerText="#{i18n.label_event_staff_value}" styleClass="col5p colCenter">
+					<cb:outputCurrency value="#{eventVar.valueStaff}" />
+				</p:column>
+	
+
+				<p:column styleClass="col5p colCenter">
+					<p:commandButton icon="ui-icon-pencil" 
+						update=":formEvent"
+						action="#{configEventBean.manage(eventVar)}"
+						oncomplete="DialogEvent.show()" 
+						/>
+				</p:column>
+				
+				<f:facet name="footer">
+					<p:separator />
+					<p:commandButton icon="ui-icon-check" value="Salvar Todos" style="font-size:1.25em"
+						action="#{configEventBean.saveAllEvents()}"
+						update="@form"
+						/>
+				</f:facet>
+	
+			</p:dataTable>
+		</p:outputPanel>
+	</h:form>
+
+</p:panel>
+
+
+<!-- Dialog Event -->
+<p:dialog header="#{i18n.label_event}" widgetVar="DialogEvent" 
+	modal="true" dynamic="true" closeOnEscape="true" maximizable="true"
+	position="top" >
+	
+	<h:form id="formEvent">
+		<p:messages globalOnly="true"  />
+
+		<h:panelGrid cellpadding="5" width="100%">
+
+			<h:panelGrid columns="2" cellpadding="5">
+				<h:outputText value="#{i18n.label_megaevent}" styleClass="less2" />
+				<h:outputText value="#{configEventBean.event.eventWeek.megaEvent.name }" styleClass="destak1" />
+			
+				<h:outputText value="#{i18n.label_week}" styleClass="less2" />
+				<h:outputText value="#{configEventBean.event.eventWeek.name }" styleClass="destak2" />
+			</h:panelGrid>
+			
+			<h:panelGroup>
+				<fieldset>
+					<legend>#{i18n.label_event_type}</legend>
+			
+					<h:panelGrid columns="2" cellpadding="5">
+						<h:panelGrid>
+							<p:outputLabel for="selEventType" value="#{i18n.label_event_type}" styleClass="less2 req" />
+							<h:panelGrid>
+								<p:selectOneRadio id="selEventType" value="#{configEventBean.event.type}"
+									layout="pageDirection" required="true" >
+									
+									<f:selectItems value="#{enumHelper.eventTypes }" var="type"
+										itemValue="#{type }" itemLabel="#{i18n[type.key] }" />
+										
+									<p:ajax process="@this" listener="#{configEventBean.onChangeTypeOrSchool()}" 
+										update="displayNameOrSchool" global="false" 
+										/>
+								</p:selectOneRadio>
+								<p:message for="selEventType" />
+							</h:panelGrid>
+						</h:panelGrid>
+						
+						<p:outputPanel id="displayNameOrSchool">
+							<h:panelGrid cellpadding="5" rendered="#{not configEventBean.event.flagFormation}">
+								<h:panelGrid cellpadding="0">
+									<p:outputLabel for="inName" value="#{i18n.label_event_name}" styleClass="less2 req" />
+									<p:inputText id="inName" value="#{configEventBean.event.name}" size="60" required="true" />
+									<p:message for="inName" />
+								</h:panelGrid>
+		
+								<h:panelGrid cellpadding="0">
+									<p:outputLabel for="inDesc" value="#{i18n.label_event_description}" styleClass="less2" />
+									<p:inputTextarea id="inDesc" value="#{configEventBean.event.description}" rows="2" cols="60" />
+									<p:message for="inDesc" />
+								</h:panelGrid>
+							</h:panelGrid>
+	
+							<h:panelGrid cellpadding="5" rendered="#{configEventBean.event.flagFormation}">
+								<h:panelGrid cellpadding="0">
+									<p:outputLabel for="inSchool" value="#{i18n.label_school}" styleClass="less2 req" />
+									<p:selectOneMenu id="inSchool" value="#{configEventBean.event.school}" required="true">
+										<f:selectItems value="#{enumHelper.schools}" var="schoolVar"
+											itemValue="#{schoolVar}" itemLabel="#{schoolVar.description }" 
+											/>
+										<p:ajax process="@this" listener="#{configEventBean.onChangeTypeOrSchool()}" update="displayModule" />
+									</p:selectOneMenu>
+									<p:message for="inSchool" />
+								</h:panelGrid>
+		
+								<h:panelGrid id="displayModule" cellpadding="0">
+									<p:outputLabel for="inModule" value="#{i18n.label_module}" styleClass="less2 req" />
+									<p:selectOneButton id="inModule" value="#{configEventBean.event.module}" required="true" >
+										<f:selectItems value="#{configEventBean.comboModules }" var="moduleVar"
+											itemValue="#{moduleVar}" itemLabel="#{moduleVar.descriptionPT }" 
+											/>
+									</p:selectOneButton>
+									<p:message for="inModule" />
+								</h:panelGrid>
+							</h:panelGrid>
+							
+							<h:panelGrid>
+								<p:outputLabel for="inCapacity" value="#{i18n.label_capacity}" styleClass="less2 req" />
+								<p:inputText id="inCapacity" value="#{configEventBean.event.capacity}" required="true" />
+								<p:message for="inCapacity" />
+							</h:panelGrid>
+							
+						</p:outputPanel>
+
+					</h:panelGrid>
+				</fieldset>
+			</h:panelGroup>
+			
+			<h:panelGrid columns="3" width="100%">
+				<h:panelGroup>
+					<fieldset style="height:100px">
+						<legend>#{i18n.label_event_dates}</legend>
+					
+						<h:panelGrid columns="2" cellpadding="5" >
+							<h:panelGrid>
+								<p:outputLabel for="inBeginDate" value="#{i18n.label_event_begin_date}" styleClass="less2 req" />
+								<p:calendar id="inBeginDate" value="#{configEventBean.event.beginDate }" 
+									required="true"  pattern="dd/MM/yyyy" navigator="true"    />
+								<p:message for="inBeginDate" />
+							</h:panelGrid>
+		
+							<h:panelGrid>
+								<p:outputLabel for="inEndDate" value="#{i18n.label_event_end_date}" styleClass="less2 req" />
+								<p:calendar id="inEndDate" value="#{configEventBean.event.endDate }" 
+									required="true"  pattern="dd/MM/yyyy" navigator="true"    />
+								<p:message for="inEndDate" />
+							</h:panelGrid>
+						</h:panelGrid>
+					
+					</fieldset>
+				</h:panelGroup>			
+			
+				<h:panelGroup>
+					<fieldset style="height:100px">
+						<legend>#{i18n.label_event_values}</legend>
+			
+						<h:panelGrid columns="2" cellpadding="5">
+	
+							<h:panelGrid>
+								<p:outputLabel for="inValueParticipant" value="#{i18n.label_event_participant_value}" styleClass="less2" />
+								<p:inputText id="inValueParticipant" value="#{configEventBean.event.valueParticipant}" />
+								<p:message for="inValueParticipant" />
+							</h:panelGrid>
+							
+							<h:panelGrid>
+								<p:outputLabel for="inValueStaff" value="#{i18n.label_event_staff_value}" styleClass="less2" />
+								<p:inputText id="inValueStaff" value="#{configEventBean.event.valueStaff}" />
+								<p:message for="inValueStaff" />
+							</h:panelGrid>
+	
+						</h:panelGrid>
+					</fieldset>
+				</h:panelGroup>			
+
+				<h:panelGroup>
+					<fieldset style="height:100px">
+						<legend>Flags</legend>
+			
+						<h:panelGrid columns="2" cellpadding="5">
+	
+							<h:panelGrid>
+								<p:outputLabel for="inComissionavel" value="Comissionável?" styleClass="less2" />
+								<p:selectBooleanButton id="inComissionavel"  
+									onIcon="ui-icon-check" onLabel="Sim"
+									offIcon="ui-icon-close" offLabel="Não"
+									value="#{configEventBean.event.flagCommissionable }" />
+								<p:message for="inComissionavel" />
+							</h:panelGrid>
+							
+						</h:panelGrid>
+					</fieldset>
+				</h:panelGroup>			
+
+			</h:panelGrid>
+				
+		</h:panelGrid>
+				
+		<p:separator />
+		
+		<p:toolbar>
+			<p:toolbarGroup>
+				<p:commandButton icon="ui-icon-check" value="#{i18n.label_event_save}"
+					action="#{configEventBean.saveEvent}"
+					oncomplete="if (args.sucessOnly) DialogEvent.hide()"
+					update="@form :formEvents" 
+					/>
+			</p:toolbarGroup>
+			
+			<p:toolbarGroup align="right" rendered="#{not configEventBean.event.transient}">
+				<p:menuButton value="Remover?" style="font-size:0.75em">
+					<p:menuitem icon="ui-icon-trash" value="Sim, remover"
+						process="@this" 
+						action="#{configEventBean.removeEvent()}"
+						oncomplete="if (args.sucessOnly) DialogEvent.hide()"
+						update="@form :formEvents" 
+						/>
+					<p:menuitem icon="ui-icon-close" value="Não" 
+						process="@none" global="false" 
+						/>
+				</p:menuButton>
+			</p:toolbarGroup>
+		</p:toolbar>
+		
+	</h:form>
+</p:dialog>
+
+
+</ui:define>	
+</ui:composition>

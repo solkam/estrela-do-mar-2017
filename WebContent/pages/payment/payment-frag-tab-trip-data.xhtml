@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:fragment xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:cb="http://java.sun.com/jsf/composite/component">
+
+<p:outputPanel id="displayTripInfo">
+	<h:panelGrid columns="2" cellpadding="20" >
+	
+		<h:panelGrid columns="2" cellpadding="5">
+			<f:facet name="header">
+				<h:outputText value="#{i18n.label_checkin}" styleClass="destak1" />
+				<p:separator />
+			</f:facet>
+			
+			<h:outputText value="#{i18n.label_preview_checkin_date}:" />
+			<cb:outputDate value="#{paymentBean.selectedRegister.previewCheckinDate }" styleClass="destak2" />
+
+			<h:outputText value="#{i18n.label_checkin_date}:" />
+			<cb:outputDate value="#{paymentBean.selectedRegister.checkin.checkinDate }" styleClass="destak2" />
+		</h:panelGrid>
+
+		<h:panelGrid columns="2" cellpadding="5">
+			<f:facet name="header">
+				<h:outputText value="#{i18n.label_checkout}" styleClass="destak1" />
+				<p:separator />
+			</f:facet>
+			
+			<h:outputText value="#{i18n.label_preview_checkout_date}:" />
+			<cb:outputDate value="#{paymentBean.selectedRegister.previewCheckoutDate }" styleClass="destak2" />
+
+			<h:outputText value="#{i18n.label_checkout_date}:" />
+			<cb:outputDate value="#{paymentBean.selectedRegister.checkout.checkoutDate }" styleClass="destak2" />
+		</h:panelGrid>
+	
+	
+		<h:panelGrid columns="2" cellpadding="5">
+			<f:facet name="header">
+				<h:outputText value="#{i18n.label_arrival}" styleClass="destak1" />
+				<p:separator />
+			</f:facet>
+			
+			<h:outputText value="#{i18n.label_day}:" />
+			<cb:outputDate value="#{paymentBean.selectedRegister.tripInfo.tripArrivalDate }" styleClass="destak2" />
+
+			<h:outputText value="#{i18n.label_hour}:" />
+			<cb:outputTime value="#{paymentBean.selectedRegister.tripInfo.tripArrivalTime }" styleClass="destak2" />
+
+			<h:outputText value="#{i18n.label_flight_company}:" />
+			<h:outputText value="#{paymentBean.selectedRegister.tripInfo.tripArrivalFlightCompany }" styleClass="destak2" />
+
+			<h:outputText value="#{i18n.label_flight_number}:" />
+			<h:outputText value="#{paymentBean.selectedRegister.tripInfo.tripArrivalFlightNumber }" styleClass="destak2" />
+		</h:panelGrid>
+		
+		<h:panelGrid columns="2" cellpadding="5">
+			<f:facet name="header">
+				<h:outputText value="#{i18n.label_departure}" styleClass="destak1" />
+				<p:separator />
+			</f:facet>
+			
+			<h:outputText value="#{i18n.label_day}:" />
+			<cb:outputDate value="#{paymentBean.selectedRegister.tripInfo.tripDepartureDate }"  styleClass="destak2" />
+
+			<h:outputText value="#{i18n.label_hour}" />
+			<cb:outputTime value="#{paymentBean.selectedRegister.tripInfo.tripDepartureTime }"  styleClass="destak2" />
+
+			<h:outputText value="#{i18n.label_flight_company}:" />
+			<h:outputText value="#{paymentBean.selectedRegister.tripInfo.tripDepartureFlightCompany }"  styleClass="destak2" />
+
+			<h:outputText value="#{i18n.label_flight_number}:" />
+			<h:outputText value="#{paymentBean.selectedRegister.tripInfo.tripDepartureFlightNumber }"  styleClass="destak2" />
+		</h:panelGrid>
+		
+		<f:facet name="footer">
+			<h:panelGrid columns="2" cellpadding="5">
+				<h:outputText value="#{i18n.label_note}:" />
+				<h:panelGrid style="background:#ddd" cellpadding="5">
+					<h:outputText value="#{paymentBean.selectedRegister.tripInfo.tripNote }"  />
+				</h:panelGrid>
+			</h:panelGrid>
+		</f:facet>
+	</h:panelGrid>
+		
+
+</p:outputPanel>
+
+<p:separator />
+
+<p:commandButton icon="ui-icon-pencil" value="#{i18n.label_edit_trip_info}"
+	oncomplete="DialogEditTripInfo.show()"
+	update=":formEditTripInfo" />
+
+</ui:fragment>

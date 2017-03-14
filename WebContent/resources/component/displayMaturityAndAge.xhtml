@@ -1,0 +1,25 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:cc="http://java.sun.com/jsf/composite"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html">
+
+<cc:interface>
+	<cc:attribute name="contact"    required="true" />
+	<cc:attribute name="styleClass" />
+</cc:interface>
+
+<cc:implementation>
+
+	<h:panelGroup rendered="#{cc.attrs.contact.flagAgingOK}">
+	
+		<h:outputText value="#{i18n[cc.attrs.contact.maturity.key]} (#{cc.attrs.contact.age} #{i18n.label_years})" 
+			styleClass="#{cc.attrs.styleClass}" />
+	
+	</h:panelGroup>
+
+
+</cc:implementation>
+
+</html>

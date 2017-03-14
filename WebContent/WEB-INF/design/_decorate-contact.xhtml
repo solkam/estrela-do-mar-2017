@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:decorate xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:cb="http://java.sun.com/jsf/composite/component"
+	template="/WEB-INF/design/_template-main.xhtml">
+
+<ui:define name="content">
+
+	<p:toolbar>
+		<p:toolbarGroup>
+			<h:panelGrid columns="2" cellpadding="5" rules="cols">
+				<h:panelGrid columns="2" cellpadding="5">
+					<h:graphicImage library="img" name="option_contact_75.png" />
+					<h:outputText value="#{i18n.title_contact}" styleClass="destak1" />
+				</h:panelGrid>
+				
+				
+				<h:panelGrid cellpadding="5" >
+					<h:panelGroup>
+						<fieldset>
+							<legend>#{i18n.label_contacts}</legend>
+							
+							<h:panelGrid columns="2" cellpadding="5">
+								<p:button id="linkToConfigContact"    icon="ui-icon-contact"  value="#{i18n.label_contacts}"      href="/pages/config/config-contact.xhtml"    />
+								<p:button id="linkToMergeContact"     icon="ui-icon-shuffle"  value="#{i18n.label_merge_contact}" href="/pages/config/merge-contact.xhtml"     />
+							</h:panelGrid>
+						</fieldset>
+					</h:panelGroup>					
+				</h:panelGrid>
+
+			</h:panelGrid>
+		</p:toolbarGroup>
+	</p:toolbar>
+
+	<ui:insert name="contentConfig" />
+	
+</ui:define>
+</ui:decorate>

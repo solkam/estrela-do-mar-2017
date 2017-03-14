@@ -1,0 +1,43 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:cc="http://java.sun.com/jsf/composite"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+<cc:interface>
+	<cc:attribute name="imageName"  required="true" />
+	<cc:attribute name="moduleName" required="true" />
+	<cc:attribute name="megaEvent"  required="false" />
+</cc:interface>
+
+<cc:implementation>
+
+	<p:toolbar>
+		<p:toolbarGroup>
+			<h:panelGrid columns="2" cellpadding="5" width="100%" rules="cols">
+
+				<h:panelGrid columns="2" cellpadding="5">
+					<h:graphicImage library="img" name="#{cc.attrs.imageName }" />
+					<h:outputText value="#{cc.attrs.moduleName }" styleClass="destak1" />
+				</h:panelGrid>
+				
+				<h:panelGrid columns="2" cellpadding="5" rendered="#{not empty cc.attrs.megaEvent.id}">
+					<h:graphicImage library="img" name="#{cc.attrs.megaEvent.type.image }" />
+					<h:panelGroup>
+						<h:outputText value="#{cc.attrs.megaEvent.name }" styleClass="destak2" />
+						<br />
+						<h:outputText value="#{cc.attrs.megaEvent.descDates}" styleClass="less2" />
+					</h:panelGroup>
+				</h:panelGrid>
+
+			</h:panelGrid>
+		</p:toolbarGroup>	
+		
+	</p:toolbar>
+	
+
+</cc:implementation>
+
+</html>

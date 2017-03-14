@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:cb="http://java.sun.com/jsf/composite/component"
+	template="/WEB-INF/design/_template-main.xhtml">
+
+<ui:define name="content" >
+
+<cb:barPanel imageName="option_transport_75.png" 
+	moduleName="#{i18n.title_transport }" 
+	megaEvent="#{sessionHolder.currentMegaEvent }" 
+	/>
+
+<p:panel>
+	<h:form id="formTransports">
+	
+		<fieldset>
+			<legend>#{i18n.label_search}</legend>
+			
+			<h:panelGrid columns="2" cellpadding="5">
+				<h:panelGrid columns="2">
+					<h:outputText value="#{i18n.label_transport_direction}" styleClass="less2" />
+					<p:selectOneMenu value="#{transportBean.filterTransportDirection}"
+						layout="pageDirection" >
+
+							<f:selectItems value="#{enumHelper.transportDirection}" var="directionRow"
+								itemLabel="#{i18n[directionRow.key]}" itemValue="#{directionRow}" />
+					</p:selectOneMenu>
+				</h:panelGrid>
+				
+				<p:commandButton icon="ui-icon-search" value="#{i18n.label_transport_search}"
+					action="#{transportBean.search()}"
+					update="@form" />
+			
+			</h:panelGrid>
+		</fieldset>
+	
+		<div>
+			<p:spacer height="5" />
+		</div>
+
+		<p:commandButton icon="ui-icon-plus" value="#{i18n.label_transport_new}"
+			action="#{transportBean.reset()}"
+			update=":regionTransport"
+			oncomplete="DialogTransport.show()" />
+	
+		<p:separator />
+
+		<cb:globalMessages />
+
+		<h:outputText value="#{i18n.msg_no_result_found}" styleClass="less2"
+			rendered="#{empty transportBean.transports}" />
+			
+		<p:dataTable value="#{transportBean.transports}" var="transportRow"
+			rendered="#{not empty transportBean.transports}">
+			
+			<p:column headerText="#{i18n.label_name}" styleClass="col50p">
+				<h:outputText value="#{transportRow.name}" styleClass="destak2" />
+			</p:column>
+		
+			<p:column headerText="#{i18n.label_day}" styleClass="colCenter col10p">
+				<cb:outputDate value="#{transportRow.date}" />
+			</p:column>
+			
+			<p:column headerText="#{i18n.label_hour}" styleClass="colCenter col10p">
+				<cb:outputTime value="#{transportRow.time}" />
+			</p:column>
+
+			<p:column headerText="#{i18n.label_transport_capacity}" styleClass="colCenter col10p">
+				<h:outputText value="#{transportRow.capacity}" />
+			</p:column>
+			
+			<p:column headerText="#{i18n.label_transport_remainds}" styleClass="colCenter col10p">
+				<h:outputText value="#{transportRow.calculatedReminds}" />
+			</p:column>
+
+			<p:column styleClass="colCenter col10p">
+				<p:commandButton icon="ui-icon-pencil" title="#{i18n.label_transport_manage}"
+					 action="#{transportBean.manageTransport(transportRow)}"
+					 update=":regionTransport"
+					 oncomplete="DialogTransport.show()" />
+			</p:column>
+	
+		</p:dataTable>
+
+	</h:form>
+</p:panel>
+
+
+
+<p:dialog widgetVar="DialogTransport" header="#{i18n.title_transport}"
+	modal="true" closeOnEscape="true" dynamic="true" maximizable="true"
+	width="90%" height="90%" position="top">
+	
+	<p:outputPanel id="regionTransport">
+
+		<h:panelGrid id="displayTransportHeader" columns="5" cellpadding="5" border="1" rules="all" width="100%"
+			rendered="#{not empty transportBean.transport.id}">
+			
+			<h:outputText value="#{i18n.label_name}" styleClass="less2" />
+			<h:outputText value="#{i18n.label_day}" styleClass="less2" />
+			<h:outputText value="#{i18n.label_hour}" styleClass="less2" />
+			<h:outputText value="#{i18n.label_transport_capacity}" styleClass="less2" />
+			<h:outputText value="#{i18n.label_transport_remainds}" styleClass="less2" />
+			
+			<h:outputText value="#{transportBean.transport.name}" styleClass="destak1" />
+			<cb:outputDate value="#{transportBean.transport.date}" styleClass="destak2" />
+			<cb:outputTime value="#{transportBean.transport.time}" styleClass="destak2" />
+			<h:outputText value="#{transportBean.transport.capacity}" styleClass="destak2" />
+			<h:outputText value="#{transportBean.transport.calculatedReminds}" styleClass="destak2" />
+			
+		</h:panelGrid>
+		
+		<p:spacer height="5" />
+
+		<p:tabView>
+			<p:tab title="#{i18n.label_principal}">
+				<ui:include src="/pages/transport/transport-frag-tab-principal.xhtml" />
+			</p:tab>
+			
+			<p:tab title="#{i18n.label_passengers}" rendered="#{not empty transportBean.transport.id}" >
+				<ui:include src="/pages/transport/transport-frag-tab-passengers.xhtml" />
+			</p:tab>
+		
+		</p:tabView>
+	</p:outputPanel>
+</p:dialog>
+
+
+</ui:define>
+</ui:composition>

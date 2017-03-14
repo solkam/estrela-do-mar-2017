@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:fragment xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:cb="http://java.sun.com/jsf/composite/component">
+
+<h:form id="formRoomConfirmed">
+	
+	<h1>Quarto OK</h1>
+	<p:separator />
+	
+	<cb:globalMessages />
+
+	<h:outputText value="Não há quartos configurados" styleClass="less2 warning"
+		rendered="#{empty hostingBean.okHostings}" />
+		
+	<p:dataTable value="#{hostingBean.okHostings}" var="hostingRow"
+		rendered="#{not empty hostingBean.okHostings}">
+
+		<p:column headerText="#{i18n.label_hosting_area}" sortBy="#{hostingRow.hostingArea}" styleClass="col10p">
+			<h:outputText value="#{hostingRow.hostingArea}" styleClass="destak4" />
+		</p:column>
+
+		<p:column headerText="#{i18n.label_hosting_number}" sortBy="#{hostingRow.hostingNumber}" styleClass="col10p">
+			<h:outputText value="#{hostingRow.hostingNumber}" styleClass="destak4" />
+		</p:column>
+
+		<p:column headerText="#{i18n.label_room_type}" sortBy="#{hostingRow.roomType.description}" styleClass="col10p colCenter">
+			<h:outputText value="#{hostingRow.roomType.description}" />
+		</p:column>
+
+		<p:column headerText="Confirmados no Quarto" styleClass="col25p colCenter">
+			<h:outputText value="Não há confirmados no quarto" styleClass="less2 warning" 
+				rendered="#{empty hostingRow.confirmeds}" />
+			
+			<p:dataTable value="#{hostingRow.confirmeds}" var="hostingConfirmedRow"
+				rendered="#{not empty hostingRow.confirmeds}">
+				
+				<p:column styleClass="col20p">
+					<f:facet name="header">
+						<h:outputText value="#{i18n.label_civil_name}" styleClass="less2" />
+					</f:facet>
+					<h:outputText value="#{hostingConfirmedRow.register.contact.civilName}" styleClass="less2" />
+				</p:column>
+		
+				<p:column styleClass="col20p">
+					<f:facet name="header">
+						<h:outputText value="#{i18n.label_new_name}" styleClass="less2" />
+					</f:facet>
+					<h:outputText value="#{hostingConfirmedRow.register.contact.name}" styleClass="less2" />
+				</p:column>
+		
+				<p:column styleClass="col10p colCenter">
+					<f:facet name="header">
+						<h:outputText value="#{i18n.label_age}" styleClass="less2" />
+					</f:facet>
+					<h:outputText value="#{hostingConfirmedRow.register.contact.age}" styleClass="less2" />
+				</p:column>
+
+				<p:column styleClass="col10p">
+					<f:facet name="header">
+						<h:outputText value="#{i18n.label_city}" styleClass="less2" />
+					</f:facet>
+					<h:outputText value="#{hostingConfirmedRow.register.contact.city}" styleClass="less2" />
+				</p:column>
+
+				<p:column styleClass="col20p">
+					<f:facet name="header">
+						<h:outputText value="#{i18n.label_root_school}" styleClass="less2" />
+					</f:facet>
+					<h:outputText value="#{hostingConfirmedRow.register.contact.rootSchool.description}" styleClass="less2" />
+				</p:column>
+
+				<p:column styleClass="col20p">
+					<f:facet name="header">
+						<h:outputText value="#{i18n.label_events}" styleClass="less2" />
+					</f:facet>
+					<cb:displayRegisterAllEvents register="#{hostingConfirmedRow.register}" />
+				</p:column>
+			</p:dataTable>
+		</p:column>
+		
+		<p:column headerText="Vagas" styleClass="col5p colCenter">
+			<h:outputText value="#{hostingRow.confirmedsAvailable}" styleClass="destak2" />
+		</p:column>
+		
+		<p:column headerText="Ocupação" sortBy="#{hostingRow.roomOccupancy}" styleClass="col5p colCenter">
+			<cb:displayRoomOccupancy hosting="#{hostingRow}" />
+		</p:column>
+
+		<p:column headerText="Criado" styleClass="col5p colCenter">
+			<cb:outputDate value="#{hostingRow.createDate}" styleClass="less2" />
+			<br />
+			<h:outputText value="#{hostingRow.createdBy}" styleClass="less2" />
+		</p:column>
+
+		<p:column headerText="Atualizado" styleClass="col5p colCenter">
+			<cb:outputDate value="#{hostingRow.updateDate }" styleClass="less2" />
+			<br />
+			<h:outputText value="#{hostingRow.updatedBy }" styleClass="less2" />
+		</p:column>
+
+		<p:column styleClass="col5p colCenter" rendered="#{sessionHolder.currentMegaEvent.flagHostingOpen}">
+			<p:commandButton icon="ui-icon-pencil"
+				process="@this"
+				action="#{hostingBean.manageOkHosting(hostingRow)}"
+				update=":regionConfigRoom"
+				oncomplete="DialogRoom.show()" />
+		</p:column>
+
+	</p:dataTable>
+
+
+</h:form>
+
+</ui:fragment>

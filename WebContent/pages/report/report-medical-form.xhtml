@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html >
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:cb="http://java.sun.com/jsf/composite/component"
+	template="/WEB-INF/design/_decorate-report.xhtml">
+<ui:define name="reportContent" >
+
+<p:panel header="Informe de Fichas Médicas">
+
+	<h:form>
+		<h:panelGrid columns="7" cellpadding="10">
+			<h:panelGrid>
+				<p:outputLabel for="inFilterMegaEvent" value="#{i18n.label_megaevent}" styleClass="less2 req" />
+				<p:selectOneMenu id="inFilterMegaEvent" value="#{rMedicalFormBean.filterMegaEvent }" converter="#{megaEventConverter}">
+					<f:selectItems value="#{rMedicalFormBean.comboMegaEvents }" var="megaEventVar"
+						itemValue="#{megaEventVar }" itemLabel="#{megaEventVar.name }" 
+						/>
+					<p:ajax process="@this" global="false"
+						listener="#{rMedicalFormBean.onChangeMegaEvent()}" 
+						update="inFilterWeek inFilterEvent" 
+						/>
+				</p:selectOneMenu>
+				<p:message for="inFilterMegaEvent" />
+			</h:panelGrid>
+			
+			<h:panelGrid>
+				<p:outputLabel for="inFilterWeek" value="#{i18n.label_week}" styleClass="less2 req" />
+				<p:selectOneMenu id="inFilterWeek" value="#{rMedicalFormBean.filterWeek }" converter="#{eventWeekConverter}">
+					<f:selectItems value="#{rMedicalFormBean.comboWeeks }" var="weekVar"
+						itemValue="#{weekVar }" itemLabel="#{weekVar.name }" 
+						/>
+					<p:ajax process="@this" global="false"
+						listener="#{rMedicalFormBean.onChangeWeek()}"
+						update="inFilterEvent" 
+						/>
+				</p:selectOneMenu>
+				<p:message for="inFilterWeek" />
+			</h:panelGrid>
+			
+			<h:panelGrid>
+				<p:outputLabel for="inFilterEvent" value="#{i18n.label_event}" styleClass="less2 req" />
+				<p:selectCheckboxMenu id="inFilterEvent" value="#{rMedicalFormBean.filterEvents }" label="#{i18n.label_event}" converter="#{eventConverter}">
+					<f:selectItems value="#{rMedicalFormBean.comboEvents }" var="eventVar"
+						itemValue="#{eventVar }" itemLabel="#{eventVar.displayNameOrSchool }" />
+				</p:selectCheckboxMenu>
+				<p:message for="inFilterEvent" />
+			</h:panelGrid>
+
+			<h:panelGrid>
+				<p:outputLabel for="inFilterStatus" value="#{i18n.label_status}" styleClass="less2 req" />
+				<p:selectCheckboxMenu id="inFilterStatus" value="#{rMedicalFormBean.filterStatusList }" label="#{i18n.label_status}" converter="#{registerStatusConverter}">
+					<f:selectItems value="#{rMedicalFormBean.comboStatus }" var="statusVar"
+						itemValue="#{statusVar }" itemLabel="#{i18n[statusVar.key] }" />
+				</p:selectCheckboxMenu>
+				<p:message for="inFilterStatus" />
+			</h:panelGrid>
+
+			<h:panelGrid>
+				<h:panelGrid>
+				<p:outputLabel for="acRegister" value="Contato" styleClass="less2" />
+					<p:autoComplete id="acRegister" value="#{rMedicalFormBean.filterRegister }" converter="#{registerConverter}"
+						completeMethod="#{rMedicalFormBean.completeRegister}" var="registerVar"
+						itemValue="#{registerVar}" itemLabel="#{registerVar.contact.fullDesc}"
+						queryDelay="1000" minQueryLength="2" scrollHeight="200" size="60" >
+						
+						<p:column headerText="ID Inscrição">
+							#{registerVar.id}
+						</p:column>
+		
+						<p:column headerText="#{i18n.label_civil_name}">
+							#{registerVar.contact.civilName}
+						</p:column>
+					
+						<p:column headerText="#{i18n.label_new_name}">
+							#{registerVar.contact.name}
+						</p:column>
+		
+						<p:column headerText="#{i18n.label_city}">
+							#{registerVar.contact.city}
+						</p:column>
+						
+						<p:column headerText="#{i18n.label_root_school}" >
+							#{registerVar.contact.rootSchool.description}
+						</p:column>
+					</p:autoComplete>
+		
+					<p:message for="acRegister" />
+				</h:panelGrid>			
+			
+			</h:panelGrid>
+			
+			<h:panelGrid>
+				<p:outputLabel for="inFilterLimitation" value="Limitação Física" styleClass="less2 req" />
+				<p:selectOneRadio id="inFilterLimitation" value="#{rMedicalFormBean.filterPhysicalLimitationOnly}" layout="pageDirection">
+					<f:selectItem itemValue="true"  itemLabel="Somente com limitação física" />
+					<f:selectItem itemValue="false" itemLabel="Todos" />
+				</p:selectOneRadio>
+				<p:message for="inFilterLimitation" />
+			</h:panelGrid>
+
+
+			<p:commandButton icon="ui-icon-search" value="#{i18n.label_search }" style="font-size:1.25em"  
+				action="#{rMedicalFormBean.search()}"
+				update="@form :formResult"
+				/>
+
+		</h:panelGrid>
+	</h:form>
+
+	<p:separator />
+
+	<h:form id="formResult">
+	
+		<cb:globalMessages />
+		
+		<p:outputPanel rendered="#{not empty rMedicalFormBean.dtos}">
+		
+			<p:fieldset legend="#{i18n.label_export_options}" toggleable="true" collapsed="true">
+				<h:panelGrid columns="2" cellpadding="5">
+	
+					<p:commandButton icon="ui-icon-calendar" value="#{i18n.label_export_to_excel}"  
+						action="#{rMedicalFormBean.exportToExcel() }" 
+						ajax="false"
+						/>
+				</h:panelGrid>
+			</p:fieldset>
+			
+			<p:spacer height="20" />
+
+			<p:dataGrid value="#{rMedicalFormBean.dtos}" var="dtoVar" columns="1">
+				
+				<p:panelGrid columns="9">
+					<h:outputText value="#{i18n.label_civil_name }" styleClass="less2" />
+					<h:outputText value="#{i18n.label_new_name }" styleClass="less2" />
+					<h:outputText value="#{i18n.label_root_school }" styleClass="less2" />
+					<h:outputText value="#{i18n.label_country }" styleClass="less2" />
+					<h:outputText value="#{i18n.label_city }" styleClass="less2" />
+					<h:outputText value="#{i18n.label_age }" styleClass="less2" />
+					<h:outputText value="Maturidade" styleClass="less2" />
+					<h:outputText value="#{i18n.label_status }" styleClass="less2" />
+					<h:outputText value="Limitação Física" styleClass="less2" />
+					
+					<h:outputText value="#{dtoVar.register.contact.civilName }" styleClass="destak4" />
+					<h:outputText value="#{dtoVar.register.contact.name }" styleClass="destak4" />
+					<h:outputText value="#{dtoVar.register.contact.rootSchool.description }"  />
+					<h:outputText value="#{dtoVar.register.contact.country }"  />
+					<h:outputText value="#{dtoVar.register.contact.city }"  />
+					<h:outputText value="#{dtoVar.register.contact.age }"  />
+					<h:outputText value="#{i18n[dtoVar.register.contact.maturity.key] }"  />
+					<cb:displayRegisterStatus register="#{dtoVar.register }"  />
+					<cb:displayFlagYesNo flag="#{dtoVar.flagPhysicalLimitation}" />
+				</p:panelGrid>
+				
+				
+				<h:outputText value="Não há ficha médica" styleClass="warning"
+					rendered="#{empty dtoVar.answers}" />
+				
+				<p:dataTable value="#{dtoVar.answers}" var="answerVar"
+					rendered="#{not empty dtoVar.answers}">
+					<p:column headerText="#{i18n.label_question}" styleClass="col30p">
+						<h:outputText value="#{answerVar.question.textES}" styleClass="less1" />
+					</p:column>
+				
+					<p:column headerText="#{i18n.label_answer}" styleClass="col10p colCenter">
+						<cb:displayFlagYesNo flag="#{answerVar.booleanAnswer}" />
+					</p:column>
+	
+					<p:column headerText="#{i18n.label_treatment}" styleClass="col60p">
+						<h:outputText value="#{answerVar.textAnswer}" styleClass="less1" style="color:blue" />
+					</p:column>
+				</p:dataTable>
+	
+				<p:separator />
+				<p:spacer height="20" />
+			
+			</p:dataGrid>
+		</p:outputPanel>
+	
+	</h:form>
+
+
+</p:panel>
+
+</ui:define>
+</ui:composition>

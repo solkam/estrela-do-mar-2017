@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+</head>
+<body>
+
+	<form method="post" action="http://192.168.0.19:8080/inscricao/pages/myregister/register-payment-sucess.xhtml">
+		Tipo Transaction:
+		<input type="text" name="TBK_TIPO_TRANSACCION" value="TR_NORMAL" />
+		<br /> 
+
+		Monto:
+		<input type="text" name="TBK_MONTO" value="500.00" />
+		<br /> 
+		
+		Ordem Compra:
+		<input type="text" name="TBK_ORDEN_COMPRA" value="9539" />
+		<br /> 
+		
+		SessionID:
+		<input type="text" name="TBK_ID_SESION" value="abc" />
+		<br /> 
+		
+		URL Exito:
+		<input type="text" name="TBK_URL_EXITO" value="register-payment-sucess"  />
+		<br /> 
+		
+		URL Falha:
+		<input type="text" name="TBK_URL_FRACASO" value="register-payment-fail" />
+		<br /> 
+	
+		<input type="submit" value="Simular Sucesso no pagamento da Transbank" />
+	</form>
+	
+	<hr />
+
+	<form method="post" action="http://192.168.0.19:8080/inscricao/pages/myregister/register-payment-fail.xhtml">
+		<input type="hidden" name="TBK_TIPO_TRANSACCION" value="TR_NORMAL" />
+		<input type="hidden" name="TBK_MONTO" value="2190.00" />
+		<input type="hidden" name="TBK_ORDEN_COMPRA" value="9865" />
+		<input type="hidden" name="TBK_ID_SESION" value="1a2c3f" />
+		<input type="hidden" name="TBK_URL_EXITO" value="register-payment-sucess"  />
+		<input type="hidden" name="TBK_URL_FRACASO" value="register-payment-fail" />
+	
+		<input type="submit" value="Simular falha no pagamento da Transbank" />
+	</form>
+
+
+</body>
+</html>

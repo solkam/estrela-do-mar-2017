@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:cb="http://java.sun.com/jsf/composite/component"
+	template="/WEB-INF/design/_template-main.xhtml">
+
+	<ui:define name="content">
+
+		<cb:barPanel imageName="option_checkin_75.png"
+			moduleName="#{i18n.label_checkin }"
+			megaEvent="#{sessionHolder.currentMegaEvent }" />
+
+		<h:form id="formCheckin">
+
+			<ui:param name="reg" value="#{checkInBean.selectedRegister}" />
+			<ui:param name="regDetails"	value="#{reg.details }" />
+			<ui:param name="regCredits"	value="#{reg.credits }" />
+			<ui:param name="contactName" value="#{reg.contact.fullDesc }" />
+			<ui:param name="civilName" value="#{reg.contact.civilName }" />
+			<ui:param name="spaceBetweenPanels" value="10" />
+
+			<p:panel>
+				<f:facet name="header">
+					<h:outputText value="#{i18n.label_register_review }: "
+						styleClass="less2" />
+					<p:outputPanel autoUpdate="true">
+						<h:outputText value="#{contactName }" styleClass="destak2" />
+					</p:outputPanel>
+				</f:facet>
+
+				<p:growl globalOnly="true" />
+
+				<p:wizard id="wizard" widgetVar="WizardCheckIn"
+					backLabel="#{i18n.label_previous}" nextLabel="#{i18n.label_next}"
+					flowListener="#{checkInBean.handleFlow }" showNavBar="false">
+
+<!-- Dados Pessoais  -->
+					<p:tab id="tabPersonalData" title="#{i18n.label_personal_data}">
+						<p:toolbar>
+							<p:toolbarGroup align="right">
+								<p:commandButton type="button" icon="ui-icon-circle-triangle-e"
+									value="#{i18n.label_next}" onclick="WizardCheckIn.next()" />
+							</p:toolbarGroup>
+						</p:toolbar>
+						
+						<ui:include src="/pages/checkIN/checkin-frag-tab-personal-data.xhtml" />
+
+					</p:tab>
+
+
+<!-- Eventos e Pagamentos -->
+					<p:tab id="tabEvents" title="#{i18n.label_events}">
+						<p:toolbar>
+							<p:toolbarGroup>
+								<p:commandButton type="button" icon="ui-icon-circle-triangle-w"
+									value="#{i18n.label_previous}" onclick="WizardCheckIn.back()" />
+							</p:toolbarGroup>
+							<p:toolbarGroup align="right">
+								<p:commandButton type="button" icon="ui-icon-circle-triangle-e"
+									value="#{i18n.label_next}" onclick="WizardCheckIn.next()" />
+							</p:toolbarGroup>
+						</p:toolbar>
+						
+						<ui:include src="/pages/checkIN/checkin-frag-tab-events-and-payments.xhtml" />
+
+					</p:tab>
+
+<!-- Produtor e treinador  -->
+					<p:tab id="tabProductorAndTrainner" title="#{i18n.label_productor_trainner}">
+						<p:toolbar>
+							<p:toolbarGroup>
+								<p:commandButton type="button" icon="ui-icon-circle-triangle-w"
+									value="#{i18n.label_previous}" onclick="WizardCheckIn.back()" />
+							</p:toolbarGroup>
+							<p:toolbarGroup align="right">
+								<p:commandButton type="button" icon="ui-icon-circle-triangle-e"
+									value="#{i18n.label_next}" onclick="WizardCheckIn.next()" />
+							</p:toolbarGroup>
+						</p:toolbar>
+
+						<ui:include src="/pages/checkIN/checkin-frag-tab-productor-and-trainner.xhtml" />
+						
+					</p:tab>
+
+<!-- Ficha Medica  -->
+					<p:tab id="tabMedicalForm" title="#{i18n.label_medical_form}">
+						<p:toolbar>
+							<p:toolbarGroup>
+								<p:commandButton type="button" icon="ui-icon-circle-triangle-w"
+									value="#{i18n.label_previous}" onclick="WizardCheckIn.back()" />
+							</p:toolbarGroup>
+							<p:toolbarGroup align="right">
+								<p:commandButton type="button" icon="ui-icon-circle-triangle-e"
+									value="#{i18n.label_next}" onclick="WizardCheckIn.next()" />
+							</p:toolbarGroup>
+						</p:toolbar>
+						
+						<ui:include src="/pages/checkIN/checkin-frag-tab-medical-form.xhtml" />
+
+					</p:tab>
+
+<!-- Dados Viagem  -->
+					<p:tab id="tabTripInfo" title="#{i18n.label_trip}">
+						<p:toolbar>
+							<p:toolbarGroup>
+								<p:commandButton type="button" icon="ui-icon-circle-triangle-w"
+									value="#{i18n.label_previous}" onclick="WizardCheckIn.back()" />
+							</p:toolbarGroup>
+							<p:toolbarGroup align="right">
+								<p:commandButton type="button" icon="ui-icon-circle-triangle-e"
+									value="#{i18n.label_next}" onclick="WizardCheckIn.next()" />
+							</p:toolbarGroup>
+						</p:toolbar>
+						
+						<ui:include src="/pages/checkIN/checkin-frag-tab-trip-data.xhtml" />
+
+					</p:tab>
+
+
+<!-- Dados de hosting -->			
+<!-- [24 ABR 2014] Hospedagem passa a ser feita na funcionalidade propria -->
+
+
+<!-- Confirmacao -->
+					<p:tab id="tabConfirmation" title="#{i18n.label_confirmation}">
+						<p:toolbar>
+							<p:toolbarGroup>
+								<p:commandButton type="button" icon="ui-icon-circle-triangle-w"
+									value="#{i18n.label_previous}" onclick="WizardCheckIn.back()" />
+							</p:toolbarGroup>
+						</p:toolbar>
+						
+						<ui:include src="/pages/checkIN/checkin-frag-tab-confirmation.xhtml" />
+
+					</p:tab>
+				</p:wizard>
+
+			</p:panel>
+		</h:form>
+
+
+
+<!-- Dialogos -->
+<!-- ******** -->
+
+<ui:include src="/pages/checkIN/checkin-frag-dialog-family.xhtml" />
+
+<ui:include src="/pages/checkIN/checkin-frag-dialog-third.xhtml" />
+
+<ui:include src="/pages/checkIN/checkin-frag-dialog-print-responsability-release-pt.xhtml" />
+
+<ui:include src="/pages/checkIN/checkin-frag-dialog-print-responsability-release-es.xhtml" />
+
+<ui:include src="/pages/checkIN/checkin-frag-confirm-dialog-remove-event.xhtml" />
+
+<ui:include src="/pages/checkIN/checkin-frag-confirm-dialog-remove-payment.xhtml" />
+
+<ui:include src="/pages/checkIN/checkin-frag-dialog-add-event.xhtml" />
+
+<ui:include src="/pages/checkIN/checkin-frag-dialog-payment-partial.xhtml" />
+
+<ui:include src="/pages/checkIN/checkin-frag-dialog-payment-total.xhtml" />
+
+<ui:include src="/pages/checkIN/checkin-frag-dialog-print-medical-form.xhtml" />
+
+
+</ui:define>
+</ui:composition>

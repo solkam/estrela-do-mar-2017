@@ -1,0 +1,89 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:fragment xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:cb="http://java.sun.com/jsf/composite/component">
+
+<!-- Dialog Imprimir Ficha Medica -->
+<!-- **************************** -->
+<p:dialog widgetVar="DialogPrintMedicalForm" header="#{i18n.label_medical_form_view_to_print}" 
+	maximizable="true" modal="true" dynamic="true" closeOnEscape="true"
+	position="top" >
+	
+	<h:form id="formMedicalPrint">
+		<ui:param name="civilName" value="#{checkInBean.selectedRegister.contact.civilName}" />
+		<ui:param name="country" value="#{checkInBean.selectedRegister.contact.country}" />
+		<ui:param name="fullIdDoc" value="#{checkInBean.selectedRegister.contact.fullIdentityDocument }" />
+		<ui:param name="fullAddress" value="#{checkInBean.selectedRegister.contact.fullAddress}" />
+	
+			<p:panel id="panelMedicalForm">
+			
+				<h:panelGrid cellpadding="5" width="100%">
+					<h:panelGroup layout="block">
+						<p style="line-height:2em;font-size:8pt">
+							Eu, <strong>#{civilName}</strong>, natural de <strong>#{country}</strong>, profissão______________________________________, 
+							portador(a) do <strong>#{fullIdDoc}</strong> residente e domiciliado na <strong>#{fullAddress}</strong>, declaro ser verdade as informações médicas a baixo descritas. 
+							E Mediante este instrumento, me declaro inteiramente responsável por todo e qualquer acontecimento relacionado a minha saúde física, emocional e mental, 
+							liberando de qualquer responsabilidade a Organização Internacional Condor Blanco, a Empresa Estrela do Mar Ltda, inscrita no CNPJ 20.205.455/0001-50 e o Hotel 
+							Blue Tree Park Búzios, cujo espaço é cedido para a realização deste evento. Declaro também que, por livre e espontânea, vontade participo deste evento organizado 
+							pela empresa Estrela do Mar nos dias, de: ______/______ a ______/______ de 2015 e me responsabilizo por isso. 
+						</p>
+					</h:panelGroup>
+				
+				
+					<p:dataTable value="#{checkInBean.medicalAnswers }" var="medicalAnwerRow">
+						<f:facet name="header">
+							<h:outputText value="Ficha Médica" styleClass="destak2" />
+						</f:facet>
+						
+						<p:column headerText="#{i18n.label_question}" styleClass="col50p">
+							<h:outputText value="#{medicalAnwerRow.question.displayTextByLocale(facesContext.viewRoot.locale) }" style="white-space:normal;font-size:8pt" />
+						</p:column>
+	
+						<p:column headerText="#{i18n.label_answer}" styleClass="col10p colCenter">
+							<h:outputText value="#{i18n.label_yes}"	rendered="#{medicalAnwerRow.booleanAnswer }" styleClass="warning" style="font-size:8pt" />
+								
+							<h:outputText value="#{i18n.label_no}" rendered="#{not medicalAnwerRow.booleanAnswer }" style="font-size:8pt" />
+						</p:column>
+	
+						<p:column headerText="#{i18n.label_treatment}" styleClass="col40p">
+							<h:outputText value="#{medicalAnwerRow.textAnswer }" styleClass="warning" style="white-space:normal;font-size:8pt" />
+						</p:column>
+					</p:dataTable>
+
+
+					<h:panelGroup>
+						<p style="font-size:8pt">
+							Por ser expressão da verdade e por estar de acordo com o que me foi exposto, sobre o conteúdo e a dinâmicas deste evento, assino e dou fé. 						
+						</p>
+					</h:panelGroup>
+
+
+					<h:outputText value="#{i18n.label_signature_with_local_and_date }" style="font-size:8pt" />
+
+
+					<h:panelGrid>
+						<p:separator />
+						<h:outputText value="#{civilName}" styleClass="destak3" />
+					</h:panelGrid>
+				
+				</h:panelGrid>
+			</p:panel>
+			
+
+			<p:toolbar>
+				<p:toolbarGroup>
+					<p:commandButton value="Imprimir" style="font-size:1.25em"
+						icon="ui-icon-print" type="button">
+						<p:printer target="panelMedicalForm" />
+					</p:commandButton>
+				</p:toolbarGroup>
+			</p:toolbar>
+
+
+	</h:form>
+</p:dialog>
+
+</ui:fragment>

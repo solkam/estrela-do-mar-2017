@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:fragment xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:cb="http://java.sun.com/jsf/composite/component">
+
+<h:form>
+	<h:panelGrid cellspacing="10" >
+
+		<h:panelGrid columns="2" cellspacing="5">
+			<h:outputText value="#{i18n.label_transport_direction}" styleClass="less2" />
+			<h:outputText value="#{i18n[transportBean.transport.direction.key]}" styleClass="destak1" />
+		</h:panelGrid>
+
+		<h:panelGrid columns="2" cellspacing="5">
+			<h:panelGrid>
+				<p:outputLabel for="inName" value="#{i18n.label_name}" styleClass="less2 req" />
+				<p:inputText id="inName" value="#{transportBean.transport.name}" size="60" required="true" />
+				<p:message for="inName" />
+			</h:panelGrid>
+		
+			<h:panelGrid>
+				<p:outputLabel for="inCapacity" value="#{i18n.label_transport_capacity}" styleClass="less2 req" />
+				<p:inputText id="inCapacity" value="#{transportBean.transport.capacity}" size="10" required="true" />
+				<p:message for="inCapacity" />
+			</h:panelGrid>
+		</h:panelGrid>
+
+		<h:panelGrid columns="2" cellspacing="5">
+			<h:panelGrid>
+				<p:outputLabel for="inDate" value="#{i18n.label_day}" styleClass="less2" />
+				<p:calendar id="inDate" value="#{transportBean.transport.date}"  
+					pattern="dd/MM/yyyy" navigator="true" />
+				<p:message for="inDate" />
+			</h:panelGrid>
+			
+			<h:panelGrid>
+				<p:outputLabel for="inTime" value="#{i18n.label_hour}" styleClass="less2" />
+				<p:inputMask mask="99:99" id="inTime" value="#{transportBean.transport.time}" size="7" >
+					<f:convertDateTime pattern="HH:mm"    />
+				</p:inputMask>
+				
+				<p:message for="inTime" />
+			</h:panelGrid>
+		</h:panelGrid>
+	
+		<h:panelGrid columns="2">
+			<p:outputLabel for="inFlagOficial" value="#{i18n.label_oficial}" styleClass="less2" />
+			<p:selectBooleanCheckbox id="inFlagOficial" value="#{transportBean.transport.flagOficial}" />
+		</h:panelGrid>
+		
+	</h:panelGrid>
+	
+	<cb:globalMessages />
+	
+	<p:toolbar>
+		<p:toolbarGroup>
+			<p:commandButton icon="ui-icon-check" value="#{i18n.label_transport_save}"
+				action="#{transportBean.save()}"
+				update=":regionTransport :formTransports"
+				/>
+		</p:toolbarGroup>
+		
+		<p:toolbarGroup align="right" rendered="#{not transportBean.transport.transient}" >
+			<p:menuButton value="#{i18n.label_transport_remove}" >
+				<p:menuitem icon="ui-icon-trash" value="#{i18n.label_yes_remove}"
+					action="#{transportBean.remove}"
+					update=":formTransports @form"
+					oncomplete="if (args.sucessOnly) DialogTransport.hide()"  
+					/>
+				<p:menuitem icon="ui-icon-close" value="#{i18n.label_no}"
+					global="false" process="@none" update="@none"
+					/>
+			</p:menuButton>
+		</p:toolbarGroup>
+	</p:toolbar>
+</h:form>
+
+
+
+</ui:fragment>

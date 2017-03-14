@@ -1,0 +1,1532 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<title>Anotações de Desenvolvimento: Estrela do Mar</title>
+</h:head>
+
+<h:body style="font-family:Calibri">
+
+<h1>Anotações de Desenvolvimento: Estrela do Mar</h1>
+
+<fieldset>
+<legend>Notas sobre Builds:</legend>
+
+	<table style="bordercolor:white;" cellpadding="10" cellspacing="1" width="100%">
+		
+		<tr style="font-weight: bold; background: #000088; color: white">
+			<td>Build</td>
+			<td>Data</td>
+			<td>Ações</td>
+		</tr>
+
+		<tr style="background: #eFeFFF">
+			<td>4.40</td>
+			<td>09/07/2016</td>
+			<td>
+				<ul>
+					<li>Mega Evento: flag hospedagem aberta</li>
+				</ul>
+			</td>
+		</tr>
+
+		<tr style="background: #dFdFFF">
+			<td>4.30</td>
+			<td>08/07/2016</td>
+			<td>
+				<ul>
+					<li>Relatório Pessoas por Evento: coluna DataNascimento e Idade</li>
+				</ul>
+			</td>
+		</tr>
+
+
+		<tr style="background: #eFeFFF">
+			<td>4.25</td>
+			<td>06/07/2016</td>
+			<td>
+				<ul>
+					<li>Relatório de Quartos: coluna Hospede 5 e 6</li>
+				</ul>
+			</td>
+		</tr>
+
+
+		<tr style="background: #dFdFFF">
+			<td>4.20</td>
+			<td>04/07/2016</td>
+			<td>
+				<ul>
+					<li>Relatórios: Filtros de status default</li>
+					<li>Quartos: idades dos hospedes</li>
+					<li>Relatório de Comissão: valor a ser subtraído do valor do participante</li>
+				</ul>
+			</td>
+		</tr>
+
+		<tr style="background: #eFeFFF">
+			<td>4.10</td>
+			<td>01/07/2016</td>
+			<td>
+				<ul>
+					<li>Pagamentos: edicao de produtor 1 e 2. </li>
+					<li>Novo meio de pagamento: Montanha - Bc Brasil</li>
+					<li>Usuario: possibilidade de pesquisa por todos os perfis</li>
+				</ul>
+			</td>
+		</tr>
+
+		<tr style="background: #dFdFFF">
+			<td>4.01</td>
+			<td>27/06/2016</td>
+			<td>
+				<ul>
+					<li>Habilitado o Merge de Contatos</li>
+				</ul>
+			</td>
+		</tr>
+
+		<tr style="background: #eFeFFF">
+			<td>4.00</td>
+			<td>19/06/2016</td>
+			<td>
+				<ul>
+					<li>Hospedagem acessivel para Lider Mundial</li>
+				</ul>
+			</td>
+		</tr>
+
+		<tr style="background: #dFdFFF">
+			<td>3.96</td>
+			<td>27/08/2015</td>
+			<td>
+				<ul>
+					<li>Informe Pagamentos por Evento: inclusao de campos de endereco no excel</li>
+				</ul>
+			</td>
+		</tr>
+
+
+		<tr style="background: #eFeFFF">
+			<td>3.95</td>
+			<td>25/08/2015</td>
+			<td>
+				<ul>
+					<li>Informe de Comissao: valor de participante da RegisterDetail ao inves de Event</li>
+					<li>Informe de Pessoas por Evento: impressao de ficha medica</li>
+					<li>Impressao de Ficha Medica: quebra de linha</li>
+					<li>Remocao do status CHECKIN_VIRTUAL</li>
+				</ul>
+			</td>
+		</tr>
+
+
+		<tr style="background: #dFdFFF">
+			<td>3.94</td>
+			<td>22/08/2015</td>
+			<td>
+				<ul>
+					<li>Produtor 2 em Meus Inscritos</li>
+					<li>Removida a regra onde participante que já é produtor não geraria comissão</li>
+					<li>Informe de Comissão: processo inicial que limpa todos os auto-produtores</li>
+					<li>Informe de Comissão: Escola raiz com produtor</li>
+					<li>Informe de Pagamentos por Evento: adicionada coluna Evento</li>
+					<li>Ao remover inscrição, remove primeiro do room lista</li>
+					<li>Impressão de Demonstrativo dos Eventos inscritos (Checkin)</li>
+					<li>Impressão de Ficha Medica com texto atualizado</li>
+				</ul>
+			</td>
+		</tr>
+
+
+		<tr style="background: #eFeFFF">
+			<td>3.91</td>
+			<td>18/08/2015</td>
+			<td>
+				<ul>
+					<li>Correcao das datas de pagamento e credito</li>
+				</ul>
+				<h2>Pendentes</h2>
+				<ul>
+					<li>Impressao das fichas de inscricao</li>
+				</ul>
+			</td>
+		</tr>
+
+
+		<tr style="background: #dFdFFF">
+			<td>3.90</td>
+			<td>17/08/2015</td>
+			<td>
+				<ul>
+					<li>Informe de Pagamento por Evento: colunas ordenáveis</li>
+					<li>Escola Yaikin</li>
+					<li>Criação do tipo de evento CONSULTA</li>
+				</ul>
+			</td>
+		</tr>
+
+
+		<tr style="background: #eFeFFF">
+			<td>3.8</td>
+			<td>16/08/2015</td>
+			<td>
+				<ul>
+					<li>Informe de Comissao: com 2 visoes e export</li>
+					<li>Informe de Pagamentos por Evento: agregado os campos faltantes no excel e pdf</li>
+				</ul>
+			</td>
+		</tr>
+
+		<tr style="background: #dFdFFF">
+			<td>3.7</td>
+			<td>11/08/2015</td>
+			<td>
+				<ul>
+					<li>Metodos de pagamento: paypal e pagseguro</li>
+					<li>Pagamentos criado a partir de Creditos: guarda suas 2 datas</li>
+					<li>Creditos criado a partir de Pagamentos: guarda suas 2 datas</li>
+					<li>Informe de Quartos no formato do Hotel</li>
+					<li>Removido o acesso de Hospedagem para Lider Mundial (agora somente ADM e TEC)</li>
+				</ul>
+			</td>
+		</tr>
+
+		<tr style="background: #eFeFFF">
+			<td>3.6</td>
+			<td>10/08/2015</td>
+			<td>
+				<ul>
+					<li>Campos sobre criacao e atualizacao em quartos</li>
+					<li>Filtro de pessoa em Ficha Medica</li>
+				</ul>
+			</td>
+		</tr>
+
+
+		<tr style="background: #dFdFFF">
+			<td>3.5</td>
+			<td>09/08/2015</td>
+			<td>
+				<ul>
+					<li>Data de pagamento em Creditos</li>
+					<li>Metodos de pagamento: Transf.Itau, Transf.BB e Comissao Produtor</li>
+					<li>Atualizacao das datas de pagamentos nos Creditos</li>
+					<li>Melhorias em Hospedagem</li>
+					<li>Hospedagem inacessiveis para os produtores de elite e Minha Inscricao</li>
+					<li>Ficha Medica (com export)</li>
+				</ul>
+			</td>
+		</tr>
+
+
+		<tr style="background: #eFeFFF">
+			<td>3.4.0</td>
+			<td>23/07/2015</td>
+			<td>
+				<ul>
+					<li>Remocao do link de pagamentos</li>
+					<li>Volta do Criar Meu Usuario</li>
+				</ul>
+			</td>
+		</tr>
+
+
+		<tr style="background: #dFdFFF">
+			<td>3.3.0</td>
+			<td>04/06/2015</td>
+			<td>
+				<ul>
+					<li>Bufix: contato novo na criacao de usuario: atribuir cidade, pais e sexo</li>
+					<li>Configuracao de Evento: Module como entity</li>
+					<li>Removido o link de Criar meu Usuario</li>
+				</ul>
+			</td>
+		</tr>
+
+		<tr style="background: #eFeFFF">
+			<td>3.2.0</td>
+			<td>25/05/2015</td>
+			<td>
+				<ul>
+					<li>Ajustes dos Acessos por Perfil</li>
+					<li>Usuario como Icone (removido de configuracao)</li>
+					<li>Pessoas por Evento: escola raiz agregada</li>
+					<li>RoomType como Entity e CRUD</li>
+				</ul>
+			</td>
+		</tr>
+
+		<tr style="background: #dFdFFF">
+			<td>3.1.0</td>
+			<td>24/05/2015</td>
+			<td>
+				<ul>
+					<li>Merge de contatos</li>
+					<li>Disponiveis os Relatórios Gerencias: "Pessoas e Papeis" e "Novos Participantes"</li>
+				</ul>
+			</td>
+		</tr>
+
+		<tr style="background: #eFeFFF">
+			<td>3.0.0</td>
+			<td>23/05/2015</td>
+			<td>
+				<ul>
+					<li>Nova versão com a nova estrutura criado durante o Desenvolvimento CB 2015</li>
+					<li>CPF obrigatório para brasileiro (em inscricao e no checkin)</li>
+					<li>Integracao com as bases SeminarioCB (amz29) e Inscricao (box)</li>
+					<li>Tema Cupertino</li>
+				</ul>
+			</td>
+		</tr>
+
+
+		<tr style="background: #dFdFFF">
+			<td>2.0.20</td>
+			<td>09/08/2014</td>
+			<td>
+				<ul>
+					<li>Em Informe de Pessoas por Evento, incluido campo Telefone</li>
+					<li>Em Informe de Pessoas por Evento, incluido campo Produtor</li>
+				</ul>
+			</td>
+		</tr>
+
+		<tr style="background: #eFeFFF">
+			<td>2.0.19</td>
+			<td>27/07/2014</td>
+			<td>
+				<ul>
+					<li>Substituiçao de todos os componentes p:confirmDialog por p:dialog, para resolver os dialogos que sumiam da tela</li>
+				</ul>
+			</td>
+		</tr>
+
+		<tr style="background: #dFdFFF">
+			<td>2.0.18</td>
+			<td>14/07/2014</td>
+			<td>
+				<ul>
+					<li>Em hospedagem, mostrando os eventos que está como participante ou staff</li>
+				</ul>
+			</td>
+		</tr>
+
+		<tr style="background: #eFeFFF">
+			<td>2.0.17</td>
+			<td>07/07/2014</td>
+			<td>
+				<ul>
+					<li>Tamanho de Camiseta no Informe de Pessoas por Evento</li>
+					<li>Resumo Camisetas por Sexo no Informe de Pessoas por Evento</li>
+					<li>Tamanho de Camiseta no cadastro de Participante</li>
+				</ul>
+			</td>
+		</tr>
+
+		<tr style="background: #dFdFFF">
+			<td>2.0.16</td>
+			<td>02/07/2014</td>
+			<td>
+				<ul>
+					<li>Melhoramentos no Informe de Quartos e Exportação para Excel</li>
+					<li>Meus Inscritos: Todos produtores podem ver todos os inscritos (temporário para o Estrela do Mar 2014)</li>
+				</ul>
+			</td>
+		</tr>
+
+		<tr style="background: #eFeFFF">
+			<td>2.0.15</td>
+			<td>01/07/2014</td>
+			<td>
+				<ul>
+					<li>Envio de Recibo de Pagamento em espanhol por Email OK</li>
+				</ul>
+			</td>
+		</tr>
+
+
+		<tr style="background: #dFdFFF">
+			<td>2.0.14</td>
+			<td>29/06/2014</td>
+			<td>
+				<ul>
+					<li>Datas de checkIN e checkOUT arrumadas</li>
+				</ul>
+			</td>
+		</tr>
+
+		<tr style="background: #eFeFFF">
+			<td>2.0.13</td>
+			<td>19/06/2014</td>
+			<td>
+				<ul>
+					<li>Retirado o simbolo de Dolar do componente de moeda</li>
+				</ul>
+			</td>
+		</tr>
+
+		<tr style="background: #dFdFFF">
+			<td>2.0.12</td>
+			<td>02/05/2014</td>
+			<td>
+				<ul>
+					<li>Email para inscrições para cada Mega Evento</li>
+				</ul>
+				<small>
+					update mega_event set adminEmail='inscripcion@condorblanco.com' where adminEmail is null;
+				</small>
+			</td>
+		</tr>
+
+
+		<tr style="background: #eFeFFF">
+			<td>2.0.11</td>
+			<td>11/05/2014</td>
+			<td>
+				<ul>
+					<li>Informe de Quartos</li>
+				</ul>
+			</td>
+		</tr>
+
+
+		<tr style="background: #dFdFFF">
+			<td>2.0.10</td>
+			<td>02/05/2014</td>
+			<td>
+				<ul>
+					<li>Correção: remover inscrição que tinha dependentes que não tinham eventos</li>
+					<li>Auditoria agora guardar o username do usuario logado</li>
+					<li>Melhorias no Checkin</li>
+					<li>Existem usuários para o mesmo contato. O scritp abaixo deleta eles.</li>
+				</ul>
+				<small>
+					update UserCB set createdByUser_id=null where id=594;
+					<br />					
+					update UserCB set createdByUser_id=null where id=	595	;
+					<br />					
+					update UserCB set createdByUser_id=null where id=	666	;
+					<br />					
+					update UserCB set createdByUser_id=null where id=	51	;
+					<br />					
+					update UserCB set createdByUser_id=null where id=	9175	;
+					<br />					
+					update UserCB set createdByUser_id=null where id=	9252	;
+					<br />					
+					update UserCB set createdByUser_id=null where id=	422	;
+					<br />					
+					update UserCB set createdByUser_id=null where id=	695	;
+					<br />					
+					update UserCB set createdByUser_id=null where id=	693	;
+					<br />					
+					update UserCB set createdByUser_id=null where id=	9127	;
+					update UserCB set createdByUser_id=null where id=	9102	;
+					<br />					
+					update UserCB set createdByUser_id=null where id=	9131	;
+					<br />					
+					update UserCB set createdByUser_id=null where id=	9493	;
+					<br />					
+					update UserCB set createdByUser_id=null where id=	9456	;
+					<br />					
+					update UserCB set createdByUser_id=null where id=	609	;
+					<br />					
+					update UserCB set createdByUser_id=null where id=	648	;
+					<br />					
+					update UserCB set createdByUser_id=null where id=	-46	;
+					<br />					
+					update UserCB set createdByUser_id=null where id=	-15	;
+					<br />					
+					update UserCB set createdByUser_id=null where id=	-16	;
+					<br />					
+					update UserCB set createdByUser_id=null where id=	9045	;
+					<br />					
+					update UserCB set createdByUser_id=null where id=	371	;
+					<br />					
+					update UserCB set createdByUser_id=null where id=	427	;
+					<br />					
+					update UserCB set createdByUser_id=null where id=	9097	;
+					<br />					
+					update UserCB set createdByUser_id=null where id=	598	;
+					<br />					
+					update UserCB set createdByUser_id=null where id=	599	;
+					<br />					
+					update UserCB set createdByUser_id=null where id=	643	;
+					<br />					
+					update UserCB set createdByUser_id=null where id=	-28	;
+					<br />					
+					update UserCB set createdByUser_id=null where id=	4019	;
+					<br />
+					update UserCB set createdByUser_id=null where id=	9246	;
+					<br />					
+					<br />
+					delete from user_x_city where user_id=	594	;
+					<br />
+					delete from user_x_city where user_id=	595	;
+					<br />
+					delete from user_x_city where user_id=	666	;
+					<br />
+					delete from user_x_city where user_id=	51	;
+					<br />
+					delete from user_x_city where user_id=	9175	;
+					<br />
+					delete from user_x_city where user_id=	9252	;
+					<br />
+					delete from user_x_city where user_id=	422	;
+					<br />
+					delete from user_x_city where user_id=	695	;
+					<br />
+					delete from user_x_city where user_id=	693	;
+					<br />
+					delete from user_x_city where user_id=	9127	;
+					delete from user_x_city where user_id=	9102	;
+					<br />
+					delete from user_x_city where user_id=	9131	;
+					<br />
+					delete from user_x_city where user_id=	9493	;
+					<br />
+					delete from user_x_city where user_id=	9456	;
+					<br />
+					delete from user_x_city where user_id=	609	;
+					<br />
+					delete from user_x_city where user_id=	648	;
+					<br />
+					delete from user_x_city where user_id=	-46	;
+					<br />
+					delete from user_x_city where user_id=	-15	;
+					<br />
+					delete from user_x_city where user_id=	-16	;
+					<br />
+					delete from user_x_city where user_id=	9045	;
+					<br />
+					delete from user_x_city where user_id=	371	;
+					<br />
+					delete from user_x_city where user_id=	427	;
+					<br />
+					delete from user_x_city where user_id=	9097	;
+					<br />
+					delete from user_x_city where user_id=	598	;
+					<br />
+					delete from user_x_city where user_id=	599	;
+					<br />
+					delete from user_x_city where user_id=	643	;
+					<br />
+					delete from user_x_city where user_id=	-28	;
+					<br />
+					delete from user_x_city where user_id=	4019	;
+					<br />
+					delete from user_x_city where user_id=	9246	;
+					<br />
+					<br />
+					delete from user_x_school where user_id=	594	;
+					<br />
+					delete from user_x_school where user_id=	595	;
+					<br />
+					delete from user_x_school where user_id=	666	;
+					<br />
+					delete from user_x_school where user_id=	51	;
+					<br />
+					delete from user_x_school where user_id=	9175	;
+					<br />
+					delete from user_x_school where user_id=	9252	;
+					<br />
+					delete from user_x_school where user_id=	422	;
+					<br />
+					delete from user_x_school where user_id=	695	;
+					<br />
+					delete from user_x_school where user_id=	693	;
+					<br />
+					delete from user_x_school where user_id=	9127	;
+					<br />
+					delete from user_x_school where user_id=	9102	;
+					<br />
+					delete from user_x_school where user_id=	9131	;
+					<br />
+					delete from user_x_school where user_id=	9493	;
+					<br />
+					delete from user_x_school where user_id=	9456	;
+					<br />
+					delete from user_x_school where user_id=	609	;
+					<br />
+					delete from user_x_school where user_id=	648	;
+					<br />
+					delete from user_x_school where user_id=	-46	;
+					<br />
+					delete from user_x_school where user_id=	-15	;
+					<br />
+					delete from user_x_school where user_id=	-16	;
+					<br />
+					delete from user_x_school where user_id=	9045	;
+					<br />
+					delete from user_x_school where user_id=	371	;
+					<br />
+					delete from user_x_school where user_id=	427	;
+					<br />
+					delete from user_x_school where user_id=	9097	;
+					<br />
+					delete from user_x_school where user_id=	598	;
+					<br />
+					delete from user_x_school where user_id=	599	;
+					<br />
+					delete from user_x_school where user_id=	643	;
+					<br />
+					delete from user_x_school where user_id=	-28	;
+					<br />
+					delete from user_x_school where user_id=	4019	;
+					<br />
+					delete from user_x_school where user_id=	9246	;
+					<br />
+					<br />
+					delete from UserCB where id=	594	;
+					<br />
+					delete from UserCB where id=	595	;
+					<br />
+					delete from UserCB where id=	666	;
+					<br />
+					delete from UserCB where id=	51	;
+					<br />
+					delete from UserCB where id=	9175	;
+					<br />
+					delete from UserCB where id=	9252	;
+					<br />
+					delete from UserCB where id=	422	;
+					<br />
+					delete from UserCB where id=	695	;
+					<br />
+					delete from UserCB where id=	693	;
+					<br />
+					delete from UserCB where id=	9127	;
+					<br />
+					delete from UserCB where id=	9102	;
+					<br />
+					delete from UserCB where id=9131	;
+					<br />
+					delete from UserCB where id=	9493	;
+					<br />
+					delete from UserCB where id=	9456	;
+					<br />
+					delete from UserCB where id=	609	;
+					<br />
+					delete from UserCB where id=	648	;
+					<br />
+					delete from UserCB where id=	-46	;
+					<br />
+					delete from UserCB where id=	-15	;
+					<br />
+					delete from UserCB where id=	-16	;
+					<br />
+					delete from UserCB where id=	9045	;
+					<br />
+					delete from UserCB where id=	371	;
+					<br />
+					delete from UserCB where id=	427	;
+					<br />
+					delete from UserCB where id=	9097	;
+					<br />
+					delete from UserCB where id=	598	;
+					<br />
+					delete from UserCB where id=	599	;
+					<br />
+					delete from UserCB where id=	643	;
+					<br />
+					delete from UserCB where id=	-28	;
+					<br />
+					delete from UserCB where id=	4019	;
+					<br />
+					delete from UserCB where id=	9246	;
+				</small>
+			</td>
+		</tr>
+
+		<tr style="background: #eFeFFF">
+			<td>2.0.9</td>
+			<td>29/04/2014</td>
+			<td>
+				<ul>
+					<li>Envio de email por JavaMail e infra do JBoss</li>
+					<li>Melhoramentos em Esqueci minha Senha</li>
+					<li>Melhoramentos em Criar meu Usuário</li>
+				</ul>
+			</td>
+		</tr>
+
+		<tr style="background: #dFdFFF">
+			<td>2.0.8.0</td>
+			<td>27/04/2014</td>
+			<td>
+				<ul>
+					<li>Gestão de Quartos</li>
+				</ul>
+				<small>Remover as FK Register(hosting_id) e Hosting(registerLeader_id)</small>
+			</td>
+		</tr>
+
+
+		<tr style="background: #eFeFFF">
+			<td>2.0.6.1</td>
+			<td>24/04/2014</td>
+			<td>
+				<ul>
+					<li>Produtor não tem acesso a Contatos</li>
+					<li>Link de Criar Meu Usuário removido por falha de segurança</li>
+				</ul>
+			</td>
+		</tr>
+
+
+		<tr style="background: #dFdFFF">
+			<td>2.0.7.0</td>
+			<td>23/04/2014</td>
+			<td>
+				<ul>
+					<li>Sugestões de Tipo de Quarto e colegas de quarto durante a inscrição</li>
+				</ul>
+				<small>
+					update register set hosting_id=null;
+					<br />
+					delete from Hosting;
+					<br />
+					select concat('insert into Hosting (id, megaEvent_id) values (', r.id, ', ', r.megaEvent_id, ');') from register r where not exists (select 1 from Hosting h where r.hosting_id=h.id) INTO OUTFILE 'insert_hosting.sql';
+					<br />
+					update register set hosting_id=id where hosting_id is null;
+					<br />
+				</small>
+			</td>
+		</tr>
+
+		<tr style="background: #eFeFFF">
+			<td>2.0.1</td>
+			<td>21/04/2014</td>
+			<td>
+				<ul>
+					<li>1. Gestão de Quartos</li>
+				</ul>
+				<table>
+					<tr><td>
+					alter table register drop column hostingNumber;
+					</td></tr>
+					<tr><td>
+					alter table register drop column hostingArea;
+					</td></tr>
+				</table>
+				
+			</td>
+		</tr>
+
+
+		<tr style="background: #dFdFFF">
+			<td>2.00</td>
+			<td>03/02/2014</td>
+			<td>
+				<ul>
+					<li>Auditoria ativada</li>
+					<li>Melhorias na Interface Gráfica (novos icones no menu principal)</li>
+					<li>Envio de email com Recibo de Pagamento</li>
+					<li>Acesso a configuração de Contato no menu principal</li>
+					<li>Correção bug em usuário</li>
+					<li>Correção bug ao pro-ratear credito (onde coluna 'note' estava muita pequena)</li>
+				</ul>
+			</td>
+		</tr>
+		
+		<tr style="background: #eFeFFF">
+			<td>1.98</td>
+			<td>18/11/2013</td>
+			<td>
+				<ul>
+					<li>1. Sacar estrella de mar de la lista de escuelas.</li>
+					<li>2. Poner a la formacion de Kainapi como Guia de Kainapi.</li>
+					<li>3. Arreglar problema com Yalcon y revisar </li>
+					<li>4. no mostrar los creditos ya usados en la lista de creditos </li>
+					<li>5. Error de refresco en pago (NO LOGRE REPRODUZIR)</li>
+					<li>6. Llenar masivamente contactos con tipo de entrenador null</li>
+					<li>7. Llenar masivamente contactos con flag consultores false</li>
+					<li>8. agregar seminario de formaction postgrado (punto de decision)</li>
+					<li>9. vision de halcon poner como formacion y sin modulo</li>
+					<li>10. sacar la restrition de modulo en seminario de formacion (NO)</li>
+					<li>11. crea modulo 1y2, 3y4</li>
+					<li>12. administrador puede modificar dia de checkin y checkout</li>
+					<li>13. administrador puede modificar datos personales</li>
+				</ul>
+				<small>
+					delete from event where school='EM';
+					<br />
+					delete from user_x_school where school='EM';
+					<br />
+					delete from production where school='EM';
+					<br />
+					update event set name=null where type='FORMATION';
+					<br />
+					update contact set name=null where name='';
+					<br />
+					delete from register_credit where alreadyUsed=true;
+					<br />
+					update contact set trainnerType=null;
+					<br />
+					update contact set flagConsultant=0;
+					<br />
+					
+					<br />
+					<br />
+					<br />
+					<br />
+					
+				</small>
+			</td>
+		</tr>
+		
+		<tr style="background: #dFdFFF">
+			<td>1.97</td>
+			<td>11/11/2013</td>
+			<td>
+				<ul>
+					<li>Envio de email de confirmação de inscrição</li>
+					<li>Envio de email de confirmação de checkin</li>
+				</ul>
+			</td>
+		</tr>
+
+		<tr style="background: #eFeFFF">
+			<td>1.95</td>
+			<td>19/10/2013</td>
+			<td>
+				<ul>
+					<li>1. Pago en la web hacer solo una opcion pago total.</li>
+					<li>2. revisar error de pago por web.</li>
+					<li>3. cambiar informaciones generales por historico y produccion</li>
+					<li>4. revisar busqueda de productores con sus invitados en el modulo de informes.</li>
+					<li>5. la ficha medica de checkin no se muestra en español aunque esta en el idioma configurado como español.</li>
+					<li>6. poner automatico enviar comprobante de chekin por email una vez realizado el proceso y tambien mostrar dialogo de impresion par la ficha medica y liberacion de responsabilidad.</li>
+					<li>7. evaluar si estando en una ficha de contacto puedo ir directo a gestion de pago segun el evento y megaevento que seleccione.</li>
+					<li>8. en pagos de gestion de pagos: tener un area que muestra todos los pagos de de todos los eventos del megaevento que se esta viendo. Cuando haya saldo mayor del pendiente entonces colocar un registro con lo descontado y que fue pagado.</li>
+					<li>9. validar que el porcentaje de productor no pueda descontarse de si mismo. tambien si el producido tiene nombre nuevo no se genera credito para el productor, tambien si el producido ha venido mas de 2 veces tampoco aplica. solo aplica porcentaje a seminarios de formación.</li>
+					<li>10. error en creacion de nuevo inscrito en mis inscripciones.</li>
+					<li>11. el campo fecha de checkin y checkout en el registro del participante quedara abierto. Poner aviso: "Es responsabilidad del participante si su ingreso y salida del megaevento es fuera de las fechas oficiales."</li>
+					<li>12. trabajar en la modificacion que es el punto 49 de seguimiento de requerimientos.</li>
+					<li>13. cambiar la fuente de la fecha de checkin mostrada en la ficha del participante en el modulo de gestion de pagos.</li>
+				</ul>
+				<small>
+					update account set createDate=current_date where createDate is null;
+					<br />
+					update event set type='COMPLEMENTAR' where type='FORMATION' and school is null;
+					<br />
+					update event set school=null, module=null, type='STAFF' where lower(name) like '%staff%';
+					<br />
+					update event set type='DEPENDENT', school=null, module=null where lower(name) like '%estadia%';
+					<br />
+					update event set school=null, module=null where type='COMPLEMENTAR';
+					<br />
+					update contact set name=null where id in (1275,8092,5022,4611);
+					<br />
+					update medical_question set textPT=text, textES=text;
+					<br />
+					alter table medical_question drop column active;
+					<br />
+					alter table medical_question drop column text;
+					<br />
+					alter table medical_question drop column idiom;
+					<br />
+					select concat('delete from medical_answer where register_id=', a.register_id,';') from medical_answer a where not exists (select 1 from register r where r.id=a.register_id);
+					<br />
+				    alter table event drop column enableForParticipant;
+					<br />
+				    alter table event drop column enableForStaff;
+					<br />
+				    alter table contact drop column profession;
+					<br />
+					alter table event_week drop column visible;
+					<br />
+					update event_week set flagOficial=oficial;
+					<br />
+					alter table event_week drop column oficial;
+					<br />
+					update mega_event set flagActive=active;
+					<br />
+					alter table mega_event drop column active;
+					<br />
+					update mega_event set flagCurrent=current;
+					<br />
+					alter table mega_event drop column current;
+					<br />
+					update city set flagActive=active;
+					<br />
+					alter table city drop column active;
+					<br />
+					update facilitator set flagActive=active;
+					<br />
+					alter table facilitator drop column active;
+					<br />
+					update production set flagClosed=closed;
+					<br />
+					update production set flagCurrent=current;
+					<br />
+					alter table production drop column current;
+					<br />
+					alter table production drop column closed;
+					<br />
+					update facilitator set category='LOBO';
+					<br />
+					update user_x_city set city_id=allowedCities_id;
+					<br />
+					alter table user_x_city drop column allowedCities_id;
+					<br />
+					update user_x_school set school=allowedSchools;
+					<br />
+					alter table user_x_school drop column allowedSchools;
+					<br />
+					
+					<br />
+					
+				</small>
+			</td>
+		</tr>
+
+		<tr style="background: #dFdFFF">
+			<td>1.90</td>
+			<td>07/10/2013</td>
+			<td>
+				<ul>
+					<li>Transferencia de evento: Evento futuro ou outra pessoa</li>
+				</ul>
+			</td>
+		</tr>
+
+		<tr style="background: #eFeFFF">
+			<td>1.85</td>
+			<td>30/09/2013</td>
+			<td>
+				<ul>
+					<li>Correção de Criar Usuários que não saía do campo email</li>
+					<li>Inscrições de Familiares</li>
+				</ul>
+				<small>
+					alter table event modify column name varchar(60) null;
+					<br />
+					update mega_event set babysitterWeekValue=890 where babysitterWeekValue is null;
+					<br />
+					update mega_event set childWeekValue=890 where childWeekValue is null;
+					<br />
+					update mega_event set teenagerWeekValue=890 where teenagerWeekValue is null;
+					<br />
+					update mega_event set youngWeekValue=890 where youngWeekValue is null;
+					<br />
+					update event set school='LCB', type='FORMATION' where name like '%idera%';
+					<br />
+					update event set school='LCB', type='FORMATION' where name like '%LCB%';
+					<br />
+					update event set school='CE', type='FORMATION' where name like '%oachin%';
+					<br />
+					update event set school='KW', type='FORMATION' where name like '%oman%';
+					<br />
+					update event set school='KF', type='FORMATION' where name like '%orest%';
+					<br />
+					update event set school='BD', type='FORMATION' where name like '%odhi%';
+					<br />
+					update event set school='FM', type='FORMATION' where name like '%ree%';
+					<br />
+					update event set school='KA', type='FORMATION' where name like '%ainapi%';
+					<br />
+					update event set module='M1' where type='FORMATION' and name like '%1%';
+					<br />
+					update event set module='M2' where type='FORMATION' and name like '%2%';
+					<br />
+					update event set module='M3' where type='FORMATION' and name like '%3%';
+					<br />
+					update event set module='M1' where type='FORMATION' and module is null;
+					<br />
+ 					update event set type='DEPENDENT' where type='COMPANION';
+					<br />
+					update register_detail set presence='DEPENDENT' where presence in ('CHILD','BABY_SITER');
+					<br />
+ 										
+				</small>
+			</td>
+		</tr>
+
+		<tr style="background: #dFdFFF">
+			<td>1.8</td>
+			<td>01/09/2013</td>
+			<td>
+				<ul>
+					<li>Ponto 26: Pagos pela Web (Transbank) OK</li>
+				</ul>
+				<small>
+					alter table register_detail_payment modify column date timestamp not null;
+				</small>
+			</td>
+		</tr>
+
+		<tr style="background: #eFeFFF">
+			<td>1.7</td>
+			<td>18/08/2013</td>
+			<td>
+				<ul>
+					<li>Ponto 22: Modulo Configuração está internacionalizavel. Agora o sistema todo está</li>
+					<li>Ponto 37: Esta implementado a impressão de ficha médica ao final do check-in. A impressão de liberação de responsabilidade continua pendente por falta de detalhes</li>
+				</ul>
+			</td>
+		</tr>
+
+		<tr style="background: #dFdFFF">
+			<td>1.6</td>
+			<td>12/08/2013</td>
+			<td>
+				<ul>
+					<li>Ponto 15: Ficha medica com obrigatoriedade em tratamento em resposta afirmativa</li>
+					<li>Ponto 20: Consertado remoção de inscrição em Meus Inscritos</li>
+					<li>Ponto 16: Combos ordenados alfabeticamente (enums)</li>
+					<li>Ponto 19: Dialogos se fecham quando tudo está ok</li>
+					<li>Ponto 11: Estado final de conta depende da migração para Firebird. Deixado em Stand-by</li>
+				</ul>
+			</td>
+		</tr>
+
+		
+		<tr style="background: #eFeFFF">
+			<td>1.45</td>
+			<td>29/07/2013</td>
+			<td>
+				<ul>
+					<li>Correção de 'agos' no icone</li>
+					<li>Correção de 'data' para 'fecha'</li>
+					<li>Ponto 7: Não replicar credito com zero</li>
+				</ul>
+			</td>
+		</tr>
+
+		<tr style="background: #dFdFFF">
+			<td>1.4</td>
+			<td>28/06/2013</td>
+			<td>
+				<ul>
+					<li>Bug fixed</li>
+					<li>Ponto 5: Export Excel e PDF para: "Informe Pessoas por Semana" e "Pagamentos por Evento" </li>
+					<li>Ponto 6: Campo observação</li>
+					<li>Nova carga com a base de dados ajustada com o novo modelo</li>
+				</ul>
+				
+				<fieldset>
+					<legend>Atualização modelo de dados</legend>
+					
+					drop table pk_gen;
+					<br />
+					--(drop os indices register > checkin_id)
+					<br />
+					alter table register drop foreign key FKD6DC2EA3E19D48EF;
+					<br />
+					alter table register drop key FKD6DC2EA3E19D48EF;
+					<br />
+					alter table register drop column checkin_id;
+					<br />
+					drop table checkin;	
+					<br />
+					--(dropar os indices register > checkout)
+					<br />
+					alter table register drop foreign key FKD6DC2EA35CB50C45;
+					<br />
+					alter table register drop key FKD6DC2EA35CB50C45;
+					<br />
+					alter table register drop column checkout_id;
+					<br />
+					drop table checkout;
+					<br />
+					--(dropar os indices register > tripInfo)
+					<br />
+					alter table register drop foreign key FKD6DC2EA3F45B4165;
+					<br />
+					alter table register drop key FKD6DC2EA3F45B4165;
+					<br />
+					alter table register drop column tripInfo_id;
+					<br />
+					drop table trip_info;
+					<br />
+					--(dropar os indices register.productorContact_id > contact)
+					<br />
+					alter table register drop foreign key FKD6DC2EA3D0341081;
+					<br />
+					alter table register drop key FKD6DC2EA3D0341081;
+					<br />
+					alter table register drop column productorContact_id;
+					<br />
+					alter table register drop column discountValue;
+					<br />
+					alter table register_detail drop column discountValue;
+					<br />
+					alter table user_x_city change allowedCities_id city_id bigint(20);
+					<br />
+					alter table user_x_school change allowedSchools school varchar(3);
+					<br />
+					alter table contact drop column blackberryPIM;
+					<br />
+					alter table contact drop column twitter;
+					<br />
+					alter table event_week drop column visible;
+					<br />
+					update incoming set paymentMethod = payment_method;
+					<br />
+					alter table incoming drop column payment_method;
+					<br />
+					update incoming set paymentQuota=payment_quota;
+					<br />
+					alter table incoming drop column payment_quota;
+					<br />
+					alter table mega_event drop column link_to_cart;
+					<br />
+					alter table user_x_school change User_id user_id bigint(20); 
+				</fieldset>
+				
+				<fieldset>
+					<legend>Updates para homologação</legend>
+					
+					update mega_event set active=1;
+					<br />
+					update mega_event set current=1 where id=5;
+					<br />
+					update event_week set oficial=1;
+					<br />
+					update facilitator set active=1;
+				</fieldset>
+			</td>
+		</tr>
+
+		<tr style="background: #eFeFFF">
+			<td>1.3</td>
+			<td>21/07/2013</td>
+			<td>
+				<ul>
+					<li>Ponto 1</li>
+					<li>Ponto 2</li>
+					<li>Ponto 3</li>
+				</ul>
+				<small>
+					select concat('insert into account (id, contact_id) values (', c.id, ', ',  c.id, ');') 
+					from contact c, register r where r.contact_id=c.id;
+					<br />	
+					update register set account_id=contact_id where account_id is null;
+					<br />	
+					select concat('update register_credit set account_id=' , r.account_id , ' where register_id=' , r.id , ';' ) 
+					from register r, register_credit rc 
+					where r.id=rc.register_id and rc.account_id is not null;
+					<br />	
+					dropar a foreign key de register_credit para register
+					<br />	
+					dropar a key de register_credit para register
+					<br />	
+					alter table register_credit drop column register_id;
+				</small>
+			</td>
+		</tr>
+
+		<tr style="background: #dFdFFF">
+			<td>1.2</td>
+			<td>02/06/2013</td>
+			<td>
+				<ul>
+					<li>Ponto 43: En módulo de “Mis inscritos” que permita agregar una nueva persona además de agregarla al evento.</li>
+					<li>Ponto 44: QUE SE PUEDA MANEJAR DISTINTOS MEGAEVENTOS CON DISTINTOS USUARIOS</li>
+				</ul>
+			</td>
+		</tr>
+
+
+		<tr style="background: #eFeFFF">
+			<td>1.1</td>
+			<td>28/04/2013</td>
+			<td>
+				<ul>
+					<li>Ponto 1 e 2: Aba de Informacoes Gerais em Pagamentos com Mega Eventos ja participados e lista de pessoas produzidas</li>
+				</ul>
+			</td>
+		</tr>
+
+
+		<tr style="background: #dFdFFF">
+			<td>1.0</td>
+			<td>12/02/2013</td>
+			<td>
+				<ul>
+					<li>Informe 7.4: Comissao para Produtores</li>
+					<li>Informe de Pessoas por Evento</li>
+					<li>Configuração de Contatos</li>
+					<li>Ao adicionar pagamento com metodo Cheque, habilitar campos especificos</li>
+					<li>Correção do botão de confirmar check-out que não aparecia</li>
+				</ul>
+			</td>
+		</tr>
+		
+		<tr style="background: #eFeFFF">
+			<td>0.986</td>
+			<td>01/02/2013</td>
+			<td>
+				<ul>
+					<li>Checkin agora é Embeddable</li>
+					<li>Checkout agora é Embeddable</li>
+					<li>TripInfo agora é Embeddable</li>
+				</ul>
+			</td>
+		</tr>
+		
+		
+		<tr style="background: #dFdFFF">
+			<td>0.985</td>
+			<td>21/01/2013</td>
+			<td>
+				<ul>
+					<li>Em gestao de pagos, alterar status para checkin OK</li>
+					<li>Em gestao de pagos, eliminar inscricao</li>
+					<li>Corrigido Informe Pagamentos por Evento: EventPresence tem apenas STAFF agora</li>
+				</ul>
+				<small>
+				update register_detail set presence='STAFF' where presence in ('STAFF_SERVICE','STAFF_SEMINAR') and id>0; 
+				</small>
+			</td>
+		</tr>
+		
+
+		<tr style="background: #eFeFFF">
+			<td>0.984</td>
+			<td>17/01/2013</td>
+			<td>
+				<ul>
+					<li>Ao pro-ratear um credito, manter seu valor e alterar seu status apareencendo uma imagem</li>
+					<li>Busca de Treinador e Produtor por Dialog (retirado autocomplete)</li>
+					<li>Simplificacao na tela de login: (Botao 'Criar usuario' e logar automaticamente)</li>
+					<li>Informe Pagamentos por Eventos</li>
+				</ul>
+					<ul>
+						<li>
+							<small>
+							select CONCAT('update contact set productorContact_id=',productorContact_id,' where id=',contact_id,';') from register where productorContact_id is not null;				
+							</small>
+						</li>
+						<li>
+							<small>
+							alter table register drop column productorContact_id;				
+							</small>
+						</li>
+					</ul>
+			</td>
+		</tr>
+
+
+		<tr style="background: #dFdFFF">
+			<td>0.983</td>
+			<td>11/01/2013</td>
+			<td>
+				<ul>
+					<li>Informe 7.10: Pessoas com Limitacoes Fisica</li>
+					<li>Corrigido scroll de impressao de recibo</li>
+				</ul>
+			</td>
+		</tr>
+
+		<tr style="background: #eFeFFF">
+			<td>0.982</td>
+			<td>08/01/2013</td>
+			<td>
+				<ul>
+					<li>Produtor poder fazer a inscricao de terceiros (Funcionalidade 'Meus Inscritos')</li>
+				</ul>
+			</td>
+		</tr>
+		
+		<tr style="background: #dFdFFF">
+			<td>0.981</td>
+			<td>06/01/2013</td>
+			<td>
+				<ul>
+					<li>Em check-in, aberta a alteracao de datas de check-in e check-out</li>
+				</ul>
+			</td>
+		</tr>
+		
+		<tr style="background: #eFeFFF">
+			<td>0.98</td>
+			<td>04/01/2013</td>
+			<td>
+				<ul>
+					<li>Impressao de Recibo de Pagamento</li>
+				</ul>
+			</td>
+		</tr>
+		
+		
+		<tr style="background: #dFdFFF">
+			<td>0.97</td>
+			<td>03/01/2013</td>
+			<td>
+				<ul>
+					<li>Check-out</li>
+					<li>Informe Pessoas para Check-out por Datas</li>
+					<li>Automatizar Resposta de Ficha Medica em Check-in</li>
+					<li>Imprimir Recibo no Check-in</li>
+					<li>Pro-rateio de Creditos em Pagamentos</li>
+					<li>Novo tipo de evento: Acampanhante</li>	
+					<li>Selecao de Treinador</li>
+				</ul>
+			</td>
+		</tr>
+		
+		
+		<tr style="background: #eFeFFF">
+			<td>0.96</td>
+			<td>02/01/2013</td>
+			<td>
+				<ul>
+					<li>Campo Nota em Creditos</li>
+					<li>Meio de Pago: Nota de Credito</li>
+					<li>Remover Creditos</li>
+				</ul>
+			</td>
+		</tr>
+
+
+		<tr style="background: #dFdFFF">
+			<td>0.95</td>
+			<td>28/12/2012</td>
+			<td>
+				<ul>	
+					<li>Tipo de Documentos como combo</li>
+					<li>Gestao de Inscricao e Pagamentos, alterar o valor de eventos</li>
+					<li>Gestao de Inscricao e Pagamentos em Espanhol</li>
+					<li>Melhorias no check-in de contratados</li>
+				</ul>
+			</td>
+		</tr>
+		
+		
+		<tr style="background: #eFeFFF">
+			<td>0.94</td>
+			<td>25/12/2012</td>
+			<td>
+				<ul>
+					<li>Traduzir Inscricao para espanhol</li>
+					<li>Traduzir CheckIN para espanhol</li>
+				</ul>
+			</td>
+		</tr>
+		
+		
+		<tr style="background: #dFdFFF">
+			<td>0.93</td>
+			<td>24/12/2012</td>
+			<td>
+				<ul>	
+					<li>Imprimir confirmacao de checkin</li>
+					<li>Proprio cliente criar seu usuario</li>
+					<li>Ficha medica qdo feita por terceiro, default nao</li>
+					<li>Editar eventos no checkin</li>
+					<li>Pagamento total no checkin</li>
+					<li>Implementar solucao creditos</li>
+					<li>No checkin, ser possivel a inscricao</li>
+					<li>Editar ficha medica no checkin</li>
+					<li>Editar Pagos</li>
+				</ul>
+			</td>
+		</tr>
+		
+
+		<tr style="background: #eFeFFF">
+			<td>0.92</td>
+			<td>08/12/2012</td>
+			<td>
+				<ul>
+					<li>Informe 7.7: Pessoas no MegaEvento por Data</li>
+					<li>Informe 7.8: Pessoas para Check-OUT por Data</li>
+					<li>Diminuir fonte na inscricao</li>
+					<li>Endereco nao esta obrigatorio</li>
+					<li>Autocomplete esta com problemas</li>
+					<li>Validar Datas da Viagem (antes e depois)</li>
+					<li>Na revisao da inscricao, esta zerando a ficha medica</li>
+					<li>Mostrar a data prevista de checkin no checkin</li>
+				</ul>
+			</td>
+		</tr>
+
+
+		<tr style="background: #dFdFFF">
+			<td>0.91</td>
+			<td>07/12/2012</td>
+			<td>
+				<ul>
+					<li>Escolha do Produtor com AutoCompletamento</li>
+					<li>Informe 7.6: Movimento Pessoas por Data</li>
+					<li>Configurar Perfil de Acesso</li>
+				</ul>
+			</td>
+		</tr>
+
+
+		<tr style="background: #eFeFFF">
+			<td>0.9</td>
+			<td>29/11/2012</td>
+			<td>
+				<ul>
+					<li>Correcao da Inscricao (Lista de details)</li>
+					<li>Correcao do CheckIN (novo modelo de pagamentos)</li>
+					<li>Informe 7.5: Pessoas por Semana</li>
+					<li>Mudar senha</li>
+					<li>Estrategica JPA TABLE</li>
+					<li>Tipo de Evento</li>
+				</ul>
+			</td>
+		</tr>
+
+		<tr style="background: #dFdFFF">
+			<td>0.8</td>
+			<td>12/11/2012</td>
+			<td>
+				<ul>
+					<li>Módulo de Pagamento</li>
+					<li>Informe 7.1: Saldo por Semana</li>
+					<li>Informe 7.2: Saldo por Pessoa</li>
+					<li>Informe 7.3: Forma de Pagamento por Data</li>
+				</ul>
+			</td>
+		</tr>
+		
+		<tr style="background: #eFeFFF">
+			<td>0.7</td>
+			<td>05/10/2012</td>
+			<td>
+				<ul>
+					<li>Selecionar produtor na Inscricao</li>
+					<li>Termos e condicoes de compra na Inscricao (configuravel na Admin de MegaEvento)</li>
+					<li>Administração de Usuários (com autocomplete para buscar contatos)</li>
+					<li>Cadastre-se: para clientes criarem seus proprios usuarios</li>
+					<li>Durante checkiIN, é possivel adicionar pagamentos</li>
+					<li>Melhorias no Design</li>
+				</ul>
+			</td>
+		</tr>
+		
+		<tr style="background: #dFdFFF">
+			<td>0.5</td>
+			<td>15/10/2012</td>
+			<td>
+				<ul>
+					<li>Implementacao Administração de Mega Eventos</li>
+					<li>Implementacao Administração de Semana</li>
+					<li>Implementacao Administração de Eventos</li>
+					<li>Melhoramentos efetivos no Design</li>
+				</ul>
+			</td>
+		</tr>
+
+		<tr style="background: #EFEFFF">
+			<td>0.4</td>
+			<td>07/10/2012</td>
+			<td>
+				<ul>
+					<li>Implementação do Check-out</li>
+					<li>Melhoramentos no Design</li>
+					<li>Perfil do Usuário aparece no barra principal</li>
+					<li>Melhoramentos na Modelagem de Classes: Status de Inscrição, Pagamentos de Inscrição</li>
+				</ul>
+			</td>
+		</tr>
+		
+	
+		<tr style="background: #dFdFFF">
+			<td>0.3</td>
+			<td>30/09/2012</td>
+			<td>
+				<ul>
+					<li>Implementacao Check-in</li>
+					<li>Correcao de ano com 2 digitos</li>
+					<li>Correcao do label Status para 'Status Pagamento'</li>
+					<li>Correcao para Tipo de Documento vir ante de Documento</li>
+					<li>Em Dados de Viagem, datas nao sao obrigatorias mais</li>
+					<li>Em Dados Pessoais, está bem definido Nome Novo e Nome Civil</li>
+				</ul>
+			</td>
+		</tr>
+	
+		<tr style="background: #EFEFFF">
+			<td>0.2</td>
+			<td>14/09/2012</td>
+			<td>
+				<ul>
+					<li>Melhoramento no Assistente de Inscrições: preços, status de pagamento, salvamento on-demand e link para carrinho de carrinho atual de CB</li>
+					<li>Implementação de 3 informes iniciais (Geral, Por Semana e Por Evento)</li>
+				</ul>
+			</td>
+		</tr>
+
+		<tr style="background: #dFdFFF">
+			<td>0.1</td>
+			<td>20/08/2012</td>
+			<td>
+				<ul>
+					<li>Deployment inicial</li>
+					<li>Design preliminar</li>
+					<li>Autenticação de usuario</li>
+					<li>Reset de senha</li>
+					<li>Assistente para inscrições (MegaEvento, Semana e Evento, Dados Pessoais, Ficha Medica e Dados de Viagem)</li>
+				</ul>
+			</td>
+		</tr>
+	
+	
+	</table>
+</fieldset>
+
+<fieldset>
+<legend>Planejamento para versão 2.0:</legend>
+
+	<table style="bordercolor:#000;" cellpadding="10" cellspacing="1" width="100%">
+		
+		<tr style="font-weight: bold; background: #ee3; color: black">
+			<td>#</td>
+			<td>Ações</td>
+		</tr>
+
+		<tr style="background: #ffb">
+			<td>3</td>
+			<td>
+				Gestao de Checkin de Familiares
+			</td>
+		</tr>
+	
+		<tr style="background: #ffd">
+			<td>2</td>
+			<td>
+				Precificacao por Data
+			</td>
+		</tr>
+	
+		<tr style="background: #ffb">
+			<td>3</td>
+			<td>
+				Tabela de Taxa de Cambio
+			</td>
+		</tr>
+	
+		<tr style="background: #ffd">
+			<td>4</td>
+			<td>
+				Graficos de Informe de Pessoas por Semana
+			</td>
+		</tr>
+
+		<tr style="background: #ffb">
+			<td>1</td>
+			<td>
+				Traducao completa para Espanhol
+			</td>
+		</tr>
+	
+	</table>
+</fieldset>
+
+
+
+</h:body>
+
+</html>

@@ -1,0 +1,320 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:fragment xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:cb="http://java.sun.com/jsf/composite/component">
+
+<p:outputPanel id="displayPayments" autoUpdate="true">
+	<fieldset>
+		<legend>#{i18n.label_events_and_payments}</legend>
+
+		<p:toolbar>
+			<p:toolbarGroup>
+				<p:commandButton icon="ui-icon-circle-plus" value="#{i18n.label_add_event}"
+					action="#{checkInEventBean.populateEventWeeks }"
+					update=":formAddEvent" 
+					oncomplete="DialogAddEvent.show()" />
+			</p:toolbarGroup>
+			
+			<p:toolbarGroup align="right">
+				<p:commandButton icon="ui-icon-person" value="#{i18n.label_add_familiar_or_baby_sitter}"
+					rendered="#{not empty checkInBean.selectedRegister.details}"
+					action="#{checkInBean.popularFamiliarRegister()}"
+					update=":formFamily" 
+					oncomplete="DialogFamily.show()" 
+					/>
+				<p:commandButton icon="ui-icon-person" value="#{i18n.label_third_register_agregating}"
+					rendered="#{not empty checkInBean.selectedRegister.details}"
+					action="#{checkInBean.populateThirdRegister()}"
+					update=":formThird"
+					oncomplete="DialogThird.show()" 
+					/>
+			</p:toolbarGroup>
+		</p:toolbar>
+
+		<cb:globalMessages />
+		
+		<h:outputText value="#{i18n.msg_no_events}" styleClass="less3"
+			rendered="#{empty regDetails and empty reg.dependentRegisters}" />
+
+		<!-- eventos dos meus dependentes -->
+		<ui:repeat var="dependRegisterRow" value="#{reg.dependentRegisters}">
+		
+			<p:dataTable var="detailRow" value="#{dependRegisterRow.details}" 
+				rendered="#{not empty dependRegisterRow.details}">
+				
+				<p:column styleClass="col5p colCenter">
+					<p:commandButton icon="ui-icon-trash"
+						title="#{i18n.label_remove_event}"
+						oncomplete="ConfirmDialogRemoveRegisterDetail.show()">
+							<f:setPropertyActionListener
+								target="#{checkInEventBean.registerDetail}"
+								value="#{detailRow }" />
+					</p:commandButton>
+				</p:column>
+
+				<p:column headerText="#{i18n.label_week_or_phase}" styleClass="col25p">
+					<h:outputText value="#{detailRow.eventWeek.name }"
+						styleClass="destak3" />
+					<br />
+					<h:outputText value="#{detailRow.eventWeek.descDates }"
+						styleClass="less3" />
+				</p:column>
+
+				<p:column headerText="#{i18n.label_dependents}" styleClass="col30p">
+					<h:outputText value="#{detailRow.register.contact.civilName}"
+						styleClass="destak4" />
+					<br/>
+					<h:outputText value="#{detailRow.event.name }"
+						styleClass="less2" />
+				</p:column>
+
+				<p:column headerText="#{i18n.label_value}" styleClass="col10p colCenter">
+					<cb:outputCurrency value="#{detailRow.value }" />
+					
+				</p:column>
+
+				<p:column headerText="#{i18n.label_paid_value}"	styleClass="col10p colCenter">
+					<cb:outputCurrency value="#{detailRow.calculatedPaidValue }" styleClass="paid" />
+				</p:column>
+
+				<p:column headerText="#{i18n.label_pendent_value}" styleClass="col10p colCenter" >
+					<cb:outputCurrency value="#{detailRow.calculatedPendentValue }" styleClass="pendent" />
+				</p:column>
+
+				<p:column headerText="#{i18n.label_payments}" styleClass="col10p colCenter">
+					<p:commandButton icon="ui-icon-plus"
+						title="#{i18n.label_add_payment_to} '#{i18n[detailRow.presence.key]}'"
+						action="#{checkInEventBean.addPartialPayment(detailRow)}"
+						oncomplete="DialogPayment.show()"
+						update=":formPartialPayment" />
+				</p:column>
+			</p:dataTable>
+		</ui:repeat>
+
+		<!-- meus eventos -->
+		<p:dataTable var="detailRow" value="#{regDetails }" rendered="#{not empty regDetails}">
+			
+			<p:column styleClass="col5p colCenter">
+				<p:commandButton icon="ui-icon-trash"
+					title="#{i18n.label_remove_event}"
+					oncomplete="ConfirmDialogRemoveRegisterDetail.show()">
+						<f:setPropertyActionListener
+							target="#{checkInEventBean.registerDetail}"
+							value="#{detailRow }" />
+				</p:commandButton>
+			</p:column>
+
+			<p:column headerText="#{i18n.label_week_or_phase}" styleClass="col25p">
+				<h:outputText value="#{detailRow.eventWeek.name }"
+					styleClass="destak3" />
+				<br />
+				<h:outputText value="#{detailRow.eventWeek.descDates }"
+					styleClass="less3" />
+			</p:column>
+
+			<p:column headerText="#{i18n.label_event}" styleClass="col30p">
+				<h:outputText value="#{detailRow.event.displayNameOrSchool }"
+					styleClass="destak4" />
+				<br />
+				<h:outputText value="#{i18n[detailRow.presence.key] }"
+					styleClass="less3" />
+			</p:column>
+
+			<p:column headerText="#{i18n.label_value}" styleClass="col10p colCenter">
+				<cb:outputCurrency value="#{detailRow.value }" />
+
+				<f:facet name="footer">
+					<cb:outputCurrency
+						value="#{checkInBean.selectedRegister.calculatedTotalValue }"
+						styleClass="destak3" />
+				</f:facet>
+			</p:column>
+
+			<p:column headerText="#{i18n.label_paid_value}"	styleClass="col10p colCenter">
+				<cb:outputCurrency value="#{detailRow.calculatedPaidValue }" styleClass="paid" />
+					
+				<f:facet name="footer">
+					<cb:outputCurrency
+						value="#{checkInBean.selectedRegister.calculatedPaidValue }"
+						styleClass="destak3 paid" />
+				</f:facet>
+			</p:column>
+
+			<p:column headerText="#{i18n.label_pendent_value}" styleClass="col10p colCenter" >
+				<cb:outputCurrency value="#{detailRow.calculatedPendentValue }" styleClass="pendent" />
+
+				<f:facet name="footer">
+					<cb:outputCurrency
+						value="#{checkInBean.selectedRegister.calculatedPendentValue}"
+						styleClass="destak3 pendent" />
+				</f:facet>
+			</p:column>
+
+			<p:column headerText="#{i18n.label_payments}" styleClass="col10p colCenter">
+				<p:commandButton icon="ui-icon-plus"
+					title="#{i18n.label_add_payment_to} '#{detailRow.event.name}'"
+					action="#{checkInEventBean.addPartialPayment(detailRow)}"
+					oncomplete="DialogPayment.show()"
+					update=":formPartialPayment" />
+
+				<f:facet name="footer">
+					<p:commandButton icon="ui-icon-circle-plus"
+						value="#{i18n.label_total_payment}"
+						action="#{checkInEventBean.addTotalPayment(checkInBean.selectedRegister) }"
+						update=":formTotalPayment"
+						oncomplete="DialogTotalPayment.show()"
+						rendered="#{not reg.paymentOK }" />
+				</f:facet>
+			</p:column>
+		</p:dataTable>
+		
+		<p:spacer height="5" />
+		
+		<div style="width:400px;margin:auto;">
+			<p:commandButton icon="ui-icon-print" value="Imprimir Demonstrativo dos Eventos inscritos" type="button" style="font-size:1.25em" 
+				onclick="DialogPrintEvents.show()"
+				/>
+		</div>
+
+	</fieldset>
+
+
+	<p:spacer height="10px" />
+
+
+	<fieldset style="border: 3px solid #040">
+		<legend>#{i18n.label_credits}</legend>
+
+		<h:outputText value="#{i18n.msg_no_credits_available }"
+			rendered="#{empty regCredits }" styleClass="less1" />
+
+		<p:dataTable value="#{regCredits }" var="credit"
+			rendered="#{not empty regCredits }">
+
+			<p:column headerText="#">
+				<h:outputText value="#{credit.id}" styleClass="less3" />
+			</p:column>
+
+			<p:column headerText="#{i18n.label_payment_method}">
+				<h:outputText value="#{i18n[credit.method.key]}" />
+			</p:column>
+
+			<p:column headerText="#{i18n.label_sale_order}">
+				<h:outputText value="#{credit.saleOrder }" />
+			</p:column>
+
+			<p:column headerText="#{i18n.label_date}">
+				<cb:outputDate value="#{credit.date }" />
+			</p:column>
+
+			<p:column headerText="#{i18n.label_note}" style="width:1%;">
+				<h:graphicImage library="img" name="icon_note_36.png"
+					title="#{credit.note}" rendered="#{not empty credit.note}" />
+			</p:column>
+
+			<p:column headerText="#{i18n.label_value}"
+				style="text-align:right;">
+				<cb:outputCurrency value="#{credit.value }"
+					styleClass="credit" />
+				<f:facet name="footer">
+					<cb:outputCurrency
+						value="#{checkInBean.selectedRegister.calculatedCreditValue}"
+						styleClass="destak3 credit" />
+				</f:facet>
+			</p:column>
+		</p:dataTable>
+	</fieldset>
+</p:outputPanel>
+
+
+<!-- Dialog Imprimir Eventos -->
+<!-- *********************** -->
+<p:dialog widgetVar="DialogPrintEvents" header="Visualizar para Imprimir" 
+	modal="true" maximizable="true" closeOnEscape="true" 
+	position="top" >
+	
+	<p:outputPanel autoUpdate="true">
+
+		<p:panel id="panelPrintEvents" header="Demonstrativo dos Eventos inscritos em Mega Evento" >
+			
+			<h:panelGrid cellpadding="20" width="100%">
+			
+				<p:panelGrid columns="2">
+					<h:outputText value="#{i18n.label_megaevent}" />
+					<h:outputText value="#{sessionHolder.currentMegaEvent.name }" styleClass="destak3" />
+		
+					<h:outputText value="Nome civil" />
+					<h:outputText value="#{checkInBean.selectedRegister.contact.civilName }" styleClass="destak1" />
+	
+					<h:outputText value="Nome novo" />
+					<h:outputText value="#{checkInBean.selectedRegister.contact.name }" styleClass="destak2" />
+	
+					<h:outputText value="Escola Raiz" />
+					<h:outputText value="#{checkInBean.selectedRegister.contact.rootSchool.description }" styleClass="destak3" />
+	
+					<h:outputText value="Cidade" />
+					<h:outputText value="#{checkInBean.selectedRegister.contact.city }" styleClass="destak3" />
+	
+					<h:outputText value="País" />
+					<h:outputText value="#{checkInBean.selectedRegister.contact.country }" styleClass="destak3" />
+	
+					<h:outputText value="Data prevista de Checkin" />
+					<cb:outputDate value="#{checkInBean.selectedRegister.previewCheckinDate }" styleClass="destak3" />
+	
+					<h:outputText value="Data prevista de Checkout" />
+					<cb:outputDate value="#{checkInBean.selectedRegister.previewCheckoutDate }" styleClass="destak3" />
+				</p:panelGrid>
+
+
+				<p:dataTable value="#{checkInBean.selectedRegister.details }" var="detailVar">
+					<f:facet name="header">
+						<h:outputText value="Eventos:" styleClass="destak2" />
+					</f:facet>			
+					<p:column headerText="Evento">
+						<h:outputText value="#{detailVar.event.displayNameOrSchool }" styleClass="destak3" />
+						<br />
+						<h:outputText value="#{detailVar.event.description }" styleClass="less2" />
+					</p:column>
+	
+					<p:column headerText="Presença">
+						<h:outputText value="#{i18n[detailVar.presence.key] }" styleClass="destak4" />
+					</p:column>
+					
+					<p:column headerText="Semana ou Fase">
+						<h:outputText value="#{detailVar.event.eventWeek.name }" styleClass="destak4" />
+					</p:column>
+					
+					<p:column headerText="Datas">
+						<h:outputText value="#{detailVar.event.eventWeek.descDates }" styleClass="destak4" />
+					</p:column>
+				</p:dataTable>
+
+			
+				<h:outputText value="#{i18n.label_signature_with_local_and_date }" />
+
+
+				<h:panelGrid width="100%">
+					<p:separator />
+					<h:outputText value="#{checkInBean.selectedRegister.contact.civilName}" styleClass="destak2" />
+				</h:panelGrid>
+
+			</h:panelGrid>
+
+		</p:panel>
+		
+		<p:toolbar>
+			<p:toolbarGroup>
+				<p:commandButton value="Imprimir" icon="ui-icon-print" type="button">
+					<p:printer target="panelPrintEvents" />
+				</p:commandButton>
+			</p:toolbarGroup>
+		</p:toolbar>
+	</p:outputPanel>
+</p:dialog>
+
+
+
+</ui:fragment>

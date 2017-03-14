@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:fragment xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:cb="http://java.sun.com/jsf/composite/component">
+
+<h:form>
+
+	<fieldset>
+		<legend>#{i18n.label_passengers_with_transport }</legend>
+	 
+		<h:outputText value="#{i18n.msg_no_passenger}" styleClass="less2 req"
+			rendered="#{empty transportBean.transport.registers}" />
+	
+		<p:scrollPanel styleClass="scrollable2"  mode="native"
+			rendered="#{not empty transportBean.transport.registers}" >
+		
+			<p:dataTable value="#{transportBean.transport.registers}" var="registerRow">
+				
+				<p:column headerText="#{i18n.label_civil_name}" styleClass="col30p" sortBy="#{registerRow.contact.civilName}" >
+					<h:outputText value="#{registerRow.contact.civilName}" styleClass="destak2" />
+				</p:column>
+	
+				<p:column headerText="#{i18n.label_name}" styleClass="col20p" sortBy="#{registerRow.contact.name}">
+					<h:outputText value="#{registerRow.contact.name}" styleClass="destak2" />
+				</p:column>
+			
+				<p:column headerText="#{i18n.label_checkin_date}" styleClass="col10p colCenter" >
+					<cb:outputDate value="#{registerRow.checkin.checkinDate}" />
+				</p:column>
+	
+				<p:column headerText="#{i18n.label_note_about_register}" styleClass="col10p colCenter" >
+					<cb:displayNote note="#{registerRow.note}" />
+				</p:column>
+	
+				<p:column headerText="#{i18n.label_register_status}" styleClass="col20p colCenter" sortBy="#{registerRow.status.key}" >
+					<cb:displayRegisterStatus register="#{registerRow}" />
+				</p:column>
+	
+				<p:column styleClass="colCenter col10p" >
+					<p:commandButton icon="ui-icon-minus" title="#{i18n.label_remove_passenger}"
+						action="#{transportBean.removeRegisterFromTransport(registerRow)}"
+						update="@form :displayTransportHeader :formTransports" />
+				</p:column>
+	
+			</p:dataTable>
+		</p:scrollPanel>
+	</fieldset>
+
+	<p:spacer height="10" />
+	
+	<p:fieldset legend="#{i18n.label_passengers_without_tranport }" toggleable="true">
+	
+		<h:outputText value="#{i18n.msg_no_passenger}" styleClass="less2"
+			rendered="#{empty transportBean.registersWithoutTransport}" />
+	
+		<p:scrollPanel style="height:300px" mode="native"
+			rendered="#{not empty transportBean.registersWithoutTransport}" >
+			
+			<p:dataTable value="#{transportBean.registersWithoutTransport}" var="registerRow" >
+				
+				<p:column headerText="#{i18n.label_civil_name}" styleClass="col30p" sortBy="#{registerRow.contact.civilName}">
+					<h:outputText value="#{registerRow.contact.civilName}" styleClass="destak2" />
+				</p:column>
+	
+				<p:column headerText="#{i18n.label_name}" styleClass="col20p" sortBy="#{registerRow.contact.name}">
+					<h:outputText value="#{registerRow.contact.name}" styleClass="destak2" />
+				</p:column>
+			
+				<p:column headerText="#{i18n.label_checkin_date}" styleClass="col10p colCenter" sortBy="#{registerRow.checkin.checkinDate}" >
+					<cb:outputDate value="#{registerRow.checkin.checkinDate}" />
+				</p:column>
+	
+				<p:column headerText="#{i18n.label_note_about_register}" styleClass="col10p colCenter" >
+					<cb:displayNote note="#{registerRow.note}" />
+				</p:column>
+	
+				<p:column headerText="#{i18n.label_register_status}" styleClass="col20p colCenter" sortBy="#{registerRow.status.key}" >
+					<cb:displayRegisterStatus register="#{registerRow}" />
+				</p:column>
+	
+				<p:column styleClass="colCenter col10p" >
+					<p:commandButton icon="ui-icon-plus" title="#{i18n.label_add_passenger}"
+						action="#{transportBean.addRegisterToTransport(registerRow) }"
+						rendered="#{transportBean.transport.flagAvailableCapacity}"
+						update="@form :displayTransportHeader :formTransports" />
+				</p:column>
+	
+			</p:dataTable>
+		</p:scrollPanel>
+	</p:fieldset>
+
+</h:form>
+
+</ui:fragment>

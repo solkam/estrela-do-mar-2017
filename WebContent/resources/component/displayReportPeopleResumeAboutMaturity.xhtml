@@ -1,0 +1,43 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:cc="http://java.sun.com/jsf/composite"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:h="http://java.sun.com/jsf/html">
+
+<cc:interface>
+	<cc:attribute name="resume" required="true" />
+</cc:interface>
+
+<cc:implementation>
+
+	<h:panelGroup>
+		<fieldset style="height:300px">
+			<legend>#{i18n.label_age}</legend>
+			
+			<p:panelGrid columns="2">
+				<h:outputText value="#{i18n.CONTACT_MATURITY_CHILD}:" />
+				<h:outputText value="#{cc.attrs.resume.totalChild}" styleClass="destak3" />
+
+				<h:outputText value="#{i18n.CONTACT_MATURITY_TEENAGER}:" />
+				<h:outputText value="#{cc.attrs.resume.totalTeenager}" styleClass="destak3" />
+
+				<h:outputText value="#{i18n.CONTACT_MATURITY_YOUNG}:" />
+				<h:outputText value="#{cc.attrs.resume.totalYoung}" styleClass="destak3" />
+
+				<h:outputText value="#{i18n.CONTACT_MATURITY_ADULT}:" />
+				<h:outputText value="#{cc.attrs.resume.totalAdult}" styleClass="destak3" />
+
+				<h:outputText value="#{i18n.CONTACT_MATURITY_ANCIENT}:" />
+				<h:outputText value="#{cc.attrs.resume.totalAncient}" styleClass="destak3" />
+
+				<h:outputText value="#{i18n.CONTACT_MATURITY_UNKNOWN}:" />
+				<h:outputText value="#{cc.attrs.resume.totalMaturityUnknow}" styleClass="destak3" />
+			</p:panelGrid>
+		</fieldset>
+	</h:panelGroup>
+
+</cc:implementation>
+
+</html>

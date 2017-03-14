@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:cb="http://java.sun.com/jsf/composite/component"
+	template="/WEB-INF/design/_decorate-report.xhtml">
+
+<ui:define name="reportContent" >
+
+<p:panel header="#{i18n.report_payment_method_by_dates }">
+
+	<h:form id="formOne">
+		<h:panelGrid columns="4" cellpadding="5">
+			<h:panelGrid>
+				<h:outputText value="MegaEvento: " styleClass="less2" />
+				<h:outputText value="#{reportBean.currentMegaEvent.name }" styleClass="destak2" />
+			</h:panelGrid>
+	
+			<h:panelGrid>
+				<h:outputText value="De:" styleClass="less2" />
+				<p:calendar id="calFirstDate" value="#{rPMbyDateBean.firstDate }"
+					size="10" pattern="dd/MM/yyyy"    showOn="button" 
+					required="true" label="Data" />
+				<h:outputText value="(dd/mm/yyyy)" styleClass="less3" />
+				<p:message for="calFirstDate" />
+			</h:panelGrid>
+	
+			<h:panelGrid>
+				<h:outputText value="Até:" styleClass="less2" />
+				<p:calendar id="calLastDate" value="#{rPMbyDateBean.lastDate }" 
+					size="10" pattern="dd/MM/yyyy"     showOn="button" 
+					required="true" label="Data" />
+				<h:outputText value="(dd/mm/yyyy)" styleClass="less3" />
+				<p:message for="calLastDate" />
+			</h:panelGrid>
+			
+			<p:commandButton icon="ui-icon-search" value="Pesquisar"
+				action="#{rPMbyDateBean.search }"
+				update="@form" 
+				/>
+	
+		</h:panelGrid>
+
+		<p:separator />
+
+		<p:dataTable var="summary" value="#{rPMbyDateBean.summaries }" 
+			emptyMessage="#{i18n.msg_no_result_found }">
+		
+			<p:column>
+				<p:dataTable var="payment" value="#{summary.payments }">
+					<f:facet name="header">
+						<h:outputText value="#{i18n[summary.paymentMethod.key]}" styleClass="destak1" />
+					</f:facet>
+					
+					<p:column headerText="Nome" sortBy="#{payment.registerDetail.register.contact.fullDesc }">
+						#{payment.registerDetail.register.contact.fullDesc }
+					</p:column>
+				
+ 
+					<p:column headerText="Valor Pago" sortBy="#{payment.value }" style="text-align:center">
+						<cb:outputCurrency value="#{payment.value }" />
+						<f:facet name="footer">
+							<cb:outputCurrency value="#{summary.totalValue }" styleClass="destak3" />
+						</f:facet>
+					</p:column>
+
+ 					<p:column headerText="Data" sortBy="#{payment.date }" style="text-align:center">
+						<cb:outputDate value="#{payment.date }" />
+					</p:column>
+
+					<p:column headerText="Cidade" sortBy="#{payment.registerDetail.register.contact.city}">
+						<h:outputText value="#{payment.registerDetail.register.contact.city}" />
+					</p:column>
+
+					<p:column headerText="Ordem de Compra" sortBy="#{payment.saleOrder}" style="text-align:center">
+						<h:outputText value="#{payment.saleOrder}" />
+					</p:column>
+
+					<p:column headerText="Observação" style="text-align:center">
+						<h:graphicImage id="iconNote" library="img" name="icon_note_36.png" 
+							rendered="#{not empty payment.note}" 
+							/>
+						<p:tooltip for="iconNote" value="#{payment.note}" 
+							style="background-color:yellow;"   />
+						
+					</p:column>
+				
+				</p:dataTable>
+				
+				<p:spacer height="15" />
+			
+			</p:column>
+			
+		</p:dataTable>		
+	</h:form>
+
+</p:panel>
+</ui:define>
+	
+
+</ui:composition>

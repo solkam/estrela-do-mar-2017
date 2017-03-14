@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:cb="http://java.sun.com/jsf/composite/component"
+	template="/WEB-INF/design/_template-main.xhtml">
+<ui:define name="content">
+
+<cb:barPanel imageName="option_user_75.png" moduleName="#{i18n.label_users}" />
+
+<h:form id="formConfigUsers">
+
+	<p:panel header="#{i18n.label_users}">
+	
+		<p:fieldset legend="#{i18n.label_search}" toggleable="true" collapsed="false">
+			<h:panelGrid columns="5" cellpadding="5">
+				<h:panelGrid>
+					<h:outputText value="#{i18n.label_new_name}" styleClass="less1" />
+					<p:inputText value="#{configUserBean.filterName}" size="20" />
+				</h:panelGrid>
+	
+				<h:panelGrid>
+					<h:outputText value="#{i18n.label_civil_name}" styleClass="less1" />
+					<p:inputText value="#{configUserBean.filterCivilName}" size="30" />
+				</h:panelGrid>
+	
+				<h:panelGrid>
+					<h:outputText value="#{i18n.label_email}" styleClass="less1" />
+					<p:inputText value="#{configUserBean.filterEmail}" size="30" />
+				</h:panelGrid>
+	
+				<h:panelGrid>
+					<h:outputText value="#{i18n.label_user_profile}" styleClass="less1" />
+					<p:selectOneMenu value="#{configUserBean.filterProfile}" styleClass="combo" converter="#{profileConverter}">
+						<f:selectItem itemLabel="" noSelectionOption="true"   />
+						<f:selectItems value="#{configUserBean.comboProfiles }" var="profileVar"
+							itemValue="#{profileVar}" itemLabel="#{i18n[profileVar.key]}" />
+					</p:selectOneMenu>
+				</h:panelGrid>
+	
+				<p:commandButton icon="ui-icon-search" value="#{i18n.label_user_search}"
+					action="#{configUserBean.searchUser}" 
+					update="displayUsers" />
+	
+			</h:panelGrid>
+		</p:fieldset>
+
+		<p:spacer height="5" />
+
+		<p:commandButton icon="ui-icon-plus" value="#{i18n.label_user_new}"
+			action="#{configUserBean.resetUser}"
+			oncomplete="DialogConfigUser.show()" 
+			update=":regionConfigUser" />
+
+		<p:outputPanel id="displayUsers">
+		
+			<cb:globalMessages />
+
+			<p:dataTable value="#{configUserBean.users }" var="userRow"
+				rendered="#{not empty configUserBean.users}" >
+
+				<p:column headerText="ID" styleClass="col5p colCenter">
+					<h:outputText value="#{userRow.id}" styleClass="less3" />
+				</p:column>
+
+				<p:column headerText="#{i18n.label_new_name}" sortBy="#{userRow.contact.name}"	styleClass="col20p">
+					<h:outputText value="#{userRow.contact.name}" styleClass="destak3" />
+				</p:column>
+
+				<p:column headerText="#{i18n.label_civil_name_complete}" sortBy="#{userRow.contact.civilName}" styleClass="col30p">
+					<h:outputText value="#{userRow.contact.civilName}" styleClass="destak4" />
+				</p:column>
+
+				<p:column headerText="#{i18n.label_email}" sortBy="#{userRow.contact.email}" styleClass="col30p">
+					#{userRow.contact.email}
+				</p:column>
+
+				<p:column headerText="#{i18n.label_user_profile}" sortBy="#{i18n[u.profile.key]}" styleClass="col10p colCenter">
+					#{i18n[userRow.profile.key]}
+				</p:column>
+
+				<p:column styleClass="col5p colCenter">
+					<p:commandButton icon="ui-icon-pencil"	title="#{i18n.label_user_edit}"
+						action="#{configUserBean.manageUser(userRow)}"
+						oncomplete="DialogConfigUser.show()" 
+						update=":regionConfigUser" 
+						/>
+				</p:column>
+
+			</p:dataTable>
+		</p:outputPanel>
+
+	</p:panel>
+</h:form>
+
+
+<!-- Dialog User -->
+<p:dialog header="#{i18n.label_user}" widgetVar="DialogConfigUser" 
+	modal="true" maximizable="true" dynamic="true" closeOnEscape="true"
+	position="top" width="50%" height="50%" >
+	
+	<p:outputPanel id="regionConfigUser">
+	
+		<p:panelGrid columns="4" rendered="#{not configUserBean.user.transient}">
+			<h:outputText value="#{i18n.label_civil_name}" styleClass="less2" />
+			<h:outputText value="#{i18n.label_new_name}"   styleClass="less2" />
+			<h:outputText value="#{i18n.label_email}"      styleClass="less2" />
+			<h:outputText value="#{i18n.label_city}"       styleClass="less2" />
+
+			<h:outputText value="#{configUserBean.user.contact.civilName}" styleClass="destak2" />
+			<h:outputText value="#{configUserBean.user.contact.name}"      styleClass="destak2" />
+			<h:outputText value="#{configUserBean.user.contact.email}"     styleClass="destak3" />
+			<h:outputText value="#{configUserBean.user.contact.city}"      styleClass="destak3" />
+		</p:panelGrid>
+			
+		<p:tabView>
+			<p:tab title="#{i18n.label_contact_data}">
+				<ui:include src="/pages/config/config-user-frag-principal.xhtml" />
+			</p:tab>
+		
+			<p:tab title="#{i18n.label_pass}" rendered="#{not configUserBean.user.transient}">
+				<ui:include src="/pages/config/config-user-frag-password.xhtml" />
+			</p:tab>
+		</p:tabView>
+
+	</p:outputPanel>
+
+</p:dialog>
+
+</ui:define>
+</ui:composition>

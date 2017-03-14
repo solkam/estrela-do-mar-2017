@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:cb="http://java.sun.com/jsf/composite/component"
+	template="/WEB-INF/design/_decorate-config.xhtml" >
+
+<ui:define name="contentConfig">
+
+<h:form id="formEventWeeks">
+	<p:panel header="#{i18n.label_week_config}">
+		<p:outputPanel id="displayWeekFilters">
+			<h:panelGrid columns="3" cellpadding="5">
+				<h:panelGrid>
+					<h:outputText value="#{i18n.label_megaevent}:" styleClass="less2" />
+					<p:selectOneMenu id="comboMEForEW" value="#{configWeekBean.selectedMegaEvent.id }" 
+						styleClass="combo">
+						
+						<f:selectItems value="#{configWeekBean.activeMegaEvents }" var="me"
+							itemValue="#{me.id }" itemLabel="#{me.name }"  />
+					</p:selectOneMenu>
+					<p:message for="comboMEForEW" />
+				</h:panelGrid>
+				
+				<p:commandButton icon="ui-icon-search" value="#{i18n.label_week_search}"
+					action="#{configWeekBean.searchEventWeek }"
+					update="@form" />
+			</h:panelGrid>	
+		</p:outputPanel>
+			
+		<p:separator />
+
+		<p:messages globalOnly="true" />
+		
+		<p:commandButton icon="ui-icon-plus" value="#{i18n.label_week_new}"
+			action="#{configWeekBean.resetEventWeek }"
+			oncomplete="DialogEventWeek.show()"
+			update=":formEventWeek" />
+			
+		<h:outputText value="#{i18n.msg_no_week_found}" styleClass="less2"
+			rendered="#{empty configWeekBean.eventWeeks}" />
+	
+		<p:dataTable value="#{configWeekBean.eventWeeks }" var="weekRow" 
+			rendered="#{not empty configWeekBean.eventWeeks}" >
+			
+			<p:column headerText="ID" styleClass="col5p">
+				<h:outputText value="#{weekRow.id }" styleClass="less3" />
+			</p:column>
+
+			<p:column headerText="#{i18n.label_week_name}" styleClass="col20p">
+				<h:outputText value="#{weekRow.name }" styleClass="destak3" />
+			</p:column>
+		
+			<p:column headerText="#{i18n.label_week_begin_date}" styleClass="col10p">
+				<cb:outputDate value="#{weekRow.beginDate }" styleClass="destak4" />
+			</p:column>
+
+			<p:column headerText="#{i18n.label_week_end_data}" styleClass="col10p">
+				<cb:outputDate value="#{weekRow.endDate }" styleClass="destak4" />
+			</p:column>
+			
+			<p:column headerText="#{i18n.label_week_checkin_date}" styleClass="col10p">
+				<cb:outputDate value="#{weekRow.dateForCheckin}" />
+			</p:column>
+
+			<p:column headerText="#{i18n.label_week_checkout_data}" styleClass="col10p">
+				<cb:outputDate value="#{weekRow.dateForCheckout }" />
+			</p:column>
+			
+			<p:column headerText="#{i18n.label_week_oficial}" styleClass="col5p colCenter" >
+				<h:graphicImage library="img" name="icon_active.jpg"   rendered="#{weekRow.flagOficial}" />
+				<h:graphicImage library="img" name="icon_inactive.jpg" rendered="#{not weekRow.flagOficial}" />
+			</p:column>
+
+			<p:column styleClass="col5p colCenter">
+				<p:commandButton icon="ui-icon-pencil" title="#{i18n.label_week_edit} '#{weekRow.name}'"
+					oncomplete="DialogEventWeek.show()"
+					update=":formEventWeek" >
+				
+					<f:setPropertyActionListener target="#{configWeekBean.eventWeek}" value="#{weekRow}" />
+				</p:commandButton>
+			</p:column>
+
+			<p:column styleClass="col5p colCenter">
+				<p:commandButton icon="ui-icon-trash"  title="#{i18n.label_week_remove} '#{weekRow.name}'"
+					oncomplete="ConfirmDialogRemoveEventWeek.show()" >
+					
+					<f:setPropertyActionListener target="#{configWeekBean.eventWeek}" value="#{weekRow}" />
+				</p:commandButton>
+			</p:column>
+
+		</p:dataTable>
+	</p:panel>
+</h:form>
+
+
+<!-- Dialog Week -->
+<p:dialog header="#{i18n.label_week}" widgetVar="DialogEventWeek" 
+	modal="true" dynamic="true" closeOnEscape="true" maximizable="true" 
+	position="top" >
+	
+	<h:form id="formEventWeek">
+		<h:panelGrid cellpadding="5">
+	
+			<h:panelGrid columns="2" cellpadding="5">
+				<h:outputText value="#{i18n.label_megaevent}" styleClass="less2" />
+				<h:outputText value="#{configWeekBean.selectedMegaEvent.name}" styleClass="destak1" />
+			</h:panelGrid>
+
+			<h:panelGroup>
+				<fieldset>
+					<legend>#{i18n.label_week}</legend>
+
+					<h:panelGrid columns="2">
+						<p:outputLabel for="inWeekName" value="#{i18n.label_week_name}" styleClass="less2 req" />
+						<h:panelGrid>
+							<p:inputText id="inWeekName" value="#{configWeekBean.eventWeek.name }" 
+								size="50" required="true" />
+							<p:message for="inWeekName" />
+						</h:panelGrid>
+					</h:panelGrid>
+					
+					<h:panelGrid columns="3" cellpadding="5" >
+						<h:outputText value="#{i18n.label_week_oficial}?" styleClass="less2 req" />
+					
+						<h:panelGroup id="displayOficialImage">
+							<h:graphicImage library="img" name="icon_active.jpg"   rendered="#{configWeekBean.eventWeek.flagOficial }"     />
+							<h:graphicImage library="img" name="icon_inactive.jpg" rendered="#{not configWeekBean.eventWeek.flagOficial }" />
+						</h:panelGroup>
+					
+						<p:selectOneRadio value="#{configWeekBean.eventWeek.flagOficial }" >
+							<f:selectItem itemValue="#{true}"  itemLabel="#{i18n.label_yes}" />
+							<f:selectItem itemValue="#{false}" itemLabel="#{i18n.label_no}"  />
+							<p:ajax process="@this" update="displayOficialImage" global="false" />
+						</p:selectOneRadio>	
+					</h:panelGrid>
+					
+				</fieldset>
+			</h:panelGroup>
+			
+			<h:panelGroup>
+				<fieldset>
+					<legend>#{i18n.label_dates}</legend>
+
+					<h:panelGrid columns="2" cellpadding="5" >
+						<h:panelGrid>
+							<p:outputLabel for="inBeginDate" value="#{i18n.label_week_begin_date}" styleClass="less2 req" />
+							<p:calendar id="inBeginDate" value="#{configWeekBean.eventWeek.beginDate }" 
+								required="true" size="12" pattern="dd/MM/yyyy" navigator="true"   
+								/>
+							<p:message for="inBeginDate" />
+						</h:panelGrid>
+	
+						<h:panelGrid>
+							<p:outputLabel for="inEndDate" value="#{i18n.label_week_end_data}" styleClass="less2 req" />
+							<p:calendar id="inEndDate" value="#{configWeekBean.eventWeek.endDate }" 
+								required="true" size="12" pattern="dd/MM/yyyy" navigator="true"    
+								/>
+							<p:message for="inEndDate" />
+						</h:panelGrid>
+					</h:panelGrid>
+	
+					
+					<h:panelGrid columns="2" cellpadding="5" >
+						<h:panelGrid>
+							<p:outputLabel for="inDateForCheckIN" value="#{i18n.label_week_checkin_date}" styleClass="less2 req" />
+							<p:calendar id="inDateForCheckIN" value="#{configWeekBean.eventWeek.dateForCheckin }" 
+								required="true" size="12" pattern="dd/MM/yyyy" navigator="true"     
+								/>	
+							<p:message for="inDateForCheckIN" />
+						</h:panelGrid>
+	
+						<h:panelGrid>
+							<p:outputLabel for="inDateForCheckout" value="#{i18n.label_week_checkout_data}" styleClass="less2 req" />
+							<p:calendar id="inDateForCheckout" value="#{configWeekBean.eventWeek.dateForCheckout }" 
+								required="true" size="12" pattern="dd/MM/yyyy" navigator="true"     
+								/>
+							<p:message for="inDateForCheckout" />
+						</h:panelGrid>
+					</h:panelGrid>
+
+				</fieldset>
+			</h:panelGroup>
+		
+			<h:panelGroup>
+				<fieldset>
+					<legend>#{i18n.label_create_dependent_events}</legend>
+
+					<h:panelGrid columns="3">
+					
+						<p:selectBooleanCheckbox id="selBabysitter" value="#{configWeekBean.flagBabysitterEvent}"  >
+							<p:ajax process="@this" update="displayBabySitterEvent" global="false"/>
+						</p:selectBooleanCheckbox>
+						
+						<p:outputLabel for="selBabysitter" value="#{i18n.label_event_auto_babysitter}" styleClass="destak3" />
+						
+						<p:outputPanel id="displayBabySitterEvent">
+							<h:panelGrid columns="2" cellpadding="0" rendered="#{configWeekBean.flagBabysitterEvent}">
+								<p:outputLabel for="inBabysitterName" value="#{i18n.label_name}" styleClass="less3 req" />
+								<p:outputLabel for="inBabysitterValue" value="#{i18n.label_value}" styleClass="less3 req" />
+	
+								<p:inputText id="inBabysitterName" value="#{configWeekBean.babysitterEvent.name}" required="true" size="30" />
+								<p:inputText id="inBabysitterValue" value="#{configWeekBean.babysitterEvent.valueParticipant}" required="true" size="10" />
+	
+								<p:message for="inBabysitterName" />
+								<p:message for="inBabysitterValue" />
+							</h:panelGrid>
+						</p:outputPanel>
+
+
+						<p:selectBooleanCheckbox id="selChild" value="#{configWeekBean.flagChildEvent}"  >
+							<p:ajax process="@this" update="displayChildEvent" global="false"/>
+						</p:selectBooleanCheckbox>
+						
+						<p:outputLabel for="selChild" value="#{i18n.label_event_auto_child}" styleClass="destak3" />
+						
+						<p:outputPanel id="displayChildEvent">
+							<h:panelGrid columns="2" cellpadding="0"  rendered="#{configWeekBean.flagChildEvent}">
+								<p:outputLabel for="inChildName" value="#{i18n.label_name}" styleClass="less3 req" />
+								<p:outputLabel for="inChildValue" value="#{i18n.label_value}" styleClass="less3 req" />
+	
+								<p:inputText id="inChildName" value="#{configWeekBean.childEvent.name}" required="true" size="30" />
+								<p:inputText id="inChildValue" value="#{configWeekBean.childEvent.valueParticipant}" required="true" size="10" />
+	
+								<p:message for="inChildName" />
+								<p:message for="inChildValue" />
+							</h:panelGrid>
+						</p:outputPanel>
+
+
+						<p:selectBooleanCheckbox id="selTeenager" value="#{configWeekBean.flagTeenagerEvent}"  >
+							<p:ajax process="@this" update="displayTeenagerEvent" global="false"/>
+						</p:selectBooleanCheckbox>
+						
+						<p:outputLabel for="selTeenager" value="#{i18n.label_event_auto_teenager}" styleClass="destak3" />
+						
+						<p:outputPanel id="displayTeenagerEvent">
+							<h:panelGrid  columns="2" cellpadding="0"  rendered="#{configWeekBean.flagTeenagerEvent}">
+								<p:outputLabel for="inTeenagerName" value="#{i18n.label_name}" styleClass="less3 req" />
+								<p:outputLabel for="inTeenagerValue" value="#{i18n.label_value}" styleClass="less3 req" />
+	
+								<p:inputText id="inTeenagerName" value="#{configWeekBean.teenagerEvent.name}" required="true" size="30" />
+								<p:inputText id="inTeenagerValue" value="#{configWeekBean.teenagerEvent.valueParticipant}" required="true" size="10" />
+	
+								<p:message for="inTeenagerName" />
+								<p:message for="inTeenagerValue" />
+							</h:panelGrid>
+						</p:outputPanel>
+
+
+						<p:selectBooleanCheckbox id="selYoung" value="#{configWeekBean.flagYoungEvent}"  >
+							<p:ajax process="@this" update="displayYoungEvent" global="false" />
+						</p:selectBooleanCheckbox>
+						
+						<p:outputLabel for="selYoung" value="#{i18n.label_event_auto_young}" styleClass="destak3" />
+						
+						<p:outputPanel id="displayYoungEvent">
+							<h:panelGrid  columns="2" cellpadding="0"  rendered="#{configWeekBean.flagYoungEvent}">
+								<p:outputLabel for="inYoungName" value="#{i18n.label_name}" styleClass="less3 req" />
+								<p:outputLabel for="inYoungValue" value="#{i18n.label_value}" styleClass="less3 req" />
+	
+								<p:inputText id="inYoungName" value="#{configWeekBean.youngEvent.name}" required="true" size="30" />
+								<p:inputText id="inYoungValue" value="#{configWeekBean.youngEvent.valueParticipant}" required="true" size="10" />
+	
+								<p:message for="inYoungName" />
+								<p:message for="inYoungValue" />
+							</h:panelGrid>
+						</p:outputPanel>
+
+					</h:panelGrid>
+				</fieldset>
+			</h:panelGroup>
+			
+		</h:panelGrid>
+			
+		<p:separator />			
+			
+		<p:messages globalOnly="true" />
+		
+		<p:commandButton icon="ui-icon-check" value="#{i18n.label_week_save}"
+			action="#{configWeekBean.saveEventWeek }"
+			oncomplete="if (args.sucessOnly) DialogEventWeek.hide()"
+			update="@form :formEventWeeks" />
+		
+	</h:form>
+</p:dialog>
+
+
+<!-- Confirm Remover -->
+<p:dialog widgetVar="ConfirmDialogRemoveEventWeek" heder="#{i18n.question_sure_to_remove_week}" 
+	closeOnEscape="true" modal="true" position="top" >
+	<h:form>
+		<h:panelGrid columns="2" cellpadding="20">
+			<p:commandButton icon="ui-icon-check" value="#{i18n.label_yes}"
+				action="#{configWeekBean.removeEventWeek }"
+				oncomplete="ConfirmDialogRemoveEventWeek.hide()"
+				update=":formEventWeeks" 
+				/>
+		
+			<p:commandButton icon="ui-icon-close" value="#{i18n.label_no}"  
+				type="button" 
+				onclick="ConfirmDialogRemoveEventWeek.hide()" 
+				/>
+		</h:panelGrid>
+	</h:form>
+</p:dialog>
+
+
+</ui:define>	
+</ui:composition>

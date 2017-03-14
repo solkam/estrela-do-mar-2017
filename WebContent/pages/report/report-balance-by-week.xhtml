@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:cb="http://java.sun.com/jsf/composite/component"
+	template="/WEB-INF/design/_decorate-report.xhtml">
+
+<ui:define name="reportContent" >
+
+<p:panel header="#{i18n.report_balance_by_week}">
+
+	<h:form id="formFilter">
+		<h:panelGrid columns="3" cellpadding="5">
+			<h:panelGrid>
+				<h:outputText value="MegaEvento: " styleClass="less2" />
+				<h:outputText value="#{reportBean.currentMegaEvent.name}" styleClass="destak2" />
+			</h:panelGrid>
+	
+			<h:panelGrid>
+				<h:outputText value="Semana(s):" styleClass="less2" />
+				<p:selectCheckboxMenu id="selWeek" label="(selecione)" value="#{reportBalanceByWeekBean.selectedEventWeeks}"
+					panelStyle="width:300px" style="width:300px"
+					converter="#{eventWeekConverter}"
+					required="true" requiredMessage="Selecione pelo menos uma semana" >
+		
+					<f:selectItems value="#{reportBean.currentEventWeeks }" var="w"
+						itemValue="#{w}" itemLabel="#{w.name}" />
+				</p:selectCheckboxMenu>
+				<p:message for="selWeek" />
+			</h:panelGrid>
+			
+			<p:commandButton icon="ui-icon-search" value="Pesquisar"
+				action="#{reportBalanceByWeekBean.search }"
+				update="@form :formResult" />
+				
+		</h:panelGrid>
+		
+		<p:messages />
+	</h:form>
+
+	<p:spacer height="10" />
+
+	<h:form id="formResult">
+			
+		<p:dataTable id="dtSummaries" var="summary" value="#{reportBalanceByWeekBean.eventWeekSummaries }"
+			emptyMessage="#{i18n.msg_no_result_found }" >
+			
+			<p:column>
+				<p:spacer height="15" />
+			
+				<h:outputText value="#{summary.eventWeek.name}:" styleClass="destak2" />
+				<h:outputText value="#{i18n.msg_no_result_found }" styleClass="less2" rendered="#{empty summary.registerDetails}" />
+			
+				<p:dataTable var="registerDetail" value="#{summary.registerDetails }"
+				 	rendered="#{not empty summary.registerDetails}" >
+				
+					<p:column headerText="Nome" style="width:30%" sortBy="#{registerDetail.register.contact.fullDesc }">
+						<p:commandLink value="#{registerDetail.register.contact.fullDesc }" title="Visualizar detalhes de contato"
+							oncomplete="DialogViewContact.show()"
+							update=":viewContact">
+							<f:setPropertyActionListener target="#{reportBalanceByWeekBean.contact}" value="#{registerDetail.register.contact }" />
+						</p:commandLink>
+					</p:column>
+					
+					<p:column headerText="Evento" style="width:25%" sortBy="#{registerDetail.event.name }">
+						#{registerDetail.event.name }
+					</p:column>
+					
+					<p:column headerText="Como" style="width:20%" >
+						#{i18n[registerDetail.presence.key]}
+					</p:column>
+
+					<p:column headerText="Valor" style="width:20%; text-align:center">
+						<cb:outputCurrency value="#{registerDetail.value }" />
+						<f:facet name="footer">
+							<cb:outputCurrency value="#{summary.totalValue }" styleClass="destak3" />
+						</f:facet>
+					</p:column>
+					
+					<p:column headerText="Valor Pago" style="width:20%; text-align:center">
+						<p:commandLink title="Visualizar Detalhes dos Pagamentos"
+							oncomplete="DialogViewPayments.show()"
+							update=":displayPayments">
+							
+							<cb:outputCurrency value="#{registerDetail.calculatedPaidValue }" />
+							<f:setPropertyActionListener target="#{reportBalanceByWeekBean.registerDetail}" value="#{registerDetail}" />
+						</p:commandLink>
+						
+						<f:facet name="footer">
+							<cb:outputCurrency value="#{summary.paidValue }" styleClass="destak3" />
+						</f:facet>
+					</p:column>
+
+					<p:column headerText="Pendente" style="width:20%; text-align:center">
+						<cb:outputCurrency value="#{registerDetail.calculatedPendentValue }" />
+						<f:facet name="footer">
+							<cb:outputCurrency value="#{summary.pendentValue }" styleClass="destak3" />
+						</f:facet>
+					</p:column>
+
+					<p:column headerText="Nota" style="text-align:center">
+						<h:graphicImage id="iconNote" library="img" name="icon_note_36.png" 
+							rendered="#{not empty registerDetail.note }" 
+							/>
+						<p:tooltip for="iconNote" value="#{registerDetail.note }" 
+							style="background-color:yellow;"   />
+					</p:column>
+				</p:dataTable>	
+				
+				<p:spacer height="15" />	
+				
+			</p:column>
+		</p:dataTable>
+		
+		<p:spacer height="10" />
+		
+		<p:pieChart value="#{reportBalanceByWeekBean.chartModel }" sliceMargin="10" legendPosition="w" showDataLabels="true" shadow="true" enhancedLegend="true"  />
+
+	</h:form>
+</p:panel>
+
+<p:dialog widgetVar="DialogViewPayments" header="Detalhe dos Pagamentos" modal="true" dynamic="true">
+	<p:outputPanel id="displayPayments">
+		<p:panel>
+			<h:panelGrid columns="2" cellpadding="5">
+				<h:outputText value="Nome:" />
+				<h:outputText value="#{reportBalanceByWeekBean.registerDetail.register.contact.fullDesc }" styleClass="destak2" />
+			
+				<h:outputText value="Semana:" />
+				<h:outputText value="#{reportBalanceByWeekBean.registerDetail.eventWeek.name }" styleClass="destak2" />
+
+				<h:outputText value="Evento:" />
+				<h:outputText value="#{reportBalanceByWeekBean.registerDetail.event.displayNameOrSchool }" styleClass="destak2" />
+			</h:panelGrid>
+		</p:panel>
+			
+		<p:spacer height="10" />
+
+		<p:dataTable value="#{reportBalanceByWeekBean.registerDetail.payments}" var="payment"
+			emptyMessage="#{i18n.msg_no_payment_done }">
+			
+			<p:column headerText="Meio de Pagamento">
+				<h:outputText value="#{i18n[payment.method.key] }" />
+			</p:column>
+
+			<p:column headerText="Ordem de Compra">
+				<h:outputText value="#{payment.saleOrder}" />
+			</p:column>
+
+			<p:column headerText="Valor" style="text-align:center">
+				<cb:outputCurrency value="#{payment.value }" />
+				<f:facet name="footer">
+					<cb:outputCurrency value="#{reportBalanceByWeekBean.registerDetail.calculatedPaidValue}" styleClass="destak2" />
+				</f:facet>
+			</p:column>
+		
+			<p:column headerText="Data">
+				<cb:outputDate value="#{payment.date }" />
+			</p:column>
+
+		</p:dataTable>
+	</p:outputPanel>		
+</p:dialog>
+
+<p:dialog widgetVar="DialogViewContact" header="Detalhes do Contato" modal="true" dynamic="true">
+	<p:panel>
+		<p:outputPanel id="viewContact">
+			<h:panelGrid columns="4" cellpadding="1">
+				<h:outputText value="Nome novo:" />
+				<h:outputText value="#{reportBalanceByWeekBean.contact.name }" styleClass="destak3" />
+			
+				<h:outputText value="Nome civil:" />
+				<h:outputText value="#{reportBalanceByWeekBean.contact.civilName }" styleClass="destak3" />
+
+				<h:outputText value="Email:" />
+				<h:outputText value="#{reportBalanceByWeekBean.contact.email }" styleClass="destak3" />
+
+				<h:outputText value="Telefone:" />
+				<h:outputText value="#{reportBalanceByWeekBean.contact.telephone1 }" styleClass="destak3" />
+
+				<h:outputText value="Cidade:" />
+				<h:outputText value="#{reportBalanceByWeekBean.contact.city }" styleClass="destak3" />
+
+				<h:outputText value="País:" />
+				<h:outputText value="#{reportBalanceByWeekBean.contact.country }" styleClass="destak3" />
+
+				<h:outputText value="Data Nascimento:" />
+				<cb:outputDate value="#{reportBalanceByWeekBean.contact.birthDate }" styleClass="destak3" />
+
+				<h:outputText value="Sexo:" />
+				<h:outputText value="#{i18n[reportBalanceByWeekBean.contact.gender.key] }" styleClass="destak3" />
+
+
+			</h:panelGrid>
+		</p:outputPanel>
+	</p:panel>
+</p:dialog>
+	
+
+</ui:define>
+	
+
+</ui:composition>

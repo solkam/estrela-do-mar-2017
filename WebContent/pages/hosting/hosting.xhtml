@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:cb="http://java.sun.com/jsf/composite/component"
+	template="/WEB-INF/design/_template-main.xhtml">
+
+<ui:define name="content" >
+
+<cb:barPanel imageName="option_room_75.png" 
+	moduleName="#{i18n.title_hosting }" 
+	megaEvent="#{sessionHolder.currentMegaEvent }" 
+	/>
+
+
+<p:tabView id="tabviewRooms">
+	<p:tab title="Quartos Pendentes">
+		<ui:include src="/pages/hosting/hosting-frag-room-pending.xhtml" />
+	</p:tab>
+	
+	<p:tab title="Quartos OK">
+		<ui:include src="/pages/hosting/hosting-frag-room-ok.xhtml" />
+	</p:tab>
+</p:tabView>
+
+
+<p:dialog widgetVar="DialogRoom" header="Configurar Quarto"
+	modal="true" dynamic="true" maximizable="true" closeOnEscape="true"
+	position="top" width="80%" height="80%" >
+	
+	<p:outputPanel id="regionConfigRoom">
+ 		<p:panelGrid columns="3" rendered="#{not empty hostingBean.hosting.roomType}">
+			<h:outputText value="#{i18n.label_room_type}"      styleClass="less2" />
+			<h:outputText value="#{i18n.label_hosting_area}"   styleClass="less2" />
+			<h:outputText value="#{i18n.label_hosting_number}" styleClass="less2" />
+
+			<h:outputText value="#{hostingBean.hosting.roomType.description}" styleClass="destak3" />
+			<h:outputText value="#{hostingBean.hosting.hostingArea}"        styleClass="destak4" />
+			<h:outputText value="#{hostingBean.hosting.hostingNumber}"      styleClass="destak4" />
+		</p:panelGrid>
+ 
+ 		<p:spacer height="10" />		
+ 
+ 		<p:tabView>
+			<p:tab title="Principal">
+				<ui:include src="/pages/hosting/hosting-frag-principal.xhtml" />
+			</p:tab>
+			
+			<p:tab title="Confirmados" rendered="#{not empty hostingBean.hosting.roomType}">
+				<ui:include src="/pages/hosting/hosting-frag-confirmed-ones.xhtml" />
+			</p:tab>
+		</p:tabView>
+ 	
+ 	
+ 	</p:outputPanel>	
+</p:dialog>
+
+
+</ui:define>
+</ui:composition>
+

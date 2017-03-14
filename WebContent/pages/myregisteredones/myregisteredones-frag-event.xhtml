@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:fragment xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:cb="http://java.sun.com/jsf/composite/component">
+
+<h:form id="formAddEvent">
+
+	<p:fieldset legend="#{i18n.label_event_new}" toggleable="true">
+	
+		<h:panelGrid columns="5" cellpadding="5" >
+			<h:panelGrid cellpadding="0">
+				<h:outputText value="#{i18n.label_megaevent }" styleClass="less2" />
+				<h:outputText value="#{myRegisteredOnesBean.selectedMegaEvent.name}" styleClass="destak2" />
+			</h:panelGrid>
+			
+			<h:panelGrid cellpadding="0">
+				<p:outputLabel for="inEventWeek" value="#{i18n.label_week_or_phase }" styleClass="less2" />
+				<p:selectOneMenu id="inEventWeek" value="#{myRegisteredOnesBean.selectedEventWeek }" style="width:250px"
+					converter="#{eventWeekConverter}" >
+				
+					<f:selectItems value="#{myRegisteredOnesBean.comboEventWeeks }" var="weekRow"
+						itemValue="#{weekRow }" itemLabel="#{weekRow.name }" 
+						/>
+					<p:ajax process="@this" listener="#{myRegisteredOnesBean.onEventWeekChange }" update="inEvent displayValues" />
+				</p:selectOneMenu>
+			</h:panelGrid>
+			
+			<h:panelGrid cellpadding="0">
+				<p:outputLabel for="inEvent" value="#{i18n.label_event }" styleClass="less2" />
+				
+				<p:selectOneMenu id="inEvent" value="#{myRegisteredOnesBean.selectedEvent }" style="width:250px"
+					converter="#{eventConverter}">
+					<f:selectItem itemLabel="" noSelectionOption="true" />	
+					<f:selectItems value="#{myRegisteredOnesBean.comboEvents}" var="eventRow"
+						itemValue="#{eventRow}" itemLabel="#{eventRow.displayNameOrSchool }" 
+						/>
+					<p:ajax process="@this" update="displayValues" />
+				</p:selectOneMenu>
+			</h:panelGrid>
+
+			<p:outputPanel id="displayValues">
+				<h:panelGrid cellpadding="5" rendered="#{not myRegisteredOnesBean.selectedEvent.transient}">
+				
+					<h:panelGrid columns="3" rendered="#{myRegisteredOnesBean.selectedEvent.enableForParticipant}" >
+						<h:outputText value="#{i18n.label_value }:" styleClass="less2" />
+						<cb:outputCurrency value="#{myRegisteredOnesBean.selectedEvent.valueParticipant}" styleClass="destak2" />
+
+						<p:commandButton widgetVar="BtnAsParticipant" icon="ui-icon-plus" value="#{i18n.label_to_participate }" 
+							action="#{myRegisteredOnesBean.addEventAsParticipant}"
+							update=":tabviewRO:formSelected :formResults" 
+							/>
+					</h:panelGrid>
+	
+					<h:panelGrid columns="3" rendered="#{myRegisteredOnesBean.selectedEvent.enableForStaff}" >
+						<h:outputText value="#{i18n.label_value }:" styleClass="less2" />
+						<cb:outputCurrency value="#{myRegisteredOnesBean.selectedEvent.valueStaff}" styleClass="destak2" />
+
+						<p:commandButton widgetVar="BtnAsStaff" icon="ui-icon-plus" value="#{i18n.label_to_staff }" 
+							action="#{myRegisteredOnesBean.addEventAsStaff()}"
+							update=":tabviewRO:formSelected :formResults" 
+							/>
+					</h:panelGrid>
+				</h:panelGrid>
+			</p:outputPanel>
+			
+		</h:panelGrid>	
+	</p:fieldset>
+</h:form>
+
+
+<h:form id="formSelected">
+
+	<p:panel header="#{i18n.label_events_selected}">
+
+		<cb:globalMessages />
+
+		<h:outputText value="#{i18n.msg_no_event_selected}" styleClass="less2 warning"	
+			rendered="#{empty myRegisteredOnesBean.register.details}" />
+	
+		<p:dataTable value="#{myRegisteredOnesBean.register.details}" var="detailRow"
+			rendered="#{not empty myRegisteredOnesBean.register.details}">
+			
+			<p:column headerText="#{i18n.label_week_or_phase}" styleClass="col25p" sortBy="#{detailRow.eventWeek.name}">
+				<h:outputText value="#{detailRow.eventWeek.name}" styleClass="destak3" />
+				<br />
+				<h:outputText value="#{detailRow.eventWeek.descDates}" styleClass="less3" />
+			</p:column>
+		
+			<p:column headerText="#{i18n.label_event}" styleClass="col25p" sortBy="#{detailRow.event.displayNameOrSchool}">
+				<h:outputText value="#{detailRow.event.displayNameOrSchool}" styleClass="destak3" />
+				<br />
+				<h:outputText value="#{detailRow.event.description}" styleClass="less3" />
+			</p:column>
+			
+			<p:column headerText="#{i18n.label_confirmed_as}" styleClass="col25p colCenter">
+				<h:outputText value="#{i18n[detailRow.presence.key]}" />
+			</p:column>
+			
+			<p:column headerText="#{i18n.label_value}" styleClass="col20p colCenter">
+				<cb:outputCurrency value="#{detailRow.value }" />
+				<f:facet name="footer">
+					<cb:outputCurrency value="#{myRegisteredOnesBean.register.calculatedTotalValue }" styleClass="destak2" />
+				</f:facet>
+			</p:column>
+
+			<p:column styleClass="col5p colCenter">
+				<p:commandButton icon="ui-icon-trash" 
+					action="#{myRegisteredOnesBean.removeEvent(detailRow)}"
+					process="@this"
+					update="@form :formResults" />
+			</p:column>
+		
+		</p:dataTable>
+
+	</p:panel>
+</h:form>
+
+			
+</ui:fragment>

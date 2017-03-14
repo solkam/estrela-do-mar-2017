@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:fragment xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:cb="http://java.sun.com/jsf/composite/component">
+
+<h:form id="formRoomPending">
+
+	<h1>Quartos Pendentes</h1>
+	<p:separator />
+	
+	
+	<cb:globalMessages />
+
+	<h:outputText value="Não há quartos pendentes" styleClass="less2 warning"
+		rendered="#{empty hostingBean.pendingHostings} and #{empty hostingBean.pendingRegisters}" 
+		/>
+		
+		
+	<!-- COM SUGESTÕES -->
+	<p:panel header="Inscrições com sugeridos" rendered="#{not empty hostingBean.pendingHostings}">
+	
+		<p:dataTable value="#{hostingBean.pendingHostings}" var="hostingRow">
+		
+			<p:column headerText="#{i18n.label_room_type}" sortBy="#{hostingRow.roomType.description }" styleClass="col25p colCenter">
+				<h:outputText value="#{hostingRow.roomType.description}" styleClass="less2" />
+			</p:column>
+			
+			<p:column headerText="Colegas de quarto sugeridos" styleClass="col70p colCenter">
+				<h:outputText value="Não há colegas sugeridos" styleClass="less2 warning" 
+					rendered="#{empty hostingRow.sugesteds}" />
+				
+				<p:dataTable value="#{hostingRow.sugesteds}" var="sugestedHostingRow"
+					rendered="#{not empty hostingRow.sugesteds}">
+					
+					<p:column headerText="#{i18n.label_civil_name}" styleClass="col30p">
+						<h:outputText value="#{sugestedHostingRow.contact.civilName}" styleClass="less2" />
+					</p:column>
+			
+					<p:column headerText="#{i18n.label_new_name}" styleClass="col10p">
+						<h:outputText value="#{sugestedHostingRow.contact.name}" styleClass="less2" />
+					</p:column>
+			
+					<p:column headerText="#{i18n.label_age}" styleClass="col10p">
+						<h:outputText value="#{sugestedHostingRow.contact.age}" styleClass="less2" />
+					</p:column>
+
+					<p:column headerText="#{i18n.label_city}" styleClass="col20p">
+						<h:outputText value="#{sugestedHostingRow.contact.city}" styleClass="less2" />
+					</p:column>
+
+					<p:column headerText="#{i18n.label_root_school}" styleClass="col20p">
+						<h:outputText value="#{sugestedHostingRow.contact.rootSchool.description}" styleClass="less2" />
+					</p:column>
+				</p:dataTable>
+			</p:column>
+	
+			<p:column styleClass="col5p colCenter" rendered="#{sessionHolder.currentMegaEvent.flagHostingOpen}">
+				<p:commandButton icon="ui-icon-pencil"
+					process="@this"
+					action="#{hostingBean.managePendingHosting(hostingRow)}"
+					update=":regionConfigRoom"
+					oncomplete="DialogRoom.show()" 
+					/>
+			</p:column>
+		</p:dataTable>
+	</p:panel>
+	
+	
+	<p:spacer height="20" />
+	
+	
+	<!-- SEM SUGESTÕES -->
+	<p:panel header="Inscrições sem sugeridos" rendered="#{not empty hostingBean.pendingRegisters}">
+	
+		<p:dataTable value="#{hostingBean.pendingRegisters}" var="registerRow">
+
+			<p:column headerText="#{i18n.label_civil_name}" sortBy="#{registerRow.contact.civilName}" styleClass="col20p">
+				<h:outputText value="#{registerRow.contact.civilName}" />
+			</p:column>
+	
+			<p:column headerText="#{i18n.label_new_name}" sortBy="#{registerRow.contact.name}" styleClass="col10p">
+				<h:outputText value="#{registerRow.contact.name}" />
+			</p:column>
+	
+			<p:column headerText="#{i18n.label_age}" sortBy="#{registerRow.contact.age}" styleClass="col10p colCenter">
+				<h:outputText value="#{registerRow.contact.age}" styleClass="less2" />
+			</p:column>
+
+			<p:column headerText="#{i18n.label_city}" sortBy="#{registerRow.contact.city}" styleClass="col25p">
+				<h:outputText value="#{registerRow.contact.city}" styleClass="less2" />
+			</p:column>
+	
+			<p:column headerText="#{i18n.label_root_school}" sortBy="#{registerRow.contact.rootSchool}" styleClass="col10p">
+				<h:outputText value="#{i18n[registerRow.contact.rootSchool.key]}" styleClass="less2" />
+			</p:column>
+			
+			<p:column headerText="#{i18n.label_events}" styleClass="col30p">
+				<cb:displayRegisterAllEvents register="#{registerRow}" />
+			</p:column>
+			
+	
+			<p:column styleClass="col5p colCenter" rendered="#{sessionHolder.currentMegaEvent.flagHostingOpen}">
+				<p:commandButton icon="ui-icon-pencil"
+					process="@this"
+					action="#{hostingBean.managerPendingRegister(registerRow)}"
+					update=":regionConfigRoom"
+					oncomplete="DialogRoom.show()" />
+			</p:column>
+		</p:dataTable>
+	</p:panel>
+
+</h:form>
+
+</ui:fragment>

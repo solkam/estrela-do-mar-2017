@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:cb="http://java.sun.com/jsf/composite/component"
+	template="/WEB-INF/design/_decorate-report.xhtml">
+
+<ui:define name="reportContent" >
+
+<h:form id="formFilter">
+	<p:panel id="panelPaymentByEventReport" header="#{i18n.report_payments_by_event }">
+
+		<!-- Filtro de pesquisa -->
+		<h:panelGrid columns="6" cellpadding="5">
+		
+			<h:panelGrid cellpadding="2">
+				<h:outputText value="#{i18n.label_megaevent }" styleClass="less2" />
+				<p:selectOneMenu value="#{reportPaymentByEventBean.selectedMegaEvent.id }"  >
+					<f:selectItems value="#{reportPaymentByEventBean.megaEvents }" var="me"
+						itemValue="#{me.id }" itemLabel="#{me.name }" 
+						/>
+					<p:ajax event="change" listener="#{reportPaymentByEventBean.onMegaEventChange }" update="selEventWeek selEvent" />
+				</p:selectOneMenu>
+			</h:panelGrid>
+			
+			<h:panelGrid cellpadding="2">
+				<h:outputText value="#{i18n.label_week_or_phase }" styleClass="less2" />
+				<p:selectOneMenu id="selEventWeek" value="#{reportPaymentByEventBean.selectedEventWeek.id }"  >
+					<f:selectItems value="#{reportPaymentByEventBean.eventWeeks }" var="ew"
+						itemValue="#{ew.id }" itemLabel="#{ew.name }" 
+						/>
+					<p:ajax event="change" listener="#{reportPaymentByEventBean.onEventWeekChange }" update="selEvent" />
+				</p:selectOneMenu>
+			</h:panelGrid>
+			
+			<h:panelGrid cellpadding="2">
+				<h:outputText value="#{i18n.label_event }" styleClass="less2" />
+				<p:selectCheckboxMenu id="selEvent" value="#{reportPaymentByEventBean.selectedEvents }" 
+					label="#{i18n.label_event}" scrollHeight="400"
+					converter="#{eventConverter}" required="true" requiredMessage="Pelo menos um evento deve ser selecionado" >
+					
+					<f:selectItems value="#{reportPaymentByEventBean.events}" var="eventVar"
+						itemValue="#{eventVar }" itemLabel="#{eventVar.displayNameOrSchool }" 
+						/>
+				</p:selectCheckboxMenu>
+				<p:message for="selEvent" />
+			</h:panelGrid>
+			
+			<h:panelGrid cellpadding="2">
+				<p:outputLabel for="selPresence" value="#{i18n.label_presence }" styleClass="less2 req" />
+				<p:selectManyCheckbox id="selPresence" value="#{reportPaymentByEventBean.selectedPresences }" 
+					layout="pageDirection"	required="true" >
+					<f:selectItems value="#{enumHelper.eventPresencesParticipantAndStaff }" var="presenceRow" 
+						itemValue="#{presenceRow }" itemLabel="#{i18n[presenceRow.key] }" />
+				</p:selectManyCheckbox>
+				<p:message for="selPresence" />
+			</h:panelGrid>
+
+			<h:panelGrid cellpadding="2">
+				<p:outputLabel for="selStatus"   value="#{i18n.label_status }"   styleClass="less2 req" />
+				<p:selectManyCheckbox id="selStatus" value="#{reportPaymentByEventBean.selectedStatusList }" 
+					layout="pageDirection" required="true" converter="#{registerStatusConverter}" >
+					<f:selectItems value="#{enumHelper.registerStatusList }" var="statusRow" 
+						itemValue="#{statusRow }" itemLabel="#{i18n[statusRow.key] }" />
+				</p:selectManyCheckbox>
+				<p:message for="selStatus" />
+			</h:panelGrid>
+			
+			<p:commandButton icon="ui-icon-search" value="#{i18n.label_to_search }"
+				action="#{reportPaymentByEventBean.search}"
+				update="@form"
+				/>
+		</h:panelGrid>	
+
+		<p:spacer height="5" />
+		<p:separator />
+		<p:spacer height="5" />
+
+		<cb:globalMessages />
+		
+		<p:outputPanel rendered="#{not empty reportPaymentByEventBean.registerDetails }">
+	
+			<!-- export -->
+			<fieldset>
+				<legend>Exportar</legend>	
+				<h:panelGrid columns="2" cellpadding="5" >
+					<p:commandButton icon="ui-icon-calendar" value="#{i18n.label_export_to_excel}"  
+						action="#{reportPaymentByEventBean.exportToExcel() }" 
+						ajax="false"
+						/>
+					<p:commandButton icon="ui-icon-document" value="#{i18n.label_export_pdf}"
+						action="#{reportPaymentByEventBean.exportToPDF() }" rendered="false"
+						ajax="false" 
+						/>
+				</h:panelGrid>
+			</fieldset>
+			
+			<p:spacer height="5" />
+			
+			<!-- resultado -->
+			<p:dataTable value="#{reportPaymentByEventBean.registerDetails }" var="detail">
+			
+				<p:column sortBy="#{detail.register.contact.civilName }" styleClass="col5p">
+					<f:facet name="header">
+						<h:outputText value="#{i18n.label_civil_name }" />
+					</f:facet>
+					<h:outputText value="#{detail.register.contact.civilName }" />
+				</p:column>
+	
+				<p:column sortBy="#{detail.register.contact.name }" styleClass="col5p">
+					<f:facet name="header">
+						<h:outputText value="#{i18n.label_new_name }" />
+					</f:facet>
+					<h:outputText value="#{detail.register.contact.name }" />
+				</p:column>
+
+				<p:column sortBy="#{detail.register.contact.email }" styleClass="col5p" >
+					<f:facet name="header">
+						<h:outputText value="#{i18n.label_email }" />
+					</f:facet>
+					<h:outputText value="#{detail.register.contact.email }" styleClass="less2"/>
+				</p:column>
+
+				<p:column sortBy="#{detail.register.contact.country }" styleClass="col5p" >
+					<f:facet name="header">
+						<h:outputText value="#{i18n.label_country }" />
+					</f:facet>
+					<h:outputText value="#{detail.register.contact.country }" styleClass="less2"/>
+				</p:column>
+
+				<p:column sortBy="#{detail.register.contact.productorContact.shortDesc }" styleClass="col5p" >
+					<f:facet name="header">
+						<h:outputText value="#{i18n.label_productor }" />
+					</f:facet>
+					<h:outputText value="#{detail.register.contact.productorContact.shortDesc }" styleClass="less2"/>
+				</p:column>
+
+				<p:column sortBy="#{detail.register.contact.rootSchool }" styleClass="col5p" >
+					<f:facet name="header">
+						<h:outputText value="#{i18n.label_root_school }" />
+					</f:facet>
+					<h:outputText value="#{detail.register.contact.rootSchool }" styleClass="less2"/>
+				</p:column>
+
+				<p:column sortBy="#{detail.event.displayNameOrSchool}" styleClass="col5p" >
+					<f:facet name="header">
+						<h:outputText value="#{i18n.label_event }" />
+					</f:facet>
+					<h:outputText value="#{detail.event.displayNameOrSchool }" styleClass="less2"/>
+				</p:column>
+
+				<p:column sortBy="#{detail.presence}" styleClass="col5p" >
+					<f:facet name="header">
+						<h:outputText value="#{i18n.label_presence }" />
+					</f:facet>
+					<h:outputText value="#{i18n[detail.presence.key]}" styleClass="less2"/>
+				</p:column>
+				
+
+				<p:column exportable="false" styleClass="colCenter col5p"  >
+					<cb:displayRegisterStatus register="#{detail.register}" />
+				</p:column>
+				
+				<p:column sortBy="#{detail.register.status}" styleClass="colCenter col5p">
+					<f:facet name="header">
+						<h:outputText value="#{i18n.label_status }" />
+					</f:facet>
+					<h:outputText value="#{i18n[detail.register.status.key]}" styleClass="less2" />
+				</p:column>
+
+				<p:column styleClass="col5p" sortBy="#{detail.value}" >
+					<f:facet name="header">
+						<h:outputText value="#{i18n.label_value }" />
+					</f:facet>
+					<cb:outputCurrency value="#{detail.value}" />
+					<f:facet name="footer">
+						<cb:outputCurrency value="#{reportPaymentByEventBean.totalValue}" styleClass="destak2" />
+					</f:facet>
+				</p:column>
+	
+				<p:column styleClass="col5p" sortBy="#{detail.calculatedPaidValue}" >
+					<f:facet name="header">
+						<h:outputText value="#{i18n.label_paid_value }" />
+					</f:facet>
+					<cb:outputCurrency value="#{detail.calculatedPaidValue}" styleClass="paid" />
+					<f:facet name="footer">
+						<cb:outputCurrency value="#{reportPaymentByEventBean.totalPaidValue }" styleClass="destak2 paid" />
+					</f:facet>
+				</p:column>
+	
+				<p:column styleClass="col5p" sortBy="#{detail.calculatedPendentValue}" >
+					<f:facet name="header">
+						<h:outputText value="#{i18n.label_pendent_value }" />
+					</f:facet>
+					<cb:outputCurrency value="#{detail.calculatedPendentValue}" styleClass="pendent" />
+					<f:facet name="footer">
+						<cb:outputCurrency value="#{reportPaymentByEventBean.totalPendentValue }" styleClass="destak2 pendent" />
+					</f:facet>
+				</p:column>
+	
+				<p:column headerText="#{i18n.label_payments }"  styleClass="col20p"  >
+					<h:outputText value="#{i18n.label_no_payments }" rendered="#{empty detail.payments}" />
+	
+					<p:dataTable value="#{detail.payments}" var="payment" rendered="#{not empty detail.payments}">
+						<p:column sortBy="#{payment.method.key}">
+							<f:facet name="header">
+								<h:outputText value="#{i18n.label_payment_method }"	styleClass="less2" />
+							</f:facet>
+							<h:outputText value="#{i18n[payment.method.key]}" styleClass="less2" />
+						</p:column>
+						<p:column sortBy="#{payment.saleOrder}">
+							<f:facet name="header">
+								<h:outputText value="#{i18n.label_sale_order }"	styleClass="less2" />
+							</f:facet>
+							<h:outputText value="#{payment.saleOrder}"	styleClass="less2" />
+						</p:column>
+						<p:column sortBy="#{payment.date}">
+							<f:facet name="header">
+								<h:outputText value="#{i18n.label_date}" styleClass="less2" />
+							</f:facet>
+							<cb:outputDate value="#{payment.date}" styleClass="less2" />
+						</p:column>
+						<p:column>
+							<h:graphicImage library="img" name="icon_note_36.png" title="#{payment.note }" rendered="#{not empty payment.note }" />
+						</p:column>
+						<p:column sortBy="#{payment.value}">
+							<f:facet name="header">
+								<h:outputText value="#{i18n.label_value }"	styleClass="less2" />
+							</f:facet>
+							<cb:outputCurrency value="#{payment.value}"	styleClass="less2" />
+						</p:column>
+					</p:dataTable>
+					
+				</p:column>
+			</p:dataTable>		
+
+		</p:outputPanel>
+
+	</p:panel>
+</h:form>
+
+</ui:define>
+</ui:composition>

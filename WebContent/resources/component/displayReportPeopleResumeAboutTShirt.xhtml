@@ -1,0 +1,50 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:cc="http://java.sun.com/jsf/composite"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:h="http://java.sun.com/jsf/html">
+
+<cc:interface>
+	<cc:attribute name="resume" required="true" />
+</cc:interface>
+
+<cc:implementation>
+
+	<h:panelGroup>
+		<fieldset style="height:300px">
+			<legend>#{i18n.label_tshirt_size}</legend>
+			
+			<p:panelGrid columns="2">
+				<h:outputText value="Masculina GG:" />
+				<h:outputText value="#{cc.attrs.resume.totalMaleGG}" styleClass="destak3" />
+	
+				<h:outputText value="Masculina G:" />
+				<h:outputText value="#{cc.attrs.resume.totalMaleG}" styleClass="destak3" />
+				
+				<h:outputText value="Masculina M:" />
+				<h:outputText value="#{cc.attrs.resume.totalMaleM}" styleClass="destak3" />
+				
+				<h:outputText value="Masculina P:" />
+				<h:outputText value="#{cc.attrs.resume.totalMaleP}" styleClass="destak3" />
+				
+				<h:outputText value="Feminina GG:" />
+				<h:outputText value="#{cc.attrs.resume.totalFemaleGG}" styleClass="destak3" />
+				
+				<h:outputText value="Feminina G:" />
+				<h:outputText value="#{cc.attrs.resume.totalFemaleG}" styleClass="destak3" />
+
+				<h:outputText value="Feminina M:" />
+				<h:outputText value="#{cc.attrs.resume.totalFemaleM}" styleClass="destak3" />
+
+				<h:outputText value="Feminina P:" />
+				<h:outputText value="#{cc.attrs.resume.totalFemaleP}" styleClass="destak3" />
+				
+			</p:panelGrid>
+		</fieldset>
+	</h:panelGroup>
+
+</cc:implementation>
+
+</html>
